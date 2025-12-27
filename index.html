@@ -3,239 +3,1351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dramatically Early 20th Birthday!</title>
+    <title>BYZ in the Hood | Dar es Salaam's Premier Party Experience</title>
+    <meta name="description" content="BYZ in the Hood - More Than The Life Of The Party. We Are The Party Groove. Experience Dar es Salaam's best events, parties, and nightlife.">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* Main Styles */
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #fff6f6, #f8e8ff);
+        /* ===== CSS Variables ===== */
+        :root {
+            --primary: #FF3366;        /* Energetic Pink */
+            --secondary: #00D4AA;      /* Teal Accent */
+            --dark: #0A0A0A;           /* Deep Black */
+            --dark-gray: #1A1A1A;      /* Card Background */
+            --gray: #333333;           /* Borders */
+            --light-gray: #666666;     /* Secondary Text */
+            --text: #FFFFFF;           /* Primary Text */
+            --text-secondary: #CCCCCC; /* Secondary Text */
+            
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+            
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+        
+        /* ===== Reset & Base Styles ===== */
+        * {
             margin: 0;
             padding: 0;
-            color: #333;
-            text-align: center;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background-color: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
         }
         
         .container {
-            max-width: 800px;
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
         
-        h1 {
-            color: #ff6b6b;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        section {
+            padding: 100px 0;
         }
         
-        h2 {
-            color: #9c64ff;
-            font-size: 1.8em;
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
         }
         
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
+        .section-title h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         
-        /* Header */
-        .header {
-            padding: 30px 0;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        .section-title p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
         }
         
-        .subtitle {
-            font-style: italic;
-            color: #ff8e8e;
-            margin-top: 0;
-        }
-        
-        /* Countdown */
-        .countdown {
-            font-size: 1.8em;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            display: inline-block;
-            margin: 20px 0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            color: #ff6b6b;
-            font-weight: bold;
-        }
-        
-        /* Button */
-        .button {
-            display: inline-block;
-            background: linear-gradient(45deg, #ff6b6b, #9c64ff);
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 32px;
             border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin: 20px 0;
-            box-shadow: 0 4px 15px rgba(156, 100, 255, 0.3);
-            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: var(--font-heading);
         }
         
-        .button:hover {
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #ff1a55;
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(156, 100, 255, 0.4);
+            box-shadow: var(--shadow);
         }
         
-        /* Sections */
-        .section {
-            background: white;
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 51, 102, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #1da851;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* ===== Header & Navigation ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 0;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+        
+        .logo-text {
+            font-family: var(--font-heading);
+            font-weight: 900;
+            font-size: 1.8rem;
+        }
+        
+        .logo-text span {
+            color: var(--primary);
+        }
+        
+        nav ul {
+            display: flex;
+            gap: 30px;
+        }
+        
+        nav ul li a {
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* ===== Hero Section ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 100px;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.9)), 
+                        url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+        
+        .hero-content .tagline {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        /* ===== Events Section ===== */
+        .events-section {
+            background-color: var(--dark);
+        }
+        
+        .events-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .filter-btn {
+            padding: 10px 25px;
+            background-color: var(--dark-gray);
+            color: var(--text-secondary);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .filter-btn.active,
+        .filter-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .event-card {
+            background-color: var(--dark-gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        .event-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .event-img {
+            height: 250px;
+            width: 100%;
+            background-color: #444;
+            overflow: hidden;
+        }
+        
+        .event-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .event-card:hover .event-img img {
+            transform: scale(1.05);
+        }
+        
+        .event-info {
             padding: 25px;
-            border-radius: 15px;
-            margin: 20px 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            text-align: left;
         }
         
-        /* FAQ */
-        .faq-item {
+        .event-date {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
             margin-bottom: 15px;
         }
         
-        .faq-question {
-            font-weight: bold;
-            color: #9c64ff;
+        .event-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
         }
         
-        /* Footer */
-        .footer {
-            margin-top: 40px;
-            color: #888;
-            font-size: 0.9em;
+        .event-venue {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
         }
         
-        /* Responsive */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2em;
+        .event-djs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .dj-tag {
+            background-color: rgba(255, 51, 102, 0.1);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .event-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .event-link:hover {
+            color: var(--primary);
+        }
+        
+        /* ===== About Section ===== */
+        .about-section {
+            background-color: var(--dark-gray);
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .music-styles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .music-style {
+            background-color: rgba(0, 212, 170, 0.1);
+            color: var(--secondary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        
+        .about-image {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+        
+        /* ===== Gallery Section ===== */
+        .gallery-section {
+            background-color: var(--dark);
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            height: 250px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        /* ===== Booking Section ===== */
+        .booking-section {
+            background-color: var(--dark-gray);
+        }
+        
+        .booking-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .booking-info {
+            background-color: var(--dark);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+        
+        .booking-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .booking-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .booking-option {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--dark);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .booking-option i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .booking-option h4 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .booking-form {
+            background-color: var(--dark);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--dark-gray);
+            border: 1px solid var(--gray);
+            border-radius: 8px;
+            color: white;
+            font-family: var(--font-body);
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* ===== Contact Section ===== */
+        .contact-section {
+            background-color: var(--dark);
+        }
+        
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+        
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        
+        .contact-details {
+            margin-bottom: 40px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .contact-item i {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 51, 102, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .contact-text h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .contact-text a:hover {
+            color: var(--primary);
+        }
+        
+        .social-contact {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-contact a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: var(--dark-gray);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        .social-contact a:hover {
+            background-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .map-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 500px;
+        }
+        
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* ===== Footer ===== */
+        footer {
+            background-color: #080808;
+            padding: 70px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-weight: 900;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo span {
+            color: var(--primary);
+        }
+        
+        .footer-about p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        .footer-links h4,
+        .footer-contact h4 {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: white;
+        }
+        
+        .footer-links ul li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links ul li a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        
+        .footer-contact p {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--gray);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* ===== Mobile Responsiveness ===== */
+        @media (max-width: 992px) {
+            .hero-content h1 {
+                font-size: 3rem;
             }
             
-            .countdown {
-                font-size: 1.4em;
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .section-title h2 {
+                font-size: 2.3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding: 30px 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: var(--transition);
+                visibility: hidden;
+                gap: 0;
+            }
+            
+            nav ul.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            nav ul li {
+                width: 100%;
+                text-align: center;
+                padding: 15px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content .tagline {
+                font-size: 1.5rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .booking-info,
+            .booking-form {
+                padding: 25px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>🎉 My *Dramatically Early* 20th Birthday! 🎉</h1>
-            <p class="subtitle">"Why wait until June when we can celebrate in April?"</p>
+    <!-- ===== Header ===== -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">B</div>
+                <div class="logo-text">BYZ <span>IN THE HOOD</span></div>
+            </a>
             
-            <!-- Countdown -->
-            <div class="countdown" id="countdown"></div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
             
-            <p><strong>📅 April 23rd | 🕖 7:00 PM | 📍   TBD </strong></p>
-            
-            <a href="#RSVP" class="button">RSVP NOW (Or Regret It)</a>
+            <nav>
+                <ul id="mainMenu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#events">Events</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#booking">Book a Table</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
         </div>
-        
-        <!-- About Section -->
-        <div class="section">
-            <h2>🚨 Attention, Loved Ones</h2>
-            <p>My <em>actual</em> 20th birthday isn't until June... but I've decided we're celebrating <strong>TWO MONTHS EARLY</strong> because:</p>
-            <ol>
-                <li>I'm dramatic.</li>
-                <li>Life is short.</li>
-                <li>Cake tastes better in April.</li>
-            </ol>
-            <p>You are <strong>cordially summoned</strong> to an evening of exaggerated aging, gourmet food, and questionable life choices.</p>
-        </div>
-        
-        <!-- Details Section -->
-        <div class="section">
-            <h2>🎂 Event Details</h2>
-            <p><strong>📍 Location:</strong> TBD </p>
-            <p><strong>🕖 Time:</strong> 7:00 PM (Fashionably late allowed, but not too late)</p>
-            <p><strong>🎩 Dress Code:</strong> "20 Going on 30" (Interpret as you wish.)</p>
-        </div>
-        
-        <!-- What's Happening -->
-        <div class="section">
-            <h2>✨ What's Happening?</h2>
-            <p>✅ <strong>A Three-Course Dinner</strong> – Because one course is for amateurs.</p>
-            <p>✅ <strong>"How Well Do You Know Me?" Trivia</strong> – Winner gets bragging rights, loser buys my next drink.</p>
-            <p>✅ <strong>Preemptive Aging Toast</strong> – Speeches about how <em>old</em> I'm <em>almost</em> becoming.</p>
-            <p>✅ <strong>Photo Booth Extravaganza</strong> – For blackmail... I mean, memories.</p>
-            <p>✅ <strong>Spotify Playlist Live DJ'd by Me</strong> – Expect a mix of "I'm young!" and "I need a nap."</p>
-            
-            <!-- Spotify Embed (replace with your playlist) -->
-            <div class="spotify-embed">
-  <h3>🎵 Birthday Playlist 🎵</h3>
-  <iframe style="border-radius:12px" 
-          src="https://open.spotify.com/embed/playlist/6rx3676DerMFHqCoKOx4V0?utm_source=generator" 
-          width="100%" 
-          height="352" 
-          frameborder="0" 
-          allowfullscreen="" 
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-          loading="lazy">
-  </iframe>
-</div>
-        
-        <!-- FAQ -->
-        <div class="section">
-            <h2>🤔 FAQ (Frequently Anticipated Questions)</h2>
-            
-            <div class="faq-item">
-                <p class="faq-question">"Is this your real birthday?"</p>
-                <p>→ <em>No. This is my</em> <strong>fake</strong> <em>birthday. My real one is in June. Keep up.</em></p>
-            </div>
-            
-            <div class="faq-item">
-                <p class="faq-question">"Why are you like this?"</p>
-                <p>→ <em>Excellent question. No further comments.</em></p>
-            </div>
-            
-            <div class="faq-item">
-                <p class="faq-question">"What should I bring?"</p>
-                <p>→ <em>Your presence, a gift (optional but encouraged), and a willingness to lie about how young I look.</em></p>
+    </header>
+
+    <!-- ===== Hero Section ===== -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>DAR ES SALAAM'S PREMIER PARTY EXPERIENCE</h1>
+                <div class="tagline">More Than The Life Of The Party — We Are The Party Groove</div>
+                <p>BYZ in the Hood curates unforgettable nightlife experiences in Dar es Salaam. From weekly groove sessions to seasonal themed events, we bring energy, music, and community together.</p>
+                <div class="hero-btns">
+                    <a href="#events" class="btn btn-primary"><i class="fas fa-calendar-alt"></i> View Events</a>
+                    <a href="#booking" class="btn btn-secondary"><i class="fas fa-couch"></i> Book a VIP Table</a>
+                </div>
             </div>
         </div>
-        
-        <!-- RSVP -->
-        <div class="section" id="RSVP">
-            <h2>🎁 RSVP (Or Regret It Forever)</h2>
-            <p><strong>DEADLINE: April 20th</strong> – Late RSVPs will be judged harshly.</p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf0hm96OfwZgWiCaZwsd87050sCgN-kB3nT93bIkQEgd1fDDw/viewform?usp=header" class="button" target="_blank">👉 CLICK HERE TO RSVP 👈</a>
+    </section>
+
+    <!-- ===== Events Section ===== -->
+    <section class="events-section" id="events">
+        <div class="container">
+            <div class="section-title">
+                <h2>Upcoming Events</h2>
+                <p>Don't miss out on the hottest parties in Dar es Salaam. Get your tickets early!</p>
+            </div>
             
+            <div class="events-filter">
+                <button class="filter-btn active" data-filter="all">All Events</button>
+                <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                <button class="filter-btn" data-filter="past">Past Events</button>
+            </div>
+            
+            <div class="events-grid">
+                <!-- Event 1 -->
+                <div class="event-card" data-category="upcoming">
+                    <div class="event-img">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Groove Session">
+                    </div>
+                    <div class="event-info">
+                        <span class="event-date">May 15, 2023 | 9:00 PM</span>
+                        <h3>GROOVE SESSION: AFRO HOUSE NIGHT</h3>
+                        <div class="event-venue">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>The Penthouse, Masaki</span>
+                        </div>
+                        <div class="event-djs">
+                            <span class="dj-tag">DJ SHAUN</span>
+                            <span class="dj-tag">FTEARS</span>
+                            <span class="dj-tag">MO DJs</span>
+                        </div>
+                        <a href="#booking" class="event-link">Book VIP Table <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Event 2 -->
+                <div class="event-card" data-category="upcoming">
+                    <div class="event-img">
+                        <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="APT Session">
+                    </div>
+                    <div class="event-info">
+                        <span class="event-date">May 20, 2023 | 4:00 PM</span>
+                        <h3>APT. SESSION: DAY PARTY</h3>
+                        <div class="event-venue">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Ocean Drive, Kunduchi</span>
+                        </div>
+                        <div class="event-djs">
+                            <span class="dj-tag">THE FAMILY</span>
+                            <span class="dj-tag">SHAUN</span>
+                        </div>
+                        <a href="#booking" class="event-link">Book VIP Table <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Event 3 -->
+                <div class="event-card" data-category="upcoming">
+                    <div class="event-img">
+                        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Tempo Event">
+                    </div>
+                    <div class="event-info">
+                        <span class="event-date">May 27, 2023 | 10:00 PM</span>
+                        <h3>TEMPO: CARIBBEAN VIBES</h3>
+                        <div class="event-venue">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Mbudya Island Beach</span>
+                        </div>
+                        <div class="event-djs">
+                            <span class="dj-tag">CARIBBEAN SOUNDS</span>
+                            <span class="dj-tag">SPECIAL GUEST</span>
+                        </div>
+                        <a href="#booking" class="event-link">Book VIP Table <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#" class="btn btn-secondary">View All Events</a>
+            </div>
         </div>
-        
-        <!-- Footer -->
-        <div class="footer">
-            <p>Made with ❤️ and excessive drama | See you on April 23rd!</p>
+    </section>
+
+    <!-- ===== About Section ===== -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About BYZ in the Hood</h2>
+                <p>We are more than just an event promoter - we are curators of experiences.</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Creating Unforgettable Nightlife Experiences Since 2018</h2>
+                    <p>BYZ in the Hood is Dar es Salaam's premier event and nightlife brand, dedicated to creating high-energy social experiences that bring people together through music and community.</p>
+                    <p>From intimate apartment sessions to large-scale beach parties and club nights, we've built a reputation for delivering exceptional events that capture the vibrant spirit of Dar es Salaam's nightlife.</p>
+                    <p>Our events feature a diverse mix of music styles - Afro, Reggae, Dancehall, Caribbean, and worldwide hits - ensuring there's something for everyone on the dance floor.</p>
+                    
+                    <div class="music-styles">
+                        <span class="music-style">Afro Beats</span>
+                        <span class="music-style">Reggae</span>
+                        <span class="music-style">Dancehall</span>
+                        <span class="music-style">Caribbean</span>
+                        <span class="music-style">Worldwide</span>
+                        <span class="music-style">Amapiano</span>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="BYZ Event">
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <!-- Countdown Script -->
+    </section>
+
+    <!-- ===== Gallery Section ===== -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2>Event Gallery</h2>
+                <p>Relive the energy and vibe from our past events</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1501281667305-0d4ebd5b1e5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Event Photo">
+                    <div class="gallery-overlay">
+                        <h4>Groove Session</h4>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Event Photo">
+                    <div class="gallery-overlay">
+                        <h4>APT. Session</h4>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Event Photo">
+                    <div class="gallery-overlay">
+                        <h4>Beach Party</h4>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Event Photo">
+                    <div class="gallery-overlay">
+                        <h4>Halloween Special</h4>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="https://www.instagram.com/byzinthehood" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-instagram"></i> View More on Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Booking Section ===== -->
+    <section class="booking-section" id="booking">
+        <div class="container">
+            <div class="section-title">
+                <h2>Book a VIP Table</h2>
+                <p>Elevate your experience with our premium table service</p>
+            </div>
+            
+            <div class="booking-container">
+                <div class="booking-info">
+                    <h3>VIP Table Service</h3>
+                    <p>Reserve a VIP table for you and your group to enjoy exclusive benefits:</p>
+                    <ul style="margin-left: 20px; margin-top: 15px; color: var(--text-secondary);">
+                        <li>Priority entry with no waiting lines</li>
+                        <li>Prime location with the best view of the stage</li>
+                        <li>Dedicated server for bottle service</li>
+                        <li>Complimentary mixers and garnishes</li>
+                        <li>Reserved parking (where available)</li>
+                    </ul>
+                </div>
+                
+                <div class="booking-options">
+                    <div class="booking-option">
+                        <i class="fab fa-whatsapp"></i>
+                        <h4>Book via WhatsApp</h4>
+                        <p>Fastest way to secure your table</p>
+                        <a href="https://wa.me/255768464367?text=Hi%20BYZ%2C%20I%20want%20to%20book%20a%20VIP%20table" target="_blank" class="btn btn-whatsapp" style="margin-top: 15px;">WhatsApp Now</a>
+                    </div>
+                    
+                    <div class="booking-option">
+                        <i class="fas fa-phone-alt"></i>
+                        <h4>Call Directly</h4>
+                        <p>Speak with our reservations team</p>
+                        <a href="tel:+255768464367" class="btn btn-primary" style="margin-top: 15px;">Call +255 768 464 367</a>
+                    </div>
+                </div>
+                
+                <div class="booking-form">
+                    <h3 style="margin-bottom: 30px; color: var(--primary);">Booking Request Form</h3>
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="event">Select Event</label>
+                            <select id="event" name="event" required>
+                                <option value="" disabled selected>Choose an event</option>
+                                <option value="groove">Groove Session: Afro House Night</option>
+                                <option value="apt">APT. Session: Day Party</option>
+                                <option value="tempo">Tempo: Caribbean Vibes</option>
+                                <option value="other">Other Event</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="guests">Number of Guests</label>
+                            <input type="number" id="guests" name="guests" min="1" max="20" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Additional Requests</label>
+                            <textarea id="message" name="message" rows="4"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 18px;">
+                            <i class="fas fa-paper-plane"></i> Submit Booking Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Contact Section ===== -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Get In Touch</h2>
+                <p>Connect with us for collaborations, bookings, or just to say hello</p>
+            </div>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <div class="contact-text">
+                                <h4>Phone & WhatsApp</h4>
+                                <a href="tel:+255768464367">+255 768 464 367</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fab fa-instagram"></i>
+                            <div class="contact-text">
+                                <h4>Instagram</h4>
+                                <a href="https://www.instagram.com/byzinthehood" target="_blank">@byzinthehood</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <a href="mailto:info@byzinthehood.com">info@byzinthehood.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-text">
+                                <h4>Location</h4>
+                                <span>Dar es Salaam, Tanzania</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-contact">
+                        <a href="https://www.instagram.com/byzinthehood" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/255768464367" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.tiktok.com/@byzinthehood" target="_blank"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://twitter.com/byzinthehood" target="_blank"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d101408.11299642243!2d39.20812283887479!3d-6.792881336436935!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x185c4bae169bd6f1%3A0x940f6b26a086a1dd!2sDar%20es%20Salaam%2C%20Tanzania!5e0!3m2!1sen!2sus!4v1683829363242!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">BYZ <span>IN THE HOOD</span></div>
+                    <p>Dar es Salaam's premier event and nightlife brand, creating unforgettable experiences through music, community, and energy.</p>
+                    <div class="social-contact">
+                        <a href="https://www.instagram.com/byzinthehood" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/255768464367" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.tiktok.com/@byzinthehood" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#events">Events</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#booking">Book a Table</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-phone-alt"></i> +255 768 464 367</p>
+                    <p><i class="fab fa-whatsapp"></i> +255 768 464 367</p>
+                    <p><i class="fab fa-instagram"></i> @byzinthehood</p>
+                    <p><i class="fas fa-envelope"></i> info@byzinthehood.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Dar es Salaam, Tanzania</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 BYZ in the Hood. All rights reserved. | Dar es Salaam's Premier Party Experience</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        const countdown = document.getElementById('countdown');
-        const eventDate = new Date('April 23, 2024 19:00:00').getTime();
+        // ===== Mobile Menu Toggle =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainMenu = document.getElementById('mainMenu');
         
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = eventDate - now;
+        mobileMenuBtn.addEventListener('click', () => {
+            mainMenu.classList.toggle('active');
             
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            
-            countdown.innerHTML = `${days}d ${hours}h ${minutes}m until I'm *almost* 20!`;
-            
-            if (distance < 0) {
-                clearInterval(timer);
-                countdown.innerHTML = "🎉 IT'S TIME TO CELEBRATE (EARLY)! 🎉";
+            // Change menu icon
+            const icon = mobileMenuBtn.querySelector('i');
+            if (mainMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
             }
-        }, 1000);
+        });
+        
+        // Close menu when clicking a link
+        const menuLinks = document.querySelectorAll('#mainMenu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mainMenu.classList.remove('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+        
+        // ===== Header Scroll Effect =====
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // ===== Event Filtering =====
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const eventCards = document.querySelectorAll('.event-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const filterValue = button.getAttribute('data-filter');
+                
+                // Filter event cards
+                eventCards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        if (card.getAttribute('data-category') === filterValue) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // ===== Booking Form Submission =====
+        const bookingForm = document.getElementById('bookingForm');
+        
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(bookingForm);
+            const name = formData.get('name');
+            const phone = formData.get('phone');
+            const event = formData.get('event');
+            const guests = formData.get('guests');
+            
+            // Create WhatsApp message
+            const message = `Hello BYZ in the Hood! I would like to book a VIP table.%0A%0A` +
+                           `Name: ${name}%0A` +
+                           `Phone: ${phone}%0A` +
+                           `Event: ${event}%0A` +
+                           `Guests: ${guests}%0A%0A` +
+                           `Please contact me to confirm the booking.`;
+            
+            // Open WhatsApp with pre-filled message
+            window.open(`https://wa.me/255768464367?text=${message}`, '_blank');
+            
+            // Reset form
+            bookingForm.reset();
+            
+            // Show success message (you can add a proper notification here)
+            alert('Booking request sent! We will contact you shortly via WhatsApp.');
+        });
+        
+        // ===== Smooth Scrolling =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
