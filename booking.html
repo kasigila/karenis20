@@ -1,86 +1,259 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>BYZ Entertainment | Booking</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BYZ Entertainment | VIP Booking</title>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{font-family:Arial;background:#0A0A14;color:#fff;margin:0}
-.container{max-width:600px;margin:auto;padding:20px}
-.card{background:#161622;padding:20px;border-radius:12px;margin-bottom:20px}
-button{padding:15px;border:none;border-radius:50px;background:#8A2BE2;color:#fff;font-weight:bold;width:100%}
-input,select{width:100%;padding:12px;margin:10px 0;border-radius:8px;border:none}
-.hidden{display:none}
+:root{
+  --bg:#0b0b12;
+  --card:#151520;
+  --accent:#8A2BE2;
+  --accent2:#FF00FF;
+  --success:#00ffae;
+  --warning:#ffcc00;
+  --text:#ffffff;
+  --muted:#b3b3c6;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui;
+  background:linear-gradient(180deg,#07070d,#0b0b12);
+  color:var(--text);
+}
+
+.container{
+  max-width:520px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+h1{
+  font-size:1.8rem;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin-bottom:30px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:24px;
+  box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+
+.step{
+  display:none;
+}
+.step.active{
+  display:block;
+}
+
+.label{
+  font-size:.8rem;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+select,input{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  background:#1e1e2c;
+  color:white;
+  font-size:.95rem;
+  margin-bottom:16px;
+}
+
+.table-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.table{
+  padding:14px 0;
+  border-radius:12px;
+  background:#1e1e2c;
+  text-align:center;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.table.selected{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+.table.locked{
+  opacity:.35;
+  pointer-events:none;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  border-radius:999px;
+  border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  font-size:1rem;
+}
+
+button.secondary{
+  background:#1e1e2c;
+  margin-top:10px;
+}
+
+.status{
+  font-weight:700;
+  margin-top:12px;
+}
+
+.pending{color:var(--warning)}
+.confirmed{color:var(--success)}
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-<h2>BYZ Table Booking</h2>
+<h1>Reserve Your Table</h1>
+<p class="subtitle">BYZ Entertainment — VIP nightlife experiences</p>
 
-<div class="card" id="form">
-<input id="name" placeholder="Full Name">
-<input id="phone" placeholder="WhatsApp Number">
-<input id="email" placeholder="Email (optional)">
-<input id="guests" type="number" placeholder="Guests">
+<!-- STEP 1 -->
+<div class="card step active" id="step1">
+  <div class="label">Select Event</div>
+  <select id="eventSelect">
+    <option value="Groove">Groove</option>
+    <option value="APT">APT</option>
+    <option value="Tempo">Tempo</option>
+  </select>
 
-<select id="event">
-<option>Groove</option>
-<option>APT</option>
-<option>Tempo</option>
-</select>
+  <div class="label">Select Table</div>
+  <div class="table-grid" id="tables"></div>
 
-<select id="package">
-<option value="">Select Package</option>
-<option value="Standard">Standard</option>
-<option value="Premium">Premium</option>
-<option value="VIP">VIP</option>
-</select>
+  <div class="label">Package</div>
+  <select id="packageSelect">
+    <option value="">Choose package</option>
+    <option value="Standard">Standard — TZS 250,000</option>
+    <option value="Premium">Premium — TZS 400,000</option>
+    <option value="VIP">VIP — TZS 800,000</option>
+  </select>
 
-<input id="table" type="number" placeholder="Table Number (1–10)">
-<input id="txn" placeholder="M-Pesa Transaction Code">
-
-<button onclick="submit()">Submit Booking</button>
+  <button onclick="nextStep()">Continue</button>
 </div>
 
-<div class="card hidden" id="success">
-<h3>⏳ Payment Pending Verification</h3>
-<p>Your booking will be confirmed once payment is verified.</p>
-<p><b>Booking ID:</b> <span id="bid"></span></p>
+<!-- STEP 2 -->
+<div class="card step" id="step2">
+  <div class="label">Full Name</div>
+  <input id="name">
+
+  <div class="label">WhatsApp Number</div>
+  <input id="phone">
+
+  <div class="label">Email (optional)</div>
+  <input id="email">
+
+  <div class="label">Number of Guests</div>
+  <input id="guests" type="number">
+
+  <button onclick="nextStep()">Continue</button>
+  <button class="secondary" onclick="prevStep()">Back</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="card step" id="step3">
+  <p>Pay via <b>Vodacom M-Pesa</b></p>
+  <p>Send to: <b>68286833</b></p>
+
+  <div class="label">Transaction Code</div>
+  <input id="txn">
+
+  <button onclick="submitBooking()">Submit Booking</button>
+</div>
+
+<!-- CONFIRM -->
+<div class="card step" id="step4">
+  <h2>Booking Submitted</h2>
+  <p>Your booking is under review.</p>
+  <p class="status pending">Payment Pending Verification</p>
+  <p><b>Booking ID:</b> <span id="bid"></span></p>
 </div>
 
 </div>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiwV7ovrt97eEB7cF0H7zOEZbIpQj3M6RCjyUKGAtC19buMPWgtZLvjW-F_NZ-0_adBg/exec";
+const TABLES = 10;
+let selectedTable=null;
+let step=1;
 
-function submit(){
-  const payload={
-    action:"addBooking",
-    data:{
-      name:name.value,
-      phone:phone.value,
-      email:email.value,
-      guests:guests.value,
-      event:event.value,
-      package:package.value,
-      table:table.value,
-      amount:0,
-      transactionCode:txn.value
-    }
-  };
+function showStep(n){
+  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  document.getElementById("step"+n).classList.add("active");
+}
 
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(payload)})
+function nextStep(){
+  showStep(++step);
+}
+
+function prevStep(){
+  showStep(--step);
+}
+
+function renderTables(){
+  tables.innerHTML="";
+  for(let i=1;i<=TABLES;i++){
+    const d=document.createElement("div");
+    d.className="table";
+    d.textContent=i;
+    d.onclick=()=>{
+      document.querySelectorAll(".table").forEach(t=>t.classList.remove("selected"));
+      d.classList.add("selected");
+      selectedTable=i;
+    };
+    tables.appendChild(d);
+  }
+}
+
+renderTables();
+
+function submitBooking(){
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      action:"addBooking",
+      data:{
+        event:eventSelect.value,
+        table:selectedTable,
+        package:packageSelect.value,
+        name:name.value,
+        phone:phone.value,
+        email:email.value,
+        guests:guests.value,
+        amount:0,
+        transactionCode:txn.value
+      }
+    })
+  })
   .then(r=>r.json())
   .then(res=>{
-    if(!res.success){alert(res.message);return;}
-    form.classList.add("hidden");
-    success.classList.remove("hidden");
     bid.textContent=res.bookingId;
+    showStep(4);
   });
 }
 </script>
