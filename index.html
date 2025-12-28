@@ -71,13 +71,25 @@ header{
   display:flex;align-items:center;gap:10px;
   font-weight:700;letter-spacing:-.4px;
 }
-.brand-badge{
-  width:34px;height:34px;border-radius:12px;
-  background:var(--accent);
-  color:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;
+.brand-logo-wrap{
+  width:34px;height:34px;
+  border-radius:12px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
 }
+
+.brand-logo{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+.logo-dark{display:none;}
+[data-theme="dark"] .logo-light{display:none;}
+[data-theme="dark"] .logo-dark{display:block;}
+
 nav ul{display:flex;gap:26px;list-style:none;align-items:center}
 nav a{font-size:15px;color:var(--sub);transition:color .2s var(--ease)}
 nav a:hover{color:var(--text)}
@@ -852,9 +864,12 @@ footer{
 <header>
   <div class="container header-inner">
     <a class="brand" href="#home" aria-label="BYZ in the Hood Home">
-      <div class="brand-badge">B</div>
-      <div>BYZ</div>
-    </a>
+  <span class="brand-logo-wrap" aria-hidden="true">
+    <img class="brand-logo logo-light" src="assets/byz-logo-black.png" alt="" />
+    <img class="brand-logo logo-dark"  src="assets/byz-logo-white.png" alt="" />
+  </span>
+  <div>BYZ</div>
+</a>
 
     <nav aria-label="Main navigation">
       <ul>
