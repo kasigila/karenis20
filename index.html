@@ -1791,10 +1791,13 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     if (elS) elS.textContent = pad(secs);
   }
 
-  tick();
+    tick();
   setInterval(tick, 1000);
 })();
-  <script>
+
+/* =========================================================
+   MEMORY GALLERY (PINTEREST STYLE + PREVIEW + DOWNLOAD)
+========================================================= */
 (() => {
   // ✅ CHANGE THESE TWO if your folders are different
   const BASE = {
@@ -1822,6 +1825,9 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   const lbImg = document.getElementById("lbImg");
   const lbDownload = document.getElementById("lbDownload");
   const lbCopy = document.getElementById("lbCopy");
+
+  // safety guard (prevents runtime crashes if IDs ever change)
+  if(!masonry || !lightbox || !lbImg || !lbDownload || !lbCopy || !countEl || !tabs.length) return;
 
   let currentGallery = "groove";
 
@@ -1909,8 +1915,6 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   // Initial render
   render("groove");
 })();
-</script>
-
 </script>
 </body>
 </html>
