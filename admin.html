@@ -1,239 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BYZ Admin Dashboard</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
+<title>BYZ Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{
-  margin:0;
-  font-family:Poppins,sans-serif;
-  background:#0A0A14;
-  color:#fff;
-}
-
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:30px;
-}
-
-h1{margin-bottom:10px}
-
-input,select,button{
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  font-family:inherit;
-}
-
-button{
-  font-weight:600;
-  cursor:pointer;
-}
-
-.hidden{display:none}
-
-.login{
-  max-width:400px;
-  margin:120px auto;
-  background:#161622;
-  padding:30px;
-  border-radius:16px;
-}
-
-.top-bar{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:20px;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#161622;
-  border-radius:12px;
-  overflow:hidden;
-}
-
-th,td{
-  padding:12px;
-  border-bottom:1px solid #222;
-  text-align:left;
-  font-size:.9rem;
-}
-
-th{
-  background:#1f1f2f;
-}
-
-.status{
-  font-weight:700;
-}
-
-.checked{
-  color:#00ffae;
-}
-
-.confirmed{
-  color:#ffcc00;
-}
-
-.export{
-  background:linear-gradient(135deg,#8A2BE2,#FF00FF);
-  color:#fff;
-}
-
-.checkin{
-  background:#25D366;
-  color:#fff;
-  font-size:.8rem;
-}
+body{font-family:Arial;background:#0A0A14;color:#fff}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #333}
+button{padding:8px 12px;border:none;border-radius:6px;font-weight:bold}
+.approve{background:#FFD700}
+.checkin{background:#25D366}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div class="login" id="loginBox">
-  <h2>Admin Login</h2>
-  <input type="password" id="adminPass" placeholder="Admin password">
-  <br><br>
-  <button onclick="login()">Login</button>
-  <p id="loginError" style="color:#ff4d4d;display:none">Wrong password</p>
-</div>
-
-<!-- DASHBOARD -->
-<div class="container hidden" id="dashboard">
-
-<h1>BYZ Admin Dashboard</h1>
-
-<div class="top-bar">
-  <select id="eventFilter">
-    <option value="">All Events</option>
-    <option value="Groove">Groove</option>
-    <option value="APT">APT</option>
-    <option value="Tempo">Tempo</option>
-  </select>
-
-  <button class="export" onclick="exportCSV()">Export CSV</button>
-  <button onclick="logout()">Logout</button>
-</div>
+<h2>BYZ Admin Dashboard</h2>
 
 <table>
 <thead>
 <tr>
-  <th>Booking ID</th>
-  <th>Event</th>
-  <th>Table</th>
-  <th>Name</th>
-  <th>Guests</th>
-  <th>Package</th>
-  <th>Status</th>
-  <th>Action</th>
+<th>ID</th><th>Event</th><th>Table</th><th>Name</th>
+<th>Status</th><th>Action</th>
 </tr>
 </thead>
-<tbody id="bookingTable"></tbody>
+<tbody id="rows"></tbody>
 </table>
 
-</div>
-
 <script>
-/* ================= CONFIG ================= */
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwiwV7ovrt97eEB7cF0H7zOEZbIpQj3M6RCjyUKGAtC19buMPWgtZLvjW-F_NZ-0_adBg/exec";
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiwV7ovrt97eEB7cF0H7zOEZbIpQj3M6RCjyUKGAtC19buMPWgtZLvjW-F_NZ-0_adBg/exec";
-
-// 🔐 CHANGE PASSWORD HERE IF NEEDED
-const ADMIN_PASSWORD = "weballwithbyz";
-
-/* ================= STATE ================= */
-
-let bookings = [];
-
-/* ================= LOGIN ================= */
-
-function login(){
-  if(adminPass.value === ADMIN_PASSWORD){
-    loginBox.classList.add("hidden");
-    dashboard.classList.remove("hidden");
-    loadBookings();
-  } else {
-    loginError.style.display="block";
-  }
+function load(){
+fetch(SCRIPT_URL).then(r=>r.json()).then(d=>{
+rows.innerHTML="";
+d.bookings.forEach(b=>{
+rows.innerHTML+=`
+<tr>
+<td>${b.bookingId}</td>
+<td>${b.event}</td>
+<td>${b.table}</td>
+<td>${b.name}</td>
+<td>${b.status}</td>
+<td>
+${b.status==="PENDING"?`<button class="approve" onclick="approve('${b.bookingId}')">Approve</button>`:""}
+${b.status==="CONFIRMED"?`<button class="checkin" onclick="checkIn('${b.bookingId}')">Check In</button>`:""}
+</td>
+</tr>`;
+});
+});
 }
 
-function logout(){
-  location.reload();
+function approve(id){
+fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"approvePayment",bookingId:id})})
+.then(()=>load());
 }
-
-/* ================= LOAD BOOKINGS ================= */
-
-function loadBookings(){
-  fetch(SCRIPT_URL)
-    .then(r=>r.json())
-    .then(res=>{
-      bookings = res.bookings || [];
-      renderTable();
-    });
-}
-
-eventFilter.onchange = renderTable;
-
-/* ================= RENDER ================= */
-
-function renderTable(){
-  bookingTable.innerHTML="";
-  const filter = eventFilter.value;
-
-  bookings
-    .filter(b => !filter || b.event === filter)
-    .forEach(b=>{
-      const tr=document.createElement("tr");
-
-      tr.innerHTML=`
-        <td>${b.bookingId}</td>
-        <td>${b.event}</td>
-        <td>${b.table}</td>
-        <td>${b.name}</td>
-        <td>${b.guests}</td>
-        <td>${b.package}</td>
-        <td class="status ${b.status === "CHECKED IN" ? "checked" : "confirmed"}">
-          ${b.status}
-        </td>
-        <td>
-          ${b.status === "CONFIRMED"
-            ? `<button class="checkin" onclick="checkIn('${b.bookingId}')">Check In</button>`
-            : "—"}
-        </td>
-      `;
-      bookingTable.appendChild(tr);
-    });
-}
-
-/* ================= CHECK-IN ================= */
 
 function checkIn(id){
-  alert("Check-in toggle is UI-ready.\n(Next step: enable status update in Apps Script)");
+fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"checkIn",bookingId:id})})
+.then(()=>load());
 }
 
-/* ================= EXPORT ================= */
-
-function exportCSV(){
-  let csv="BookingID,Event,Table,Name,Guests,Package,Status\n";
-  bookings.forEach(b=>{
-    csv+=`${b.bookingId},${b.event},${b.table},${b.name},${b.guests},${b.package},${b.status}\n`;
-  });
-
-  const blob=new Blob([csv],{type:"text/csv"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="byz-bookings.csv";
-  a.click();
-}
+load();
 </script>
 
 </body>
