@@ -1,136 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BYZ Ops Dashboard</title>
+<meta charset="UTF-8">
+<title>BYZ Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --bg:#0b0b12;
-  --panel:#151520;
-  --card:#1e1e2c;
-  --accent:#8A2BE2;
-  --accent2:#FF00FF;
-  --success:#00ffae;
-  --warning:#ffcc00;
-  --danger:#ff4d4d;
-  --text:#ffffff;
-  --muted:#b3b3c6;
-}
-
-*{box-sizing:border-box}
 body{
   margin:0;
   font-family:Inter,system-ui;
-  background:linear-gradient(180deg,#07070d,#0b0b12);
-  color:var(--text);
+  background:#0b0b12;
+  color:#fff;
 }
 
-/* LOGIN */
-.login-screen{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.hidden{display:none}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:40px 20px;
 }
-.login-card{
-  background:var(--panel);
-  padding:36px;
-  border-radius:22px;
-  width:100%;
-  max-width:380px;
+
+h1{text-align:center;margin-bottom:10px}
+p{text-align:center;color:#aaa}
+
+.login-box{
+  max-width:360px;
+  margin:120px auto;
+  background:#151520;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 40px 120px rgba(0,0,0,.6);
 }
-.login-card input, .login-card button{
+
+input{
   width:100%;
   padding:14px;
-  border-radius:12px;
+  margin-top:12px;
   border:none;
-  margin-bottom:14px;
-}
-.login-card input{background:#1e1e2c;color:white}
-.login-card button{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:white;
-  font-weight:700;
+  border-radius:12px;
+  background:#1e1e2c;
+  color:#fff;
 }
 
-/* APP */
-.app{display:none}
-.header{
-  padding:20px;
-  border-bottom:1px solid #1e1e2c;
+button{
+  width:100%;
+  padding:14px;
+  margin-top:20px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#8A2BE2,#FF00FF);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.top-bar{
   display:flex;
   justify-content:space-between;
   align-items:center;
-}
-.content{
-  padding:20px;
-  max-width:1200px;
-  margin:auto;
-}
-
-/* CONTROLS */
-.controls{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
   margin-bottom:20px;
 }
-.controls input, .controls select, .controls button{
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  background:#1e1e2c;
-  color:white;
-}
-.controls button{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  font-weight:700;
+
+.filters{
+  display:flex;
+  gap:12px;
 }
 
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:18px;
+.filters input, .filters select{
+  padding:10px;
+  border-radius:10px;
+  background:#1e1e2c;
+  color:#fff;
+  border:none;
 }
-.booking{
-  background:var(--card);
-  padding:18px;
-  border-radius:18px;
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
 }
-.booking small{color:var(--muted)}
+
+th,td{
+  padding:14px;
+  border-bottom:1px solid #222;
+  text-align:left;
+}
+
+th{
+  color:#aaa;
+  font-size:.85rem;
+}
+
 .status{
   font-weight:700;
-  margin-top:10px;
 }
-.pending{color:var(--warning)}
-.confirmed{color:var(--success)}
-.checked{color:var(--accent)}
 
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:14px;
-}
-.actions button{
-  flex:1;
-  padding:10px;
+.PENDING{color:#ffcc00}
+.CONFIRMED{color:#00ff99}
+
+.approve{
+  background:#00c27a;
+  padding:8px 14px;
   border-radius:999px;
   border:none;
+  color:#000;
   font-weight:700;
+  cursor:pointer;
 }
-.approve{background:var(--success);color:#000}
-.checkin{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white}
 
-/* PRINT */
-@media print{
-  body{background:white;color:black}
-  .login-screen,.controls,.actions,.header button{display:none}
-  .booking{page-break-inside:avoid;border:1px solid #ccc}
+.approve:disabled{
+  opacity:.4;
+  cursor:not-allowed;
 }
 </style>
 </head>
@@ -138,68 +121,65 @@ body{
 <body>
 
 <!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-card">
-    <h2>BYZ Ops</h2>
-    <input type="password" id="passwordInput" placeholder="Access password">
-    <button onclick="handleLogin()">Enter</button>
-    <p id="loginError" style="display:none;color:var(--danger)">Wrong password</p>
-  </div>
+<div id="login" class="login-box">
+  <h1>BYZ Admin</h1>
+  <p>Secure access</p>
+  <input id="password" type="password" placeholder="Admin password">
+  <button onclick="login()">Enter</button>
 </div>
 
-<!-- APP -->
-<div class="app" id="app">
-  <div class="header">
-    <h3>Live Bookings</h3>
-    <button onclick="logout()">Logout</button>
-  </div>
+<!-- DASHBOARD -->
+<div id="dashboard" class="container hidden">
+  <h1>BYZ Admin Dashboard</h1>
+  <p>Live bookings & approvals</p>
 
-  <div class="content">
-
-    <div class="controls">
-      <select id="eventFilter" onchange="render()">
-        <option value="">All Events</option>
-        <option value="Groove">Groove</option>
-        <option value="APT">APT</option>
-        <option value="Tempo">Tempo</option>
+  <div class="top-bar">
+    <div class="filters">
+      <input id="search" placeholder="Search name / booking ID" oninput="render()">
+      <select id="statusFilter" onchange="render()">
+        <option value="">All</option>
+        <option value="PENDING">Pending</option>
+        <option value="CONFIRMED">Confirmed</option>
       </select>
-
-      <input id="searchInput" placeholder="Search name or booking ID" oninput="render()">
-
-      <button onclick="printList()">Print Guest List</button>
     </div>
-
-    <div class="grid" id="list"></div>
-
+    <button onclick="load()">Refresh</button>
   </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Booking ID</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiwV7ovrt97eEB7cF0H7zOEZbIpQj3M6RCjyUKGAtC19buMPWgtZLvjW-F_NZ-0_adBg/exec";
-const PASSWORD = "weballwithbyz";
-
-const loginScreen = document.getElementById("loginScreen");
-const app = document.getElementById("app");
-const passwordInput = document.getElementById("passwordInput");
-const loginError = document.getElementById("loginError");
-const list = document.getElementById("list");
-const eventFilter = document.getElementById("eventFilter");
-const searchInput = document.getElementById("searchInput");
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
+const ADMIN_PASSWORD = "weballwithbyz";
 
 let bookings = [];
 
-function handleLogin(){
-  if(passwordInput.value === PASSWORD){
-    loginScreen.style.display="none";
-    app.style.display="block";
+/* LOGIN */
+function login(){
+  if(password.value === ADMIN_PASSWORD){
+    login.classList.add("hidden");
+    dashboard.classList.remove("hidden");
     load();
-  }else{
-    loginError.style.display="block";
+  } else {
+    alert("Incorrect password");
   }
 }
 
-function logout(){location.reload();}
-
+/* LOAD DATA */
 function load(){
   fetch(SCRIPT_URL)
     .then(r=>r.json())
@@ -209,62 +189,54 @@ function load(){
     });
 }
 
+/* RENDER TABLE */
 function render(){
-  list.innerHTML="";
-  const event = eventFilter.value.toLowerCase();
-  const q = searchInput.value.toLowerCase();
+  const q = search.value.toLowerCase();
+  const status = statusFilter.value;
+  rows.innerHTML="";
 
   bookings
     .filter(b =>
-      (!event || b.event.toLowerCase() === event) &&
-      (!q || b.name.toLowerCase().includes(q) || b.bookingId.toLowerCase().includes(q))
+      (!status || b.status === status) &&
+      (!q ||
+        (b.name||"").toLowerCase().includes(q) ||
+        (b.bookingId||"").toLowerCase().includes(q)
+      )
     )
     .forEach(b=>{
-      const div=document.createElement("div");
-      div.className="booking";
-      div.innerHTML=`
-        <h4>${b.bookingId}</h4>
-        <small>${b.event} • Table ${b.table}</small>
-        <div>Name: ${b.name}</div>
-        <div>Guests: ${b.guests}</div>
-        <div>Phone: ${b.phone}</div>
+      const tr=document.createElement("tr");
 
-        <div class="status ${
-          b.status==="PENDING"?"pending":
-          b.status==="CONFIRMED"?"confirmed":"checked"
-        }">${b.status}</div>
-
-        <div class="actions">
-          ${
-            b.status==="PENDING"
+      tr.innerHTML=`
+        <td>${b.bookingId}</td>
+        <td>${b.bookingType}</td>
+        <td>${b.description}</td>
+        <td>${b.name}</td>
+        <td>${b.phone}</td>
+        <td>${b.amount}</td>
+        <td class="status ${b.status}">${b.status}</td>
+        <td>
+          ${b.status==="PENDING"
             ? `<button class="approve" onclick="approve('${b.bookingId}')">Approve</button>`
-            : b.status==="CONFIRMED"
-            ? `<button class="checkin" onclick="checkIn('${b.bookingId}')">Check In</button>`
-            : ""
+            : "—"
           }
-        </div>
+        </td>
       `;
-      list.appendChild(div);
+
+      rows.appendChild(tr);
     });
 }
 
+/* APPROVE */
 function approve(id){
-  if(!confirm("Approve payment?")) return;
+  if(!confirm("Approve this payment?")) return;
+
   fetch(SCRIPT_URL,{
     method:"POST",
     body:JSON.stringify({action:"approvePayment",bookingId:id})
-  }).then(load);
-}
-
-function checkIn(id){
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({action:"checkIn",bookingId:id})
-  }).then(load);
-}
-
-function printList(){
-  window.print();
+  }).then(()=>{
+    alert("Approved & email sent");
+    load();
+  });
 }
 </script>
 
