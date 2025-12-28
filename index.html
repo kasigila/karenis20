@@ -721,52 +721,209 @@ section{padding: 92px 0}
 .member .ig:hover{box-shadow: var(--shadow-soft)}
 .ig svg{width:16px;height:16px;fill:var(--text)}
 
-/* ===================== MEMORY GALLERY (HOVER OVERLAY LABEL) ===================== */
-.gallery{
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+/* ===================== MEMORY GALLERY (PINTEREST-STYLE + PREVIEW + DOWNLOAD) ===================== */
+
+.gallery-ui{
+  margin-top: 14px;
 }
-.g-item{
+
+.gallery-tabs{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom: 14px;
+}
+
+.tab{
+  padding:10px 14px;
+  border-radius: 999px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: -.2px;
+  cursor:pointer;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+
+.tab:hover{ transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+
+.tab.active{
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+  box-shadow: var(--shadow-soft);
+}
+
+.gallery-meta{
+  margin-left:auto;
+  color: var(--sub);
+  font-size: 13px;
+}
+
+/* Masonry using CSS columns (Pinterest feel) */
+.masonry{
+  column-count: 4;
+  column-gap: 16px;
+}
+
+@media (max-width: 1100px){ .masonry{ column-count: 3; } }
+@media (max-width: 820px){  .masonry{ column-count: 2; } }
+@media (max-width: 520px){  .masonry{ column-count: 1; } }
+
+.pin{
+  break-inside: avoid;
+  margin: 0 0 16px;
   border-radius: var(--radius-lg);
   overflow:hidden;
   border:1px solid var(--border);
   background: var(--bg-elev);
   box-shadow: var(--shadow-soft);
-  position:relative;
   cursor:pointer;
+  position:relative;
   transition: transform .25s var(--ease), box-shadow .25s var(--ease);
 }
-.g-item:hover{transform: translateY(-4px); box-shadow: var(--shadow)}
-.g-item img{
-  width:100%;
-  height: 230px;
-  object-fit:cover;
-  display:block;
-  filter: saturate(1.02) contrast(1.02);
-}
-.g-overlay{
-  position:absolute;inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:16px;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.66));
-  opacity:0;
-  transition: opacity .25s var(--ease);
-}
-.g-item:hover .g-overlay{opacity:1}
-.g-overlay strong{
-  color:#fff;
-  font-size:14px;
-  letter-spacing:-.2px;
-}
-.g-overlay span{
-  color: rgba(255,255,255,.85);
-  font-size:12px;
-  margin-top:4px;
+
+.pin:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
 }
 
+.pin img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.pin .pin-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  padding:12px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.72));
+  opacity:0;
+  transition: opacity .2s var(--ease);
+}
+
+.pin:hover .pin-overlay{ opacity:1; }
+
+.pin .pin-label{
+  color:#fff;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: -.2px;
+  text-transform: uppercase;
+}
+
+.pin .pin-download{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 10px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.12);
+  color:#fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration:none;
+}
+
+/* Note */
+.gallery-note{
+  margin-top: 10px;
+  color: var(--sub);
+  font-size: 13px;
+}
+
+/* Lightbox */
+.lightbox{
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display:none;
+}
+
+.lightbox.show{ display:block; }
+
+.lb-backdrop{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(6px);
+}
+
+.lb-panel{
+  position: relative;
+  width: min(980px, calc(100% - 26px));
+  margin: 40px auto;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: color-mix(in srgb, #0b0b0c 80%, transparent);
+  box-shadow: 0 22px 80px rgba(0,0,0,.45);
+  overflow:hidden;
+}
+
+.lb-close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  font-weight: 900;
+  cursor:pointer;
+}
+
+.lb-media{
+  background:#000;
+}
+
+.lb-media img{
+  width:100%;
+  height:auto;
+  max-height: 72vh;
+  object-fit: contain;
+  display:block;
+}
+
+.lb-actions{
+  display:flex;
+  gap:10px;
+  padding: 14px;
+  justify-content:flex-end;
+  background: rgba(255,255,255,.04);
+}
+
+.lb-download{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.10);
+  color:#fff;
+  font-weight: 900;
+  font-size: 13px;
+  text-decoration:none;
+}
+
+.lb-copy{
+  padding: 10px 14px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  font-weight: 900;
+  font-size: 13px;
+  cursor:pointer;
+}
+  
 /* ===================== CONNECT SECTION ===================== */
 .connect-grid{
   display:grid;
@@ -1355,33 +1512,37 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
         <h2>Memory Gallery</h2>
         <p>Did the photographer catch you lacking? Download your pictures here!</p>
       </div>
+      <div class="gallery-ui stagger reveal" aria-label="Event photo gallery">
+  <div class="gallery-tabs" role="tablist" aria-label="Choose event gallery">
+    <button class="tab active" type="button" role="tab" aria-selected="true" data-gallery="groove">Groove</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" data-gallery="tempo">Tempo</button>
+    <div class="gallery-meta" aria-live="polite">
+      <span id="photoCount">0</span> photos
+    </div>
+  </div>
 
-      <div class="gallery stagger reveal" aria-label="Event gallery">
-        <!-- Use Instagram as a real “click-through” destination until you create galleries -->
-        <a class="g-item" href="https://www.instagram.com/byzinthehood" target="_blank" rel="noopener" aria-label="Groove Series gallery">
-          <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1600&q=80" alt="Groove Series event" />
-          <div class="g-overlay">
-            <strong>GROOVE SERIES</strong>
-            <span>Tips Coco Beach • June 2025</span>
-          </div>
-        </a>
+  <div class="masonry" id="masonry" aria-label="Photos"></div>
 
-        <a class="g-item" href="https://www.instagram.com/byzinthehood" target="_blank" rel="noopener" aria-label="APT. Session gallery">
-          <img src="https://images.unsplash.com/photo-1492684223066-dd23140edf6d?auto=format&fit=crop&w=1600&q=80" alt="APT Session event" />
-          <div class="g-overlay">
-            <strong>APT. SESSION</strong>
-            <span>Private Venue • July 2025</span>
-          </div>
-        </a>
+  <p class="gallery-note">Tap a photo to preview. Hit <b>Download</b> to save it.</p>
+</div>
 
-        <a class="g-item" href="https://www.instagram.com/byzinthehood" target="_blank" rel="noopener" aria-label="Tempo gallery">
-          <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1600&q=80" alt="Tempo event" />
-          <div class="g-overlay">
-            <strong>TEMPO</strong>
-            <span>Exclusive Venue • August 2025</span>
-          </div>
-        </a>
-      </div>
+<!-- Lightbox / Preview Modal -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lb-backdrop" data-lb-close></div>
+
+  <div class="lb-panel" role="dialog" aria-modal="true" aria-label="Photo preview">
+    <button class="lb-close" type="button" aria-label="Close" data-lb-close>✕</button>
+
+    <div class="lb-media">
+      <img id="lbImg" alt="Preview" />
+    </div>
+
+    <div class="lb-actions">
+      <a class="lb-download" id="lbDownload" href="#" download>Download</a>
+      <button class="lb-copy" id="lbCopy" type="button">Copy link</button>
+    </div>
+  </div>
+</div>
     </div>
   </section>
 
@@ -1632,6 +1793,123 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   tick();
   setInterval(tick, 1000);
 })();
+  <script>
+(() => {
+  // ✅ CHANGE THESE TWO if your folders are different
+  const BASE = {
+    groove: "assets/groove/",
+    tempo: "assets/tempo/",
+  };
+
+  // Your filenames (NO renaming needed)
+  const PHOTOS = {
+    groove: [
+      "692A9175.jpg","692A9206.jpg","692A9221.jpg","692A9268.jpg","692A9273.jpg",
+      "692A9295.jpg","692A9299.jpg","692A9316.jpg","692A9332.jpg"
+    ],
+    tempo: [
+      "692A0655.jpg","692A0661.jpg","692A0674.jpg","692A0698.jpg","692A0731.jpg",
+      "692A0859.jpg","692A0906.jpg","692A0949.jpg"
+    ]
+  };
+
+  const masonry = document.getElementById("masonry");
+  const tabs = document.querySelectorAll(".gallery-tabs .tab");
+  const countEl = document.getElementById("photoCount");
+
+  const lightbox = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lbImg");
+  const lbDownload = document.getElementById("lbDownload");
+  const lbCopy = document.getElementById("lbCopy");
+
+  let currentGallery = "groove";
+
+  function render(galleryKey){
+    currentGallery = galleryKey;
+    const files = PHOTOS[galleryKey] || [];
+    countEl.textContent = String(files.length);
+
+    masonry.innerHTML = files.map((f) => {
+      const src = BASE[galleryKey] + f;
+      return `
+        <div class="pin" data-src="${src}" tabindex="0" role="button" aria-label="Open photo preview">
+          <img src="${src}" alt="${galleryKey} photo" loading="lazy" />
+          <div class="pin-overlay">
+            <div class="pin-label">${galleryKey}</div>
+            <a class="pin-download" href="${src}" download onclick="event.stopPropagation()">Download</a>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function openLightbox(src){
+    lbImg.src = src;
+    lbDownload.href = src;
+    lbDownload.setAttribute("download", "");
+    lightbox.classList.add("show");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove("show");
+    lightbox.setAttribute("aria-hidden", "true");
+    lbImg.src = "";
+    document.body.style.overflow = "";
+  }
+
+  // Tabs
+  tabs.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabs.forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected","false"); });
+      btn.classList.add("active");
+      btn.setAttribute("aria-selected","true");
+      render(btn.dataset.gallery);
+    });
+  });
+
+  // Open preview
+  masonry.addEventListener("click", (e) => {
+    const pin = e.target.closest(".pin");
+    if(!pin) return;
+    openLightbox(pin.dataset.src);
+  });
+
+  // Keyboard open
+  masonry.addEventListener("keydown", (e) => {
+    if(e.key !== "Enter") return;
+    const pin = e.target.closest(".pin");
+    if(!pin) return;
+    openLightbox(pin.dataset.src);
+  });
+
+  // Close preview
+  lightbox.addEventListener("click", (e) => {
+    if(e.target.matches("[data-lb-close]")) closeLightbox();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && lightbox.classList.contains("show")) closeLightbox();
+  });
+
+  // Copy link
+  lbCopy.addEventListener("click", async () => {
+    try{
+      await navigator.clipboard.writeText(lbDownload.href);
+      lbCopy.textContent = "Copied!";
+      setTimeout(() => lbCopy.textContent = "Copy link", 900);
+    }catch{
+      lbCopy.textContent = "Copy failed";
+      setTimeout(() => lbCopy.textContent = "Copy link", 900);
+    }
+  });
+
+  // Initial render
+  render("groove");
+})();
+</script>
+
 </script>
 </body>
 </html>
