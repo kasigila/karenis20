@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BYZ Entertainment | VIP Booking</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
@@ -16,6 +16,7 @@
   --teal:#00FFE0;
   --dark:#0A0A14;
   --card:#161622;
+  --error:#ff4d4d;
 }
 
 body{
@@ -42,16 +43,37 @@ h1,h2{
   margin-bottom:30px;
 }
 
+.hidden{display:none}
+
+.notice{
+  color:#aaa;
+  font-size:.9rem;
+}
+
+.error{
+  color:var(--error);
+  font-size:.9rem;
+  margin-top:-10px;
+  margin-bottom:10px;
+}
+
 .btn{
   padding:16px 30px;
   border:none;
-  border-radius:50px;
+  border-radius:999px;
   font-weight:700;
   cursor:pointer;
 }
 
-.primary{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;}
-.whatsapp{background:#25D366;color:#fff;}
+.btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.primary{
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  color:#fff;
+}
 
 input,select,textarea{
   width:100%;
@@ -62,8 +84,6 @@ input,select,textarea{
   background:#1f1f2f;
   color:#fff;
 }
-
-.hidden{display:none}
 
 .table-grid{
   display:grid;
@@ -82,7 +102,36 @@ input,select,textarea{
 .table.selected{border-color:var(--teal)}
 .table.locked{opacity:.4;pointer-events:none}
 
-.notice{color:#aaa;font-size:.9rem}
+/* WhatsApp CTA */
+.whatsapp-cta{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  width:100%;
+  margin-top:20px;
+  padding:16px 22px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:1rem;
+  background:linear-gradient(135deg,#25D366,#1ebe5d);
+  color:#fff;
+  border:none;
+  cursor:pointer;
+}
+
+.spinner{
+  border:4px solid #333;
+  border-top:4px solid #fff;
+  border-radius:50%;
+  width:22px;
+  height:22px;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
 </style>
 </head>
 
@@ -100,6 +149,7 @@ input,select,textarea{
 <select id="eventSelect"></select>
 
 <div class="table-grid" id="tableGrid"></div>
+<div id="tableError" class="error hidden">Please select a table</div>
 
 <select id="packageSelect">
   <option value="">Select Package</option>
@@ -108,8 +158,9 @@ input,select,textarea{
   <option value="Executive">Executive — TZS 600,000</option>
   <option value="VIP">VIP — TZS 800,000</option>
 </select>
+<div id="packageError" class="error hidden">Please select a package</div>
 
-<button class="btn primary" onclick="goStep(2)">Next</button>
+<button class="btn primary" onclick="goStep2()">Next</button>
 </div>
 
 <!-- STEP 2 -->
@@ -117,68 +168,84 @@ input,select,textarea{
 <h2>2. Your Details</h2>
 
 <input id="name" placeholder="Full Name">
+<div id="nameError" class="error hidden">Name is required</div>
+
 <input id="phone" placeholder="WhatsApp Number (255…)">
+<div id="phoneError" class="error hidden">Phone number is required</div>
+
 <input id="email" placeholder="Email (optional)">
 <input id="guests" type="number" placeholder="Number of Guests">
-<textarea id="notes" placeholder="Special requests (optional)"></textarea>
+<div id="guestsError" class="error hidden">Enter number of guests</div>
 
-<button class="btn" onclick="goStep(1)">Back</button>
-<button class="btn primary" onclick="goStep(3)">Next</button>
+<button class="btn" onclick="backToStep1()">Back</button>
+<button class="btn primary" onclick="goStep3()">Next</button>
 </div>
 
 <!-- STEP 3 -->
 <div class="glass hidden" id="step3">
 <h2>3. Payment</h2>
 
-<p>Pay via <strong>Vodacom M-Pesa</strong></p>
-<p>Send to: <strong>68286833</strong></p>
+<p>Pay via <b>Vodacom M-Pesa</b></p>
+<p>Send to: <b>68286833</b></p>
 
 <h3>TZS <span id="amount">0</span></h3>
-
 <div id="qr"></div>
 
 <input id="transactionCode" placeholder="M-Pesa Transaction Code">
+<div id="txnError" class="error hidden">Transaction code is required</div>
 
-<button class="btn whatsapp" onclick="submitBooking()">Confirm & WhatsApp</button>
+<button class="btn primary" id="confirmBtn" onclick="submitBooking()">
+  Confirm Booking
+</button>
+</div>
+
+<!-- CONFIRMATION -->
+<div class="glass hidden" id="confirmation">
+<h2>🎉 Booking Confirmed</h2>
+
+<p><b>Booking ID:</b> <span id="confirmId"></span></p>
+<p id="confirmDetails"></p>
+
+<button class="whatsapp-cta" id="sendWhatsAppBtn">
+  <i class="fab fa-whatsapp"></i> Send WhatsApp Confirmation
+</button>
+
+<p class="notice" id="copyHint" style="display:none">
+Message copied. Paste in WhatsApp if needed ✅
+</p>
 </div>
 
 </div>
 
 <script>
-/* ===============================
-   CONFIG (EDIT HERE LATER)
-   =============================== */
+/* ================= CONFIG ================= */
 
-// Apps Script Web App URL
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiwV7ovrt97eEB7cF0H7zOEZbIpQj3M6RCjyUKGAtC19buMPWgtZLvjW-F_NZ-0_adBg/exec";
-
-// 👉 NUMBER OF TABLES PER EVENT
-// Change this number later if needed
 const TABLES_PER_EVENT = 10;
+const WHATSAPP_NUMBER = "255768464367";
 
-// Package prices
 const PACKAGE_PRICES = {
-  "Standard": 250000,
-  "Premium": 400000,
-  "Executive": 600000,
-  "VIP": 800000
+  Standard:250000,
+  Premium:400000,
+  Executive:600000,
+  VIP:800000
 };
 
-/* ===============================
-   STATE
-   =============================== */
+/* ================= STATE ================= */
 
 let selectedTable = null;
 let bookings = [];
 
-/* ===============================
-   INIT
-   =============================== */
+/* ================= DOM ================= */
 
-const params = new URLSearchParams(window.location.search);
-const eventFromURL = params.get("event");
+const nameInput = document.getElementById("name");
+const phoneInput = document.getElementById("phone");
+const emailInput = document.getElementById("email");
+const guestsInput = document.getElementById("guests");
+const txnInput = document.getElementById("transactionCode");
 
-const eventSelect = document.getElementById("eventSelect");
+/* ================= INIT ================= */
+
 ["Groove","APT","Tempo"].forEach(e=>{
   const opt=document.createElement("option");
   opt.value=e;
@@ -186,108 +253,118 @@ const eventSelect = document.getElementById("eventSelect");
   eventSelect.appendChild(opt);
 });
 
-if(eventFromURL){
-  eventSelect.value = eventFromURL.charAt(0).toUpperCase()+eventFromURL.slice(1);
-}
+fetch(SCRIPT_URL)
+.then(r=>r.json())
+.then(res=>{
+  bookings=res.bookings||[];
+  renderTables();
+});
 
-fetchBookings();
-
-/* ===============================
-   FUNCTIONS
-   =============================== */
-
-function goStep(n){
-  document.querySelectorAll(".glass").forEach(s=>s.classList.add("hidden"));
-  document.getElementById("step"+n).classList.remove("hidden");
-
-  if(n===3){
-    const amount = PACKAGE_PRICES[packageSelect.value];
-    document.getElementById("amount").textContent = amount;
-    QRCode.toCanvas(
-      document.getElementById("qr"),
-      `M-PESA 68286833 TZS ${amount}`
-    );
-  }
-}
+/* ================= FUNCTIONS ================= */
 
 function renderTables(){
   tableGrid.innerHTML="";
   selectedTable=null;
 
   for(let i=1;i<=TABLES_PER_EVENT;i++){
-    const div=document.createElement("div");
-    div.className="table";
-    div.textContent="Table "+i;
+    const d=document.createElement("div");
+    d.className="table";
+    d.textContent="Table "+i;
 
     if(bookings.some(b=>b.event===eventSelect.value && b.table==i)){
-      div.classList.add("locked");
+      d.classList.add("locked");
     }
 
-    div.onclick=()=>{
+    d.onclick=()=>{
       document.querySelectorAll(".table").forEach(t=>t.classList.remove("selected"));
-      div.classList.add("selected");
+      d.classList.add("selected");
       selectedTable=i;
     };
 
-    tableGrid.appendChild(div);
+    tableGrid.appendChild(d);
   }
-}
-
-function fetchBookings(){
-  fetch(SCRIPT_URL)
-    .then(r=>r.json())
-    .then(res=>{
-      bookings = res.bookings || [];
-      renderTables();
-    });
 }
 
 eventSelect.onchange = renderTables;
 
+function goStep2(){
+  tableError.classList.toggle("hidden",!!selectedTable);
+  packageError.classList.toggle("hidden",!!packageSelect.value);
+  if(selectedTable && packageSelect.value){
+    step1.classList.add("hidden");
+    step2.classList.remove("hidden");
+  }
+}
+
+function backToStep1(){
+  step2.classList.add("hidden");
+  step1.classList.remove("hidden");
+}
+
+function goStep3(){
+  nameError.classList.toggle("hidden",!!nameInput.value.trim());
+  phoneError.classList.toggle("hidden",!!phoneInput.value.trim());
+  guestsError.classList.toggle("hidden",!!guestsInput.value);
+
+  if(nameInput.value && phoneInput.value && guestsInput.value){
+    step2.classList.add("hidden");
+    step3.classList.remove("hidden");
+    amount.textContent = PACKAGE_PRICES[packageSelect.value];
+    QRCode.toCanvas(qr,`M-PESA 68286833 TZS ${PACKAGE_PRICES[packageSelect.value]}`);
+  }
+}
+
 function submitBooking(){
+  txnError.classList.toggle("hidden",!!txnInput.value.trim());
+  if(!txnInput.value) return;
+
+  confirmBtn.disabled=true;
+  confirmBtn.innerHTML='<div class="spinner"></div>';
+
   const payload={
     action:"addBooking",
     data:{
       event:eventSelect.value,
       table:selectedTable,
       package:packageSelect.value,
-      name:name.value,
-      phone:phone.value,
-      email:email.value,
-      guests:guests.value,
+      name:nameInput.value.trim(),
+      phone:phoneInput.value.trim(),
+      email:emailInput.value.trim(),
+      guests:guestsInput.value,
       amount:PACKAGE_PRICES[packageSelect.value],
-      transactionCode:transactionCode.value
+      transactionCode:txnInput.value.trim()
     }
   };
 
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify(payload)
-  })
+  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(payload)})
   .then(r=>r.json())
   .then(res=>{
-    if(!res.success){
-      alert(res.message);
-      return;
-    }
+    if(!res.success){alert(res.message);location.reload();return;}
 
-    const msg = `
+    step3.classList.add("hidden");
+    confirmation.classList.remove("hidden");
+
+    confirmId.textContent=res.bookingId;
+    confirmDetails.innerHTML=`
+      Event: <b>${payload.data.event}</b><br>
+      Table: <b>Table ${payload.data.table}</b><br>
+      Package: <b>${payload.data.package}</b><br>
+      Guests: <b>${payload.data.guests}</b>
+    `;
+
+    const msg=`
 BYZ BOOKING CONFIRMED
+Booking ID: ${res.bookingId}
 Event: ${payload.data.event}
-Table: ${payload.data.table}
+Table: Table ${payload.data.table}
 Package: ${payload.data.package}
-Name: ${payload.data.name}
 Guests: ${payload.data.guests}
-Txn: ${payload.data.transactionCode}
 `;
 
-    window.open(
-      "https://wa.me/255768464367?text="+encodeURIComponent(msg),
-      "_blank"
-    );
-
-    alert("Booking confirmed!");
-    location.reload();
+    sendWhatsAppBtn.onclick=()=>{
+      navigator.clipboard.writeText(msg).then(()=>copyHint.style.display="block");
+      window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(msg));
+    };
   });
 }
 </script>
