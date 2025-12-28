@@ -91,6 +91,33 @@ h1{text-align:center;font-size:2.4rem}
 }
 .choice i{font-size:3.2rem;color:var(--accent2)}
 
+/* DROPDOWN / SELECTOR */
+.selector{
+  max-width:420px;
+  margin:40px auto;
+  background:var(--card);
+  border-radius:26px;
+  padding:30px;
+  text-align:center;
+}
+
+.selector select{
+  width:100%;
+  padding:16px;
+  border-radius:14px;
+  border:none;
+  background:var(--card2);
+  color:var(--text);
+  font-size:1rem;
+}
+
+.price-display{
+  margin-top:20px;
+  font-size:1.6rem;
+  font-weight:800;
+  color:var(--accent2);
+}
+
 /* TABLES */
 .packages{
   display:grid;
@@ -186,7 +213,7 @@ button{
     <div class="choice" onclick="selectType('TICKET',this)">
       <i class="fa-solid fa-ticket"></i>
       <h2>Tickets</h2>
-      <p class="subtitle">30,000 TZS per person</p>
+      <p class="subtitle">30,000 TZS per ticket</p>
     </div>
     <div class="choice" onclick="selectType('TABLE',this)">
       <i class="fa-solid fa-couch"></i>
@@ -196,13 +223,33 @@ button{
   </div>
 </div>
 
-<!-- STEP 2 TABLES -->
+<!-- TICKET SELECTOR -->
+<div class="step" id="ticketStep">
+  <div class="selector">
+    <h2>Select Number of Tickets</h2>
+    <select id="ticketQty" onchange="updateTicketPrice()">
+      <option value="1">1 Ticket</option>
+      <option value="2">2 Tickets</option>
+      <option value="3">3 Tickets</option>
+      <option value="4">4 Tickets</option>
+      <option value="5">5 Tickets</option>
+      <option value="6">6 Tickets</option>
+      <option value="7">7 Tickets</option>
+      <option value="8">8 Tickets</option>
+      <option value="9">9 Tickets</option>
+      <option value="10">10 Tickets</option>
+    </select>
+    <div class="price-display" id="ticketTotal">30,000 TZS</div>
+  </div>
+</div>
+
+<!-- TABLES -->
 <div class="step" id="tablesStep">
   <h2 class="subtitle">Choose your VIP package</h2>
   <div class="packages" id="packages"></div>
 </div>
 
-<!-- STEP 3 PAYMENT -->
+<!-- PAYMENT -->
 <div class="step" id="paymentStep">
   <div class="payment">
     <h2>Pay via M-Pesa</h2>
@@ -212,7 +259,7 @@ button{
   </div>
 </div>
 
-<!-- STEP 4 FORM -->
+<!-- FORM -->
 <div class="step" id="formStep">
   <div class="form">
     <input id="fullName" placeholder="Full Name">
@@ -227,26 +274,51 @@ button{
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
+const SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
 const BYZ_WHATSAPP = "255768464367";
+const TICKET_PRICE = 30000;
 
-let bookingType="", tier="", availability={};
+let bookingType="", tier="", ticketQty=1, availability={};
 
+/* THEME */
+function toggleTheme(){
+  document.body.classList.toggle("light");
+}
+
+/* TYPE SELECT */
+function selectType(type,el){
+  bookingType=type;
+  document.querySelectorAll(".choice").forEach(c=>c.classList.remove("active"));
+  el.classList.add("active");
+
+  document.getElementById("ticketStep").classList.remove("active");
+  document.getElementById("tablesStep").classList.remove("active");
+
+  if(type==="TICKET"){
+    document.getElementById("ticketStep").classList.add("active");
+  } else {
+    document.getElementById("tablesStep").classList.add("active");
+  }
+
+  document.getElementById("paymentStep").classList.add("active");
+  document.getElementById("formStep").classList.add("active");
+}
+
+/* TICKET PRICE */
+function updateTicketPrice(){
+  ticketQty = Number(ticketQtyEl.value);
+  document.getElementById("ticketTotal").textContent =
+    (ticketQty * TICKET_PRICE).toLocaleString()+" TZS";
+}
+const ticketQtyEl=document.getElementById("ticketQty");
+
+/* TABLES */
 fetch(SCRIPT_URL)
   .then(r=>r.json())
   .then(d=>{
     availability = d.bookings || [];
     renderTables();
   });
-
-function selectType(type,el){
-  bookingType=type;
-  document.querySelectorAll(".choice").forEach(c=>c.classList.remove("active"));
-  el.classList.add("active");
-  document.getElementById("tablesStep").classList.add("active");
-  document.getElementById("paymentStep").classList.add("active");
-  document.getElementById("formStep").classList.add("active");
-}
 
 function renderTables(){
   const tiers=[
@@ -266,28 +338,44 @@ function renderTables(){
   });
 }
 
+/* SUBMIT */
 function submitBooking(){
-  if(bookingType==="TABLE"&&!tier)return alert("Select a VIP table");
-  const amount = tier==="700K"?700000:tier==="1.2M"?1200000:1800000;
+  let amount=0, desc="";
+
+  if(bookingType==="TICKET"){
+    amount=ticketQty*TICKET_PRICE;
+    desc=`${ticketQty} Ticket(s)`;
+  } else {
+    if(!tier) return alert("Select a VIP table");
+    amount = tier==="700K"?700000:tier==="1.2M"?1200000:1800000;
+    desc = `VIP Table ${tier}`;
+  }
+
   const data={
     bookingType,
     tier,
-    description:bookingType==="TABLE"?`VIP Table ${tier}`:"Ticket",
+    description:desc,
+    quantity:ticketQty,
     amount,
     name:fullName.value,
     phone:phone.value,
     email:email.value,
     transactionCode:txn.value
   };
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"addBooking",data})});
-  window.open(`https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(
-    `NEW BYZ BOOKING\nName:${data.name}\n${data.description}\nTxn:${data.transactionCode}`
-  )}`,"_blank");
-  alert("Booking submitted. Press SEND on WhatsApp.");
-}
 
-function toggleTheme(){
-  document.body.classList.toggle("light");
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({action:"addBooking",data})
+  });
+
+  window.open(
+    `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(
+      `NEW BYZ BOOKING\nName:${data.name}\n${desc}\nAmount:${amount}\nTxn:${data.transactionCode}`
+    )}`,
+    "_blank"
+  );
+
+  alert("Booking submitted. Please press SEND on WhatsApp.");
 }
 </script>
 
