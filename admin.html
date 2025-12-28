@@ -180,12 +180,23 @@ document.getElementById("dashboard").classList.remove("hidden");
 }
 
 /* LOAD DATA */
-function load(){
+function load() {
   fetch(SCRIPT_URL)
-    .then(r=>r.json())
-    .then(d=>{
-      bookings = d.bookings || [];
+    .then(res => res.json())
+    .then(data => {
+      console.log("ADMIN RAW RESPONSE:", data);
+
+      if (!data.bookings || !Array.isArray(data.bookings)) {
+        alert("No bookings returned from server");
+        return;
+      }
+
+      bookings = data.bookings;
       render();
+    })
+    .catch(err => {
+      console.error("ADMIN FETCH ERROR:", err);
+      alert("Failed to load bookings");
     });
 }
 
