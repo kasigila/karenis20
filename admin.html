@@ -171,8 +171,8 @@ let bookings = [];
 /* LOGIN */
 function login(){
   if(password.value === ADMIN_PASSWORD){
-    login.classList.add("hidden");
-    dashboard.classList.remove("hidden");
+    document.getElementById("login").classList.add("hidden");
+document.getElementById("dashboard").classList.remove("hidden");
     load();
   } else {
     alert("Incorrect password");
