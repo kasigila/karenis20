@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BYZ Booking Verification</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#0A0A14;color:#fff;margin:0}
+.card{max-width:400px;margin:80px auto;background:#161622;padding:25px;border-radius:16px;text-align:center}
+.status{font-size:1.2rem;font-weight:bold;margin:15px 0}
+.pending{color:#ffcc00}
+.confirmed{color:#00ffae}
+.checked{color:#25D366}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>BYZ Booking Verification</h2>
+<p id="msg">Checking booking…</p>
+<div id="details" style="display:none">
+<p><b>ID:</b> <span id="bid"></span></p>
+<p><b>Event:</b> <span id="event"></span></p>
+<p><b>Table:</b> <span id="table"></span></p>
+<p><b>Name:</b> <span id="name"></span></p>
+<p class="status" id="status"></p>
+</div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiwV7ovrt97eEB7cF0H7zOEZbIpQj3M6RCjyUKGAtC19buMPWgtZLvjW-F_NZ-0_adBg/exec";
+const bid = new URLSearchParams(location.search).get("bid");
+
+fetch(`${SCRIPT_URL}?bid=${bid}`)
+.then(r=>r.json())
+.then(res=>{
+  if(!res.found){
+    msg.textContent="❌ Booking not found";
+    return;
+  }
+
+  const b=res.booking;
+  msg.style.display="none";
+  details.style.display="block";
+
+  bidEl.textContent=b.bookingId;
+  event.textContent=b.event;
+  table.textContent=b.table;
+  name.textContent=b.name;
+
+  status.textContent=b.status;
+  status.className="status "+(
+    b.status==="PENDING"?"pending":
+    b.status==="CONFIRMED"?"confirmed":"checked"
+  );
+});
+</script>
+
+</body>
+</html>
