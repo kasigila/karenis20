@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BYZ Entertainment | VIP Booking</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+<style>
+:root{
+  --purple:#8A2BE2;
+  --pink:#FF00FF;
+  --teal:#00FFE0;
+  --dark:#0A0A14;
+  --card:#161622;
+}
+
+body{
+  margin:0;
+  font-family:Poppins,sans-serif;
+  background:var(--dark);
+  color:#fff;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+h1,h2{
+  font-family:Outfit,sans-serif;
+}
+
+.glass{
+  background:var(--card);
+  border-radius:16px;
+  padding:30px;
+  margin-bottom:30px;
+}
+
+.btn{
+  padding:16px 30px;
+  border:none;
+  border-radius:50px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.primary{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;}
+.whatsapp{background:#25D366;color:#fff;}
+
+input,select,textarea{
+  width:100%;
+  padding:14px;
+  margin:10px 0 20px;
+  border-radius:10px;
+  border:none;
+  background:#1f1f2f;
+  color:#fff;
+}
+
+.hidden{display:none}
+
+.table-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:15px;
+}
+
+.table{
+  padding:20px;
+  border:2px solid #333;
+  border-radius:12px;
+  text-align:center;
+  cursor:pointer;
+}
+
+.table.selected{border-color:var(--teal)}
+.table.locked{opacity:.4;pointer-events:none}
+
+.notice{color:#aaa;font-size:.9rem}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>BOOK YOUR VIP EXPERIENCE</h1>
+<p class="notice">Secure table booking • Instant confirmation • M-Pesa</p>
+
+<!-- STEP 1 -->
+<div class="glass" id="step1">
+<h2>1. Choose Event & Table</h2>
+
+<select id="eventSelect"></select>
+
+<div class="table-grid" id="tableGrid"></div>
+
+<select id="packageSelect">
+  <option value="">Select Package</option>
+  <option value="Standard">Standard — TZS 250,000</option>
+  <option value="Premium">Premium — TZS 400,000</option>
+  <option value="Executive">Executive — TZS 600,000</option>
+  <option value="VIP">VIP — TZS 800,000</option>
+</select>
+
+<button class="btn primary" onclick="goStep(2)">Next</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="glass hidden" id="step2">
+<h2>2. Your Details</h2>
+
+<input id="name" placeholder="Full Name">
+<input id="phone" placeholder="WhatsApp Number (255…)">
+<input id="email" placeholder="Email (optional)">
+<input id="guests" type="number" placeholder="Number of Guests">
+<textarea id="notes" placeholder="Special requests (optional)"></textarea>
+
+<button class="btn" onclick="goStep(1)">Back</button>
+<button class="btn primary" onclick="goStep(3)">Next</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="glass hidden" id="step3">
+<h2>3. Payment</h2>
+
+<p>Pay via <strong>Vodacom M-Pesa</strong></p>
+<p>Send to: <strong>68286833</strong></p>
+
+<h3>TZS <span id="amount">0</span></h3>
+
+<div id="qr"></div>
+
+<input id="transactionCode" placeholder="M-Pesa Transaction Code">
+
+<button class="btn whatsapp" onclick="submitBooking()">Confirm & WhatsApp</button>
+</div>
+
+</div>
+
+<script>
+/* ===============================
+   CONFIG (EDIT HERE LATER)
+   =============================== */
+
+// Apps Script Web App URL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiwV7ovrt97eEB7cF0H7zOEZbIpQj3M6RCjyUKGAtC19buMPWgtZLvjW-F_NZ-0_adBg/exec";
+
+// 👉 NUMBER OF TABLES PER EVENT
+// Change this number later if needed
+const TABLES_PER_EVENT = 10;
+
+// Package prices
+const PACKAGE_PRICES = {
+  "Standard": 250000,
+  "Premium": 400000,
+  "Executive": 600000,
+  "VIP": 800000
+};
+
+/* ===============================
+   STATE
+   =============================== */
+
+let selectedTable = null;
+let bookings = [];
+
+/* ===============================
+   INIT
+   =============================== */
+
+const params = new URLSearchParams(window.location.search);
+const eventFromURL = params.get("event");
+
+const eventSelect = document.getElementById("eventSelect");
+["Groove","APT","Tempo"].forEach(e=>{
+  const opt=document.createElement("option");
+  opt.value=e;
+  opt.textContent=e;
+  eventSelect.appendChild(opt);
+});
+
+if(eventFromURL){
+  eventSelect.value = eventFromURL.charAt(0).toUpperCase()+eventFromURL.slice(1);
+}
+
+fetchBookings();
+
+/* ===============================
+   FUNCTIONS
+   =============================== */
+
+function goStep(n){
+  document.querySelectorAll(".glass").forEach(s=>s.classList.add("hidden"));
+  document.getElementById("step"+n).classList.remove("hidden");
+
+  if(n===3){
+    const amount = PACKAGE_PRICES[packageSelect.value];
+    document.getElementById("amount").textContent = amount;
+    QRCode.toCanvas(
+      document.getElementById("qr"),
+      `M-PESA 68286833 TZS ${amount}`
+    );
+  }
+}
+
+function renderTables(){
+  tableGrid.innerHTML="";
+  selectedTable=null;
+
+  for(let i=1;i<=TABLES_PER_EVENT;i++){
+    const div=document.createElement("div");
+    div.className="table";
+    div.textContent="Table "+i;
+
+    if(bookings.some(b=>b.event===eventSelect.value && b.table==i)){
+      div.classList.add("locked");
+    }
+
+    div.onclick=()=>{
+      document.querySelectorAll(".table").forEach(t=>t.classList.remove("selected"));
+      div.classList.add("selected");
+      selectedTable=i;
+    };
+
+    tableGrid.appendChild(div);
+  }
+}
+
+function fetchBookings(){
+  fetch(SCRIPT_URL)
+    .then(r=>r.json())
+    .then(res=>{
+      bookings = res.bookings || [];
+      renderTables();
+    });
+}
+
+eventSelect.onchange = renderTables;
+
+function submitBooking(){
+  const payload={
+    action:"addBooking",
+    data:{
+      event:eventSelect.value,
+      table:selectedTable,
+      package:packageSelect.value,
+      name:name.value,
+      phone:phone.value,
+      email:email.value,
+      guests:guests.value,
+      amount:PACKAGE_PRICES[packageSelect.value],
+      transactionCode:transactionCode.value
+    }
+  };
+
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify(payload)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(!res.success){
+      alert(res.message);
+      return;
+    }
+
+    const msg = `
+BYZ BOOKING CONFIRMED
+Event: ${payload.data.event}
+Table: ${payload.data.table}
+Package: ${payload.data.package}
+Name: ${payload.data.name}
+Guests: ${payload.data.guests}
+Txn: ${payload.data.transactionCode}
+`;
+
+    window.open(
+      "https://wa.me/255768464367?text="+encodeURIComponent(msg),
+      "_blank"
+    );
+
+    alert("Booking confirmed!");
+    location.reload();
+  });
+}
+</script>
+
+</body>
+</html>
