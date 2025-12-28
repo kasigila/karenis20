@@ -1,370 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BYZ Entertainment | VIP Booking</title>
+<title>BYZ Entertainment | Booking</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 
 <style>
-:root{
-  --purple:#8A2BE2;
-  --pink:#FF00FF;
-  --teal:#00FFE0;
-  --dark:#0A0A14;
-  --card:#161622;
-  --error:#ff4d4d;
-}
-
-body{
-  margin:0;
-  font-family:Poppins,sans-serif;
-  background:var(--dark);
-  color:#fff;
-}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:40px 20px;
-}
-
-h1,h2{
-  font-family:Outfit,sans-serif;
-}
-
-.glass{
-  background:var(--card);
-  border-radius:16px;
-  padding:30px;
-  margin-bottom:30px;
-}
-
+body{font-family:Arial;background:#0A0A14;color:#fff;margin:0}
+.container{max-width:600px;margin:auto;padding:20px}
+.card{background:#161622;padding:20px;border-radius:12px;margin-bottom:20px}
+button{padding:15px;border:none;border-radius:50px;background:#8A2BE2;color:#fff;font-weight:bold;width:100%}
+input,select{width:100%;padding:12px;margin:10px 0;border-radius:8px;border:none}
 .hidden{display:none}
-
-.notice{
-  color:#aaa;
-  font-size:.9rem;
-}
-
-.error{
-  color:var(--error);
-  font-size:.9rem;
-  margin-top:-10px;
-  margin-bottom:10px;
-}
-
-.btn{
-  padding:16px 30px;
-  border:none;
-  border-radius:999px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.btn:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-
-.primary{
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  color:#fff;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:14px;
-  margin:10px 0 20px;
-  border-radius:10px;
-  border:none;
-  background:#1f1f2f;
-  color:#fff;
-}
-
-.table-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-  gap:15px;
-}
-
-.table{
-  padding:20px;
-  border:2px solid #333;
-  border-radius:12px;
-  text-align:center;
-  cursor:pointer;
-}
-
-.table.selected{border-color:var(--teal)}
-.table.locked{opacity:.4;pointer-events:none}
-
-/* WhatsApp CTA */
-.whatsapp-cta{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  width:100%;
-  margin-top:20px;
-  padding:16px 22px;
-  border-radius:999px;
-  font-weight:700;
-  font-size:1rem;
-  background:linear-gradient(135deg,#25D366,#1ebe5d);
-  color:#fff;
-  border:none;
-  cursor:pointer;
-}
-
-.spinner{
-  border:4px solid #333;
-  border-top:4px solid #fff;
-  border-radius:50%;
-  width:22px;
-  height:22px;
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
-<h1>BOOK YOUR VIP EXPERIENCE</h1>
-<p class="notice">Secure table booking • Instant confirmation • M-Pesa</p>
+<h2>BYZ Table Booking</h2>
 
-<!-- STEP 1 -->
-<div class="glass" id="step1">
-<h2>1. Choose Event & Table</h2>
-
-<select id="eventSelect"></select>
-
-<div class="table-grid" id="tableGrid"></div>
-<div id="tableError" class="error hidden">Please select a table</div>
-
-<select id="packageSelect">
-  <option value="">Select Package</option>
-  <option value="Standard">Standard — TZS 250,000</option>
-  <option value="Premium">Premium — TZS 400,000</option>
-  <option value="Executive">Executive — TZS 600,000</option>
-  <option value="VIP">VIP — TZS 800,000</option>
-</select>
-<div id="packageError" class="error hidden">Please select a package</div>
-
-<button class="btn primary" onclick="goStep2()">Next</button>
-</div>
-
-<!-- STEP 2 -->
-<div class="glass hidden" id="step2">
-<h2>2. Your Details</h2>
-
+<div class="card" id="form">
 <input id="name" placeholder="Full Name">
-<div id="nameError" class="error hidden">Name is required</div>
-
-<input id="phone" placeholder="WhatsApp Number (255…)">
-<div id="phoneError" class="error hidden">Phone number is required</div>
-
+<input id="phone" placeholder="WhatsApp Number">
 <input id="email" placeholder="Email (optional)">
-<input id="guests" type="number" placeholder="Number of Guests">
-<div id="guestsError" class="error hidden">Enter number of guests</div>
+<input id="guests" type="number" placeholder="Guests">
 
-<button class="btn" onclick="backToStep1()">Back</button>
-<button class="btn primary" onclick="goStep3()">Next</button>
+<select id="event">
+<option>Groove</option>
+<option>APT</option>
+<option>Tempo</option>
+</select>
+
+<select id="package">
+<option value="">Select Package</option>
+<option value="Standard">Standard</option>
+<option value="Premium">Premium</option>
+<option value="VIP">VIP</option>
+</select>
+
+<input id="table" type="number" placeholder="Table Number (1–10)">
+<input id="txn" placeholder="M-Pesa Transaction Code">
+
+<button onclick="submit()">Submit Booking</button>
 </div>
 
-<!-- STEP 3 -->
-<div class="glass hidden" id="step3">
-<h2>3. Payment</h2>
-
-<p>Pay via <b>Vodacom M-Pesa</b></p>
-<p>Send to: <b>68286833</b></p>
-
-<h3>TZS <span id="amount">0</span></h3>
-<div id="qr"></div>
-
-<input id="transactionCode" placeholder="M-Pesa Transaction Code">
-<div id="txnError" class="error hidden">Transaction code is required</div>
-
-<button class="btn primary" id="confirmBtn" onclick="submitBooking()">
-  Confirm Booking
-</button>
-</div>
-
-<!-- CONFIRMATION -->
-<div class="glass hidden" id="confirmation">
-<h2>🎉 Booking Confirmed</h2>
-
-<p><b>Booking ID:</b> <span id="confirmId"></span></p>
-<p id="confirmDetails"></p>
-
-<button class="whatsapp-cta" id="sendWhatsAppBtn">
-  <i class="fab fa-whatsapp"></i> Send WhatsApp Confirmation
-</button>
-
-<p class="notice" id="copyHint" style="display:none">
-Message copied. Paste in WhatsApp if needed ✅
-</p>
+<div class="card hidden" id="success">
+<h3>⏳ Payment Pending Verification</h3>
+<p>Your booking will be confirmed once payment is verified.</p>
+<p><b>Booking ID:</b> <span id="bid"></span></p>
 </div>
 
 </div>
 
 <script>
-/* ================= CONFIG ================= */
-
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiwV7ovrt97eEB7cF0H7zOEZbIpQj3M6RCjyUKGAtC19buMPWgtZLvjW-F_NZ-0_adBg/exec";
-const TABLES_PER_EVENT = 10;
-const WHATSAPP_NUMBER = "255768464367";
 
-const PACKAGE_PRICES = {
-  Standard:250000,
-  Premium:400000,
-  Executive:600000,
-  VIP:800000
-};
-
-/* ================= STATE ================= */
-
-let selectedTable = null;
-let bookings = [];
-
-/* ================= DOM ================= */
-
-const nameInput = document.getElementById("name");
-const phoneInput = document.getElementById("phone");
-const emailInput = document.getElementById("email");
-const guestsInput = document.getElementById("guests");
-const txnInput = document.getElementById("transactionCode");
-
-/* ================= INIT ================= */
-
-["Groove","APT","Tempo"].forEach(e=>{
-  const opt=document.createElement("option");
-  opt.value=e;
-  opt.textContent=e;
-  eventSelect.appendChild(opt);
-});
-
-fetch(SCRIPT_URL)
-.then(r=>r.json())
-.then(res=>{
-  bookings=res.bookings||[];
-  renderTables();
-});
-
-/* ================= FUNCTIONS ================= */
-
-function renderTables(){
-  tableGrid.innerHTML="";
-  selectedTable=null;
-
-  for(let i=1;i<=TABLES_PER_EVENT;i++){
-    const d=document.createElement("div");
-    d.className="table";
-    d.textContent="Table "+i;
-
-    if(bookings.some(b=>b.event===eventSelect.value && b.table==i)){
-      d.classList.add("locked");
-    }
-
-    d.onclick=()=>{
-      document.querySelectorAll(".table").forEach(t=>t.classList.remove("selected"));
-      d.classList.add("selected");
-      selectedTable=i;
-    };
-
-    tableGrid.appendChild(d);
-  }
-}
-
-eventSelect.onchange = renderTables;
-
-function goStep2(){
-  tableError.classList.toggle("hidden",!!selectedTable);
-  packageError.classList.toggle("hidden",!!packageSelect.value);
-  if(selectedTable && packageSelect.value){
-    step1.classList.add("hidden");
-    step2.classList.remove("hidden");
-  }
-}
-
-function backToStep1(){
-  step2.classList.add("hidden");
-  step1.classList.remove("hidden");
-}
-
-function goStep3(){
-  nameError.classList.toggle("hidden",!!nameInput.value.trim());
-  phoneError.classList.toggle("hidden",!!phoneInput.value.trim());
-  guestsError.classList.toggle("hidden",!!guestsInput.value);
-
-  if(nameInput.value && phoneInput.value && guestsInput.value){
-    step2.classList.add("hidden");
-    step3.classList.remove("hidden");
-    amount.textContent = PACKAGE_PRICES[packageSelect.value];
-    QRCode.toCanvas(qr,`M-PESA 68286833 TZS ${PACKAGE_PRICES[packageSelect.value]}`);
-  }
-}
-
-function submitBooking(){
-  txnError.classList.toggle("hidden",!!txnInput.value.trim());
-  if(!txnInput.value) return;
-
-  confirmBtn.disabled=true;
-  confirmBtn.innerHTML='<div class="spinner"></div>';
-
+function submit(){
   const payload={
     action:"addBooking",
     data:{
-      event:eventSelect.value,
-      table:selectedTable,
-      package:packageSelect.value,
-      name:nameInput.value.trim(),
-      phone:phoneInput.value.trim(),
-      email:emailInput.value.trim(),
-      guests:guestsInput.value,
-      amount:PACKAGE_PRICES[packageSelect.value],
-      transactionCode:txnInput.value.trim()
+      name:name.value,
+      phone:phone.value,
+      email:email.value,
+      guests:guests.value,
+      event:event.value,
+      package:package.value,
+      table:table.value,
+      amount:0,
+      transactionCode:txn.value
     }
   };
 
   fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(payload)})
   .then(r=>r.json())
   .then(res=>{
-    if(!res.success){alert(res.message);location.reload();return;}
-
-    step3.classList.add("hidden");
-    confirmation.classList.remove("hidden");
-
-    confirmId.textContent=res.bookingId;
-    confirmDetails.innerHTML=`
-      Event: <b>${payload.data.event}</b><br>
-      Table: <b>Table ${payload.data.table}</b><br>
-      Package: <b>${payload.data.package}</b><br>
-      Guests: <b>${payload.data.guests}</b>
-    `;
-
-    const msg=`
-BYZ BOOKING CONFIRMED
-Booking ID: ${res.bookingId}
-Event: ${payload.data.event}
-Table: Table ${payload.data.table}
-Package: ${payload.data.package}
-Guests: ${payload.data.guests}
-`;
-
-    sendWhatsAppBtn.onclick=()=>{
-      navigator.clipboard.writeText(msg).then(()=>copyHint.style.display="block");
-      window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(msg));
-    };
+    if(!res.success){alert(res.message);return;}
+    form.classList.add("hidden");
+    success.classList.remove("hidden");
+    bid.textContent=res.bookingId;
   });
 }
 </script>
