@@ -3,138 +3,240 @@
 <head>
 <meta charset="UTF-8">
 <title>BYZ Booking</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
-body{background:#0b0b12;color:#fff;font-family:Inter;margin:0}
-.container{max-width:540px;margin:auto;padding:40px}
-.card{background:#151520;border-radius:20px;padding:24px;margin-bottom:22px}
-h1{text-align:center}
-button{width:100%;padding:16px;border:none;border-radius:999px;
-background:linear-gradient(135deg,#8A2BE2,#FF00FF);color:white;font-weight:700}
-button:disabled{opacity:.4}
-.table{padding:12px;border-radius:12px;background:#1e1e2c;margin:6px 0;cursor:pointer}
-.table.sold{opacity:.3;pointer-events:none}
-.notice{color:#ffcc00;text-align:center;font-weight:600}
+body{
+  background:#0b0b12;
+  color:#fff;
+  font-family:Inter,system-ui;
+  margin:0;
+}
+
+.container{
+  max-width:540px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+.card{
+  background:#151520;
+  border-radius:20px;
+  padding:24px;
+  margin-bottom:22px;
+}
+
+h1{text-align:center;margin-bottom:6px}
+p{text-align:center;color:#aaa}
+
+input, select{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:none;
+  border-radius:12px;
+  background:#1e1e2c;
+  color:#fff;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#8A2BE2,#FF00FF);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+.notice{
+  text-align:center;
+  font-weight:600;
+  color:#ffcc00;
+  margin-bottom:18px;
+}
+
+.amount-box{
+  background:#1e1e2c;
+  border-radius:14px;
+  padding:16px;
+  text-align:center;
+  font-weight:700;
+  margin-top:10px;
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-<h1>BYZ Booking</h1>
 
-<div id="cutoff" class="notice" style="display:none">
-Bookings after 11PM are closed.
+<h1>BYZ Booking</h1>
+<p>Reserve your spot</p>
+
+<div id="cutoffNotice" class="notice" style="display:none">
+Online bookings close at 11:00 PM.  
 <br><br>
-<a href="tel:+255768464367"><button>Call BYZ</button></a>
+<a href="tel:+255768464367">
+  <button>Call BYZ</button>
+</a>
 </div>
 
 <div class="card">
-<select id="type" onchange="toggle()">
-<option value="">Select Booking Type</option>
-<option value="TICKET">Individual Ticket – 30,000</option>
-<option value="TABLE">VIP Table</option>
+<label>Booking Type</label>
+<select id="bookingType" onchange="toggleBookingType()">
+  <option value="">Select</option>
+  <option value="TICKET">Individual Ticket (30,000 each)</option>
+  <option value="TABLE">VIP Table</option>
 </select>
 
-<div id="tickets" style="display:none">
-<input id="qty" type="number" min="1" value="1" placeholder="Ticket Quantity">
+<div id="ticketSection" style="display:none">
+  <label>Number of Tickets</label>
+  <input type="number" id="ticketQty" min="1" value="1" onchange="updateTicketAmount()">
+  <div class="amount-box">
+    Total: <span id="ticketTotal">30,000</span> TZS
+  </div>
 </div>
 
-<div id="tables" style="display:none">
-<h4>VIP Tables</h4>
-<div id="tableList"></div>
+<div id="tableSection" style="display:none">
+  <label>Table Package</label>
+  <select id="tablePackage">
+    <option value="">Select Package</option>
+    <option value="700K">Tier 1 – 700,000 (Entry VIP)</option>
+    <option value="1.2M">Tier 2 – 1,200,000 (Mid VIP)</option>
+    <option value="1.8M">Tier 3 – 1,800,000 (Premium VIP)</option>
+  </select>
 </div>
 </div>
 
 <div class="card">
-<input id="fullName" placeholder="Full Name">
-<input id="phone" placeholder="Phone (WhatsApp)">
-<input id="email" placeholder="Email">
-<input id="txn" placeholder="M-Pesa Transaction Code">
+<label>Full Name</label>
+<input id="fullName" placeholder="Your name">
+
+<label>Phone (WhatsApp)</label>
+<input id="phone" placeholder="07XXXXXXXX">
+
+<label>Email</label>
+<input id="email" placeholder="you@email.com">
+
+<label>M-Pesa Transaction Code</label>
+<input id="txn" placeholder="e.g. QH34KLM">
 </div>
 
-<button id="submit" onclick="submit()">Submit Booking</button>
+<div class="notice">
+After submitting, you will be taken to WhatsApp.  
+<br>
+<b>Please press SEND</b> to start payment verification.
+</div>
+
+<button id="submitBtn" onclick="submitBooking()">Submit Booking</button>
+
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
+const SCRIPT_URL = "PASTE_YOUR_CURRENT_APPS_SCRIPT_URL_HERE";
+const BYZ_WHATSAPP = "255768464367";
+const TICKET_PRICE = 30000;
 
-if (new Date().getHours() >= 23) {
-  cutoff.style.display="block";
-  submit.disabled=true;
+/* 11PM CUTOFF */
+(function(){
+  const now = new Date();
+  if (now.getHours() >= 23) {
+    document.getElementById("cutoffNotice").style.display = "block";
+    document.getElementById("submitBtn").disabled = true;
+  }
+})();
+
+function toggleBookingType(){
+  document.getElementById("ticketSection").style.display =
+    bookingType.value === "TICKET" ? "block" : "none";
+  document.getElementById("tableSection").style.display =
+    bookingType.value === "TABLE" ? "block" : "none";
+
+  if (bookingType.value === "TICKET") {
+    updateTicketAmount();
+  }
 }
 
-let availability={};
-
-fetch(SCRIPT_URL).then(r=>r.json()).then(d=>{
-  availability=d.availability;
-  renderTables();
-});
-
-function toggle(){
-  tickets.style.display = type.value==="TICKET"?"block":"none";
-  tables.style.display = type.value==="TABLE"?"block":"none";
+function updateTicketAmount(){
+  const qty = Number(document.getElementById("ticketQty").value || 1);
+  const total = qty * TICKET_PRICE;
+  document.getElementById("ticketTotal").textContent =
+    total.toLocaleString();
 }
 
-function renderTables(){
-  tableList.innerHTML="";
-  ["700K","1.2M","1.8M"].forEach(tier=>{
-    for(let i=1;i<=4;i++){
-      const num = i;
-      const div=document.createElement("div");
-      div.className="table";
-      div.textContent=`${tier} Table ${num}`;
-      if (availability[tier]?.includes(num)) div.classList.add("sold");
-      div.onclick=()=>selectTable(tier,num);
-      tableList.appendChild(div);
-    }
-  });
-}
+function submitBooking(){
+  const type = bookingType.value;
+  if (!type) return alert("Please select a booking type.");
 
-let selected={};
+  let data = {};
+  let messageDescription = "";
 
-function selectTable(tier,num){
-  selected={tier,tableNumber:num};
-  alert(`Selected ${tier} Table ${num}`);
-}
+  if (type === "TICKET") {
+    const qty = Number(document.getElementById("ticketQty").value);
+    const total = qty * TICKET_PRICE;
 
-function submit(){
-  let data={};
-
-  if(type.value==="TICKET"){
-    data={
-      bookingType:"TICKET",
-      description:`${qty.value} Individual Ticket(s)`,
-      quantity:qty.value,
-      amount:qty.value*30000
+    data = {
+      bookingType: "TICKET",
+      quantity: qty,
+      description: `${qty} Individual Ticket(s)`,
+      amount: total
     };
-  }else{
-    data={
-      bookingType:"TABLE",
-      tier:selected.tier,
-      tableNumber:selected.tableNumber,
-      description:`VIP Table ${selected.tier}`,
-      amount: selected.tier==="700K"?700000:selected.tier==="1.2M"?1200000:1800000
+
+    messageDescription = `${qty} Ticket(s) – ${total.toLocaleString()} TZS`;
+  } else {
+    const pkg = document.getElementById("tablePackage").value;
+    if (!pkg) return alert("Please select a table package.");
+
+    let amount = pkg === "700K" ? 700000 :
+                 pkg === "1.2M" ? 1200000 : 1800000;
+
+    data = {
+      bookingType: "TABLE",
+      tier: pkg,
+      description: `VIP Table – ${pkg}`,
+      amount: amount
     };
+
+    messageDescription = `VIP Table ${pkg} – ${amount.toLocaleString()} TZS`;
   }
 
   data.name = document.getElementById("fullName").value;
   data.phone = document.getElementById("phone").value;
-data.email = document.getElementById("email").value;
-data.transactionCode = document.getElementById("txn").value;
+  data.email = document.getElementById("email").value;
+  data.transactionCode = document.getElementById("txn").value;
 
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({action:"addBooking",data})
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({ action: "addBooking", data })
   });
 
+  const whatsappMessage =
+`NEW BYZ BOOKING (PENDING)
+Name: ${data.name}
+Phone: ${data.phone}
+Booking: ${messageDescription}
+Txn Code: ${data.transactionCode}
+
+Please verify payment and approve.`;
+
   window.open(
-    `https://wa.me/255768464367?text=${encodeURIComponent(
-      `NEW BYZ BOOKING\n${data.description}\nName:${data.name}\nTxn:${data.transactionCode}`
-    )}`
+    `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(whatsappMessage)}`,
+    "_blank"
   );
 
-  alert("Booking submitted. Pending verification.");
+  alert(
+    "Booking submitted.\n\nIMPORTANT:\nPlease press SEND on WhatsApp so BYZ can verify your payment."
+  );
 }
 </script>
+
 </body>
 </html>
