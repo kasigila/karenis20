@@ -268,7 +268,7 @@ button{
     <p style="color:var(--muted);margin-bottom:6px;">Business Name</p>
     <h3 style="margin-top:0;">BYZ Entertainment</h3>
 
-    <p style="color:var(--muted);margin-bottom:6px;">Lipa Number</p>
+    <p style="color:var(--muted);margin-bottom:6px;">M-Pesa Lipa Number</p>
     <h1 id="mpesaNumber" style="letter-spacing:2px;">68286833</h1>
 
     <button
@@ -287,15 +287,14 @@ button{
     </button>
 
     <p style="font-size:.85rem;color:var(--muted);margin-top:14px;">
-      Open M-Pesa → Lipa → Enter this number → Pay<br>
-      You will receive a transaction code by SMS
+      <br>
+      Once payment is completed copy-paste the Transaction ID into this form
     </p>
   </div>
 </div>
     <p class="subtitle">Pay first, then complete booking with Transaction ID</p>
   </div>
 </div>
-
 <!-- FORM -->
 <div class="step" id="formStep">
   <div class="form">
@@ -311,7 +310,23 @@ button{
 </div>
 
 <script>
-const SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+  function copyMpesa(){
+  const number = document.getElementById("mpesaNumber").innerText;
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(number);
+  } else {
+    const temp = document.createElement("textarea");
+    temp.value = number;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    document.body.removeChild(temp);
+  }
+
+  alert("Lipa number copied. Open M-Pesa to complete payment.");
+}
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
 const BYZ_WHATSAPP = "255768464367";
 const TICKET_PRICE = 30000;
 
