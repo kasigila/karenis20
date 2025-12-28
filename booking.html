@@ -303,6 +303,23 @@ h1, h2, h3 {
 .subtitle {
   margin-bottom: 16px !important;
 }
+  /* ===== FIX LARGE GAP BETWEEN TICKET SELECTOR & PAYMENT ===== */
+
+/* Pull payment section closer to previous content */
+#paymentStep,
+.payment {
+  margin-top: 16px !important;
+}
+
+/* If payment is inside a step container */
+#paymentStep.step {
+  padding-top: 0 !important;
+}
+
+/* Reduce spacing after ticket selector */
+#ticketStep {
+  margin-bottom: 12px !important;
+}
 </style>
 </head>
 
