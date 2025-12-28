@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>BYZ Booking</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,80 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
+  /* ===== RESPONSIVE SAFETY NET ===== */
+
+/* Prevent horizontal scrolling */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Make all containers flexible */
+* {
+  box-sizing: border-box;
+}
+
+/* Images & icons never overflow */
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Headings scale automatically */
+h1 {
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  line-height: 1.2;
+  text-align: center;
+}
+
+h2 {
+  font-size: clamp(1.3rem, 5vw, 2rem);
+}
+
+h3 {
+  font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+}
+
+/* Big numbers (like M-Pesa number) */
+.responsive-number,
+.mpesa-number {
+  font-size: clamp(1.5rem, 6vw, 2.4rem);
+  letter-spacing: 0.12em;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Buttons stay inside screen */
+button {
+  max-width: 100%;
+  white-space: normal;
+}
+
+/* Cards stack nicely on mobile */
+@media (max-width: 768px) {
+  .choice-grid,
+  .packages,
+  .table-packages {
+    grid-template-columns: 1fr !important;
+  }
+
+  .card,
+  .choice,
+  .package,
+  .selector,
+  .payment {
+    padding: 20px !important;
+  }
+}
+
+/* Prevent fixed elements blocking content */
+@media (max-width: 600px) {
+  .theme-toggle {
+    top: 10px;
+    right: 10px;
+    transform: scale(0.9);
+  }
+}
 :root{
   --bg:#0b0b12;
   --card:#151520;
