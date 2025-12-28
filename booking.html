@@ -46,7 +46,7 @@ Bookings after 11PM are closed.
 </div>
 
 <div class="card">
-<input id="name" placeholder="Full Name">
+<input id="fullName" placeholder="Full Name">
 <input id="phone" placeholder="Phone (WhatsApp)">
 <input id="email" placeholder="Email">
 <input id="txn" placeholder="M-Pesa Transaction Code">
@@ -117,10 +117,10 @@ function submit(){
     };
   }
 
-  data.name=name.value;
-  data.phone=phone.value;
-  data.email=email.value;
-  data.transactionCode=txn.value;
+  data.name = document.getElementById("fullName").value;
+  data.phone = document.getElementById("phone").value;
+data.email = document.getElementById("email").value;
+data.transactionCode = document.getElementById("txn").value;
 
   fetch(SCRIPT_URL,{
     method:"POST",
