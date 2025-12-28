@@ -269,7 +269,7 @@ button{
     <h3 style="margin-top:0;">BYZ Entertainment</h3>
 
     <p style="color:var(--muted);margin-bottom:6px;">M-Pesa Lipa Number</p>
-    <h1 id="mpesaNumber" style="letter-spacing:2px;">68286833</h1>
+    <h1 id="mpesaNumber" class="mpesa-number">68286833</h1>
 
     <button
       onclick="copyMpesa()"
@@ -292,7 +292,7 @@ button{
     </p>
   </div>
 </div>
-    <p class="subtitle">Pay first, then complete booking with Transaction ID</p>
+    <p class="subtitle"> </p>
   </div>
 </div>
 <!-- FORM -->
@@ -323,7 +323,13 @@ button{
     document.execCommand("copy");
     document.body.removeChild(temp);
   }
-
+.mpesa-number{
+  font-size:clamp(1.6rem, 6vw, 2.4rem);
+  letter-spacing:0.12em;
+  word-break:break-all;
+  text-align:center;
+  margin:12px 0;
+}
   alert("Lipa number copied. Open M-Pesa to complete payment.");
 }
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
