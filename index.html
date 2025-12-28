@@ -1,1402 +1,397 @@
-<!-- Start of Selection -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>BYZ in the Hood | Dar es Salaam's Ultimate Nightlife Experience</title>
-  <meta name="description" content="BYZ in the Hood - Tanzania's premier nightlife brand. Experience Groove Series, APT Sessions, Tempo parties, Caribbean vibes, and exclusive events in Dar es Salaam.">
-  <meta name="keywords" content="BYZ in the Hood, Dar es Salaam nightlife, Tanzania parties, Groove Series, APT Sessions, Tempo events, Caribbean parties, Mbudya beach parties">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BYZ in the Hood</title>
 
-  <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ===================== DESIGN TOKENS ===================== */
+:root {
+  --bg: #ffffff;
+  --bg-alt: #f5f5f7;
+  --text: #1d1d1f;
+  --text-sub: #6e6e73;
+  --border: #d2d2d7;
+  --accent: #000000;
+}
 
-  <style>
-  :root {
-    --z-bg: #121214;
-    --z-bg-alt: #18181b;
-    --z-card: #17171c;
-    --z-text-main: #fff;
-    --z-text-faint: #bbbbe2;
-    --z-accent-neon1: #9f1fff;
-    --z-accent-neon2: #00ffe0;
-    --z-accent-neon3: #ff2df7;
-    --z-accent-neon4: #ffe200;
-    --z-neon-glow: 0 0 24px #9f1fff, 0 0 8px #00ffe0;
-    --z-radial: radial-gradient(ellipse at 50% 0,#28285680 0%,#121214 70%);
-    --z-border-radius: 1.25em;
-    --z-pad-y: min(8vw, 4rem);
-    --z-h1: clamp(2.5rem,8vw,4.5rem);
-    --z-h2: clamp(2rem,6vw,3.2rem);
-    --z-h3: clamp(1.2rem,3vw,2rem);
-    --z-shadow: 0 8px 40px rgba(0,0,0,0.45);
-    --z-trans: cubic-bezier(.76,0,.24,1);
-    --z-gradient-accent: linear-gradient(90deg,var(--z-accent-neon1),var(--z-accent-neon3));
-    --z-gradient-alt: linear-gradient(90deg,var(--z-accent-neon2),var(--z-accent-neon1),var(--z-accent-neon3));
-    --z-button-fg: #111119;
-    --z-header-height: 82px;
-  }
+[data-theme="dark"] {
+  --bg: #000000;
+  --bg-alt: #1c1c1e;
+  --text: #f5f5f7;
+  --text-sub: #a1a1a6;
+  --border: #2c2c2e;
+  --accent: #ffffff;
+}
 
-  html { scroll-behavior: smooth; font-size: 16px; }
-  body {
-    background: var(--z-bg);
-    color: var(--z-text-main);
-    font-family: 'Poppins', 'Outfit', sans-serif;
-    min-height: 100vh;
-    transition: background .45s;
-    background-image:
-      radial-gradient(circle at 15% 10%,rgba(159,31,255,0.16) 1%,transparent 65%),
-      radial-gradient(circle at 80% 90%,rgba(0,255,224,0.09) 1%,transparent 75%);
-    letter-spacing: 0.01em;
-    overflow-x: hidden;
-  }
+/* ===================== BASE ===================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  .container {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1.2em;
-  }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.4s ease, color 0.4s ease;
+  line-height: 1.6;
+}
 
-  /* Universal typography improvements */
-  h1,h2,h3,h4,.footer-logo {
-    font-family: 'Outfit',sans-serif;
-    font-weight: 900;
-    letter-spacing: -1.5px;
-    background: none;
-  }
-  h1 { font-size: var(--z-h1); background: var(--z-gradient-accent); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  h2 { font-size: var(--z-h2); background: var(--z-gradient-alt); -webkit-background-clip: text; background-clip: text; color: transparent;}
-  h3 { font-size: var(--z-h3); }
-  .section-title {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    animation: fadein 1.3s;
-  }
-  .section-title h2 { margin-bottom: 0.5rem;}
-  .section-title p { color: var(--z-text-faint); font-family: 'Poppins', sans-serif; font-weight: 400; letter-spacing: 0.03em;}
+a { color: inherit; text-decoration: none; }
 
-  @keyframes fadein {
-    from { opacity: 0; transform: translateY(30px);}
-    to { opacity: 1; transform: none;}
-  }
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
 
-  /* ================= HEADER / NAV ================ */
-  header {
-    width: 100vw;
-    height: var(--z-header-height);
-    background: rgba(22,22,34, 0.93);
-    box-shadow: 0 1px 0 0 #23233466;
-    position: fixed;
-    top: 0; left: 0;
-    z-index: 40;
-    transition: background .3s;
-    backdrop-filter: blur(9px);
-    will-change: background;
-  }
-  .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: var(--z-header-height);
-  }
-  .logo {
-    display: flex; align-items: center; gap: .7em;
-    text-decoration: none;
-  }
-  .logo-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 16px;
-    background: var(--z-gradient-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    color: var(--z-text-main);
-    font-family: 'Outfit',sans-serif;
-    font-weight: 900;
-    box-shadow: var(--z-neon-glow);
-    transition: box-shadow 0.3s;
-    animation: neonpulse 2.5s infinite alternate;
-  }
-  @keyframes neonpulse {
-    0% { box-shadow: 0 0 0 #9f1fff, 0 0 0 #00ffe0;}
-    70% { box-shadow: 0 0 28px #9f1fff, 0 0 18px #00ffe0;}
-    100% { box-shadow: 0 0 16px #9f1fff, 0 0 9px #00ffe0;}
-  }
-  .logo-text {
-    font-family: 'Outfit',sans-serif;
-    font-size: 1.5rem;
-    font-weight: 900;
-    letter-spacing: -2px;
-    color: var(--z-text-main);
-    background: var(--z-gradient-alt);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    text-transform: uppercase;
-    line-height: 1;
-    user-select: none;
-  }
+/* ===================== HEADER ===================== */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  backdrop-filter: blur(18px);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
 
-  nav {
-    z-index: 1200;
-  }
+.header-inner {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  nav ul {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    gap: 1.4em;
-    transition: right .33s var(--z-trans);
-  }
-  nav ul li { list-style: none;}
-  nav ul li:last-child a {
-    margin-left: .8em;
-    font-weight: bold;
-    font-size:1rem;
-    border-radius: var(--z-border-radius);
-    box-shadow: var(--z-neon-glow);
-    letter-spacing:.05em;
-    /* Overriding styles below */
-  }
-  nav ul li a {
-    color: var(--z-text-main);
-    padding: 6px 10px 8px 10px;
-    font-size: 1.025rem;
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
-    text-decoration:none;
-    border:none;
-    outline:none;
-    background: none;
-    border-radius: 7px;
-    position:relative;
-    transition: color .18s, background .18s;
-  }
-  nav ul li a:hover {
-    color: var(--z-accent-neon1);
-    /* No underline or border ever */
-    background: rgba(160,65,255,0.07);
-  }
-  nav ul li:last-child a {
-    background: var(--z-gradient-accent) !important;
-    color: #fff !important;
-    padding: .7em 1.2em !important;
-    transition: box-shadow .24s;
-    text-shadow: 0 2px 16px #8a2be280;
-    border: none;
-    outline: none;
-    box-shadow: 0 8px 24px #9f1fff60;
-  }
-  nav ul li:last-child a:hover {
-    color: #fff !important;
-    background: var(--z-gradient-alt) !important;
-    box-shadow: 0 2px 24px #00ffe044,0 8px 40px #9f1fff60;
-  }
+.logo { font-weight: 600; letter-spacing: -0.4px; }
 
-  /* Mobile nav */
-  .mobile-menu-btn {
-    display: flex;
-    background: none;
-    border: none;
-    color: var(--z-accent-neon2);
-    font-size: 2.1rem;
-    align-items: center;
-    justify-content:center;
-    margin-left: 1em;
-    cursor: pointer;
-    transition: color .2s;
-    z-index: 1001;
-  }
-  @media (min-width: 940px) {
-    .mobile-menu-btn { display: none!important;}
-  }
-  @media (max-width: 940px) {
-    nav ul {
-      flex-direction: column;
-      align-items: flex-start;
-      background: #17171cfa;
-      position: fixed;
-      right: -115vw;
-      top: var(--z-header-height);
-      height: 100vh;
-      width: 87vw;
-      max-width: 340px;
-      gap: 1.2em;
-      padding: 2.4em 1.6em;
-      box-shadow: -12px 0 52px #9f1fff13;
-      border-top-left-radius: 2em;
-      border-bottom-left-radius: 2em;
-    }
-    nav ul.active {right: 0;}
-  }
+nav ul {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
 
-  /* =============== HERO ================= */
-  .hero {
-    min-height: 92vh;
-    width: 100vw;
-    padding: calc(var(--z-header-height) + 2.2em) 0 var(--z-pad-y) 0;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
-    background:
-      linear-gradient(120deg, #161622ee 0%, #161622b0 80%, transparent 100%);
-  }
-  .hero-bg {
-    position:absolute;
-    top:0; left:0; width:100%; height:100%;
-    z-index:-1;
-    /* HERO IMAGE placeholder - replace with your own */
-    background:
-      linear-gradient(130deg,rgba(18,18,36,0.9) 45%,rgba(24,24,31,0.8) 100%),
-      url('https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat;
-    filter: brightness(0.94) saturate(1.09);
-    animation: herobganim 10s infinite alternate;
-  }
-  /* HERO IMAGE: Replace above url for custom image */
-  @keyframes herobganim {
-    0% { filter: brightness(0.90) saturate(1.09);}
-    80% { filter: brightness(1.07) saturate(1.20);}
-    100% { filter: brightness(0.90) saturate(1.09);}
-  }
+nav a {
+  font-size: 15px;
+  color: var(--text-sub);
+}
+nav a:hover { color: var(--text); }
 
-  .hero-content {
-    width: 100%;
-    max-width: 700px;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.75em;
-    animation: fadein 1.2s .05s both;
-    margin-left:auto; margin-right:auto;
-    align-items: flex-start;
-  }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
 
-  .hero-tagline {
-    display:inline-block;
-    font-size: 1.05rem;
-    border-radius: 2em;
-    font-weight: 700;
-    padding:.5em 1.7em;
-    color: #fff;
-    letter-spacing: 0.08em;
-    background: var(--z-gradient-alt);
-    text-shadow: 0 2px 8px #000a;
-    box-shadow: 0 2px 18px #9f1fff44;
-    margin-bottom: .6em;
-    position:relative;
-    animation: pulseTag 1.8s infinite alternate;
-  }
-  @keyframes pulseTag {
-    0%,80% { filter: brightness(1.0);}
-    100% { filter: brightness(1.18);}
-  }
+.cta {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 14px;
+  font-weight: 500;
+}
 
-  .hero-content h1 {
-    margin-bottom: .25em;
-    background: none;
-    color: transparent;
-    background: var(--z-gradient-accent);
-    background-clip: text; -webkit-background-clip: text;
-    line-height: 1.09;
-    transition: background .42s;
-    user-select:text;
-  }
-  .hero-content h1 span {
-    background: var(--z-gradient-alt);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    transition: background .35s;
-  }
-  .hero-subtitle {
-    font-size: 1.13rem;
-    max-width: 34em;
-    color: var(--z-text-faint);
-    padding:.4em 0 .9em 0;
-    font-weight: 400;
-    letter-spacing: .01em;
-    line-height: 1.55;
-  }
+/* Dark mode toggle */
+.toggle {
+  width: 42px;
+  height: 24px;
+  background: var(--border);
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+}
+.toggle::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background: var(--bg);
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+[data-theme="dark"] .toggle::after {
+  transform: translateX(18px);
+}
 
-  .hero-btns {
-    display: flex;
-    flex-wrap: wrap;
-    gap:1.1em;
-    margin-bottom:.5em;
-    z-index: 2;
-  }
+/* ===================== HERO ===================== */
+.hero {
+  padding-top: 140px;
+  padding-bottom: 120px;
+  text-align: center;
+}
 
-  .btn {
-    border: none;
-    outline: none;
-    font-family: 'Outfit', sans-serif;
-    text-transform: uppercase;
-    padding: .95em 2em;
-    font-weight: 700;
-    font-size:1.04rem;
-    letter-spacing: .07em;
-    border-radius: 3em;
-    display:inline-flex; align-items: center; gap:.7em;
-    position:relative;
-    background: transparent;
-    color: var(--z-text-main);
-    cursor:pointer;
-    box-shadow: none;
-    transition: background .2s, color .18s, box-shadow .22s var(--z-trans), transform .21s;
-    z-index:2;
-    overflow:hidden;
-    will-change: background, color, box-shadow,transform;
-  }
-  .btn i {font-size: 1.25em;}
-  .btn-primary {
-    background: var(--z-gradient-accent);
-    color: #fff;
-    box-shadow: 0 0 16px #9f1fff70;
-  }
-  .btn-primary:hover { background: var(--z-gradient-alt); color: #fff; box-shadow: 0 5px 32px #00ffe066;}
-  .btn-success {
-    background: var(--z-gradient-alt);
-    color: var(--z-button-fg);
-    font-weight: 800;
-    box-shadow: 0 0 14px #00ffe044;
-    border: none;
-  }
-  .btn-success:hover { background: var(--z-gradient-accent); color: white; box-shadow: var(--z-neon-glow);}
-  .btn-whatsapp {
-    background: linear-gradient(90deg, #25D366 60%, #3DE97E 100%)!important;
-    color: #1a1a1a !important;
-    font-weight: 700;
-    transition: background .16s, color .23s;
-  }
-  .btn-whatsapp:hover {
-    background: #21bb5f;
-    color: #fff !important;
-    box-shadow: 0 0 12px #21bb5f50;
-  }
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  letter-spacing: -1.2px;
+  margin-bottom: 20px;
+}
 
-  .hero-stats {
-    width: 100%;
-    display: flex;
-    gap: 2em 2em;
-    flex-wrap: wrap;
-    margin-top: 1.7em;
-    justify-content: flex-start;
-  }
-  .stat-item { min-width: 78px;}
-  .stat-number {
-    font-size: 2.1rem;
-    font-family: 'Outfit',sans-serif;
-    background: var(--z-gradient-accent);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    font-weight: 900;
-    letter-spacing: .05em;
-    margin-bottom: .13em;
-    text-shadow: 0 4px 32px #9f1fff48;
-  }
-  .stat-label {
-    color: var(--z-text-faint);
-    font-size: 0.93rem;
-    text-transform: uppercase;
-    letter-spacing: .09em;
-    margin-top: .05em;
-    font-family: 'Poppins',sans-serif;
-    font-weight: 500;
-  }
+.hero p {
+  max-width: 640px;
+  margin: 0 auto 36px;
+  color: var(--text-sub);
+  font-size: 18px;
+}
 
-  /* =============== SECTIONS LAYOUT =============== */
-  section { padding: var(--z-pad-y) 0;}
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
 
-  /* =========== EVENTS SECTION ============== */
-  .events-section {
-    background: var(--z-bg-alt);
-    border-top: 2px solid #26264b30;
-    border-bottom: 2px solid #26264b20;
-    z-index:2;
-    position:relative;
-  }
-  .event-slider-container {
-    width: 100%;
-    max-width: 680px;
-    margin: 0 auto;
-    overflow: hidden;
-    border-radius: 2.1em;
-    border: 1.5px solid #19193055;
-    background: var(--z-card);
-    box-shadow: 0 18px 50px #8a2be230;
-    position: relative;
-  }
-  .event-slider {
-    display: flex;
-    transition: transform 1s cubic-bezier(.68,-0.2,.65,1.2);
-    height: 360px;
-    will-change: transform;
-  }
-  .event-slide {
-    min-width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    padding: 0;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    overflow: hidden;
-    transition: box-shadow  .31s;
-    opacity: .97;
-  }
-  /* ==== Event Slider Images placeholders ==== */
-  .event-slide.groove {
-    /* TODO: Replace with Groove Series event photo */
-    background:
-      linear-gradient(0deg,rgba(18,18,36,0.82),rgba(18,18,36,0.30) 70%),
-      url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-  }
-  .event-slide.apt {
-    /* TODO: Replace with APT Session event photo */
-    background:
-      linear-gradient(0deg,rgba(18,18,36,0.82),rgba(18,18,36,0.30) 70%),
-      url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-  }
-  .event-slide.tempo {
-    /* TODO: Replace with Tempo event photo */
-    background:
-      linear-gradient(0deg,rgba(18,18,36,0.82),rgba(18,18,36,0.30) 70%),
-      url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-  }
-  .event-info {
-    background:rgba(19,16,42,0.83);
-    padding: 2.7em 2.3em;
-    max-width: 360px;
-    min-width: 258px;
-    margin: 2em 2.4em;
-    border-radius: 1.5em;
-    border-left: 5px solid var(--z-accent-neon1);
-    box-shadow:0 3px 35px #0a0a1444;
-    transition: background .16s;
-    z-index:2;
-    backdrop-filter: blur(3.5px);
-    font-family: 'Poppins',sans-serif;
-  }
-  .event-info h3 { font-size:1.2rem; color:#fff;letter-spacing:0.07em;}
-  .event-type { color: var(--z-accent-neon2); font-weight:700; letter-spacing:.04em; margin-bottom:.7em;}
-  .event-info p { color:var(--z-text-faint); margin-bottom:1.3em;}
-  .event-slider-container .slider-dots {
-    position: absolute; bottom: 1.6em; left: 50%; transform: translateX(-50%);
-    display: flex; gap: .6em; z-index:2;
-  }
-  .slider-dot {
-    width: 13px; height: 13px; border-radius: 50%;
-    background: rgba(155,115,255,.25);
-    cursor: pointer;
-    box-shadow: 0 0 6px #8a2be280;
-    border: 2px solid transparent;
-    transition: background .18s, border .18s;
-  }
-  .slider-dot.active {
-    background: var(--z-accent-neon1);
-    border: 2px solid var(--z-accent-neon2);
-    box-shadow:0 0 0 4px #8a2be220;
-  }
+.btn {
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+.btn.primary {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+}
 
-  /* ============== TEAM SECTION ============== */
-  .team-section { background: var(--z-card);}
-  .team-carousel-container {
-    max-width: 880px;
-    margin: 0 auto;
-    overflow: hidden;
-    position: relative;
-    height: 290px;
-  }
-  .team-carousel {
-    display: flex;
-    width: 700%; /* 7 team members */
-    animation: teamSlide 14s infinite linear;
-  }
-  @keyframes teamSlide {
-    0%, 14.28% {transform:translateX(0%);}
-    14.28%,28.56% {transform:translateX(-14.28%);}
-    28.56%,42.84% {transform:translateX(-28.56%);}
-    42.84%,57.12% {transform:translateX(-42.84%);}
-    57.12%,71.4% {transform:translateX(-57.12%);}
-    71.4%,85.68% {transform:translateX(-71.4%);}
-    85.68%,100% {transform:translateX(-85.68%);}
-  }
-  .team-member {
-    width: 14.28%;
-    min-width: 120px; max-width: 230px;
-    padding: 0 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content:center;
-  }
-  .team-avatar {
-    width: 94px; height: 94px;
-    border-radius: 50%;
-    margin-bottom: 1.2em;
-    border: 3px solid var(--z-accent-neon1);
-    background: #25253e;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 12px #8a2be260;
-    /* TODO: Add team member photo below (currently initials only) */
-    overflow: hidden;
-  }
-  .team-avatar .avatar-placeholder {
-    font-size: 2.1em; color: var(--z-accent-neon1); font-family: 'Outfit',sans-serif;font-weight: 800;
-    letter-spacing:.01em;
-  }
-  .team-info h4{font-size:1.1rem; color:#fff;}
-  .team-info p{color:var(--z-accent-neon3);font-weight:600;letter-spacing:.03em; margin-bottom:0.9em;}
-  .team-instagram {
-    display: inline-flex; align-items: center; gap: .4em; color: var(--z-accent-neon1);
-    background: #19192f; border-radius: 2em; padding: .54em 1.3em; font-size:.96em;
-    text-decoration: none; box-shadow: 0 2px 12px #8a2be215;
-    font-family: 'Outfit',sans-serif;font-weight: 700;
-    transition: background .15s, color .17s, transform .14s;
-  }
-  .team-instagram:hover {background: var(--z-gradient-alt); color:#18181b; transform: translateY(-3px);}
-  
-  /* ================ YOUTUBE SECTION ================ */
-  .youtube-section { background: var(--z-bg-alt);}
-  .video-showcase {
-    display: flex;
-    flex-direction: column;
-    gap: 2.3em;
-  }
-  .main-video, .video-countdown {
-    background: var(--z-card);
-    border-radius: 1.3em;
-    box-shadow: 0 7px 32px #8a2be230;
-    margin-bottom: 0 .5em;
-    overflow: hidden;
-    position:relative;
-    animation: fadein .66s;
-  }
-  .main-video { flex:2; min-width:290px;}
-  .video-container {
-    width:100%; position:relative;
-    padding-bottom:56.25%;
-    height:0;
-  }
-  .video-container iframe {
-    position:absolute; top:0;left:0; width:100%;height:100%; border:none;
-    border-radius:.8em  .8em 0 0;
-    filter:brightness(0.96);
-  }
-  .video-info {
-    padding:1.3em 1.35em;
-  }
-  .video-info h3 { margin-bottom:.4em; font-weight:900;}
-  .video-stats {display:flex; gap:1.3em; margin-bottom:1.0em; color: var(--z-accent-neon2);}
-  .video-stats span i {margin-right:.42em;}
-  .video-info p{color:var(--z-text-faint); font-size:1.01em;}
-  .video-info .btn {margin-top:.9em;}
-  .video-countdown {
-    text-align: center;
-    padding: 2em 1em;
-    min-width:225px;
-    transition: box-shadow .20s;
-  }
-  .video-countdown h3 { color: var(--z-accent-neon2); margin-bottom: 1em;}
-  .countdown-timer {
-    display:flex; gap:.8em; justify-content:center; margin-bottom:1.1em;
-  }
-  .countdown-unit {
-    text-align:center;
-  }
-  .countdown-number {
-    font-size:2.1rem; font-weight:900; color:var(--z-accent-neon1); margin-bottom:.13em;
-    font-family: 'Outfit',sans-serif; letter-spacing:.07em;
-    text-shadow: 0 3px 15px #9f1fff50;
-  }
-  .video-countdown p {color:var(--z-text-faint);}
-  .video-countdown .popular-videos {text-align: left; margin-top: 2em;}
-  .video-countdown .popular-videos h4 {color:#fff; margin-bottom:.7em;}
-  .video-countdown .popular-videos a {
-    display: block; color: var(--z-accent-neon2); margin-bottom:.5em;
-    text-decoration:none; font-weight:600; font-size:1em; padding:0; background:none;
-    transition: color .16s;
-  }
-  .video-countdown .popular-videos a:hover { color: var(--z-accent-neon1);}
-  @media (min-width: 800px) {
-    .video-showcase {
-      flex-direction: row;
-      gap: 2.5em;
-    }
-    .main-video { min-width: 58%; }
-    .video-countdown { min-width: 235px;max-width:330px;}
-  }
+/* ===================== SECTIONS ===================== */
+section {
+  padding: 100px 0;
+}
 
-  /* ================ GALLERY ================ */
-  .gallery-section {
-    background: var(--z-card);
-  }
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap:1.5em;
-    width:100%;
-  }
-  @media (min-width:730px) {
-    .gallery-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  .gallery-item {
-    border-radius: 1.1em;
-    overflow: hidden;
-    background: #121217;
-    position: relative;
-    min-height: 205px;
-    aspect-ratio: 1.3 / 1;
-    cursor: pointer;
-    transition: box-shadow .2s;
-    box-shadow: 0 2px 14px #6a18ff13;
-  }
-  .gallery-item img {
-    /* TODO: Insert event image below (replace src) */
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform .35s;
-    filter: brightness(1.03) contrast(1.12);
-  }
-  .gallery-item:hover img { transform: scale(1.07);}
-  .gallery-overlay {
-    position: absolute; left: 0; top: 0; width: 100%; height:100%;
-    background: linear-gradient(to top,rgba(16,16,38,0.70), transparent 80%);
-    display: flex; flex-direction: column; justify-content: flex-end; padding: 1em 1.2em;
-    opacity: 0; transition: opacity .22s;
-  }
-  .gallery-item:hover .gallery-overlay { opacity: 1;}
-  .gallery-event { color: var(--z-accent-neon2); font-weight: 700; margin-bottom:.2em; font-size:1.08em;}
-  .gallery-details { color: var(--z-text-faint); font-size:.99em;}
+.section-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
 
-  /* =============== CONNECT =============== */
-  .connect-section { background: var(--z-bg-alt);}
-  .social-grid {
-    display:grid;
-    grid-template-columns:1fr;
-    gap:2em;
-    margin-top:1.2em;
-  }
-  @media (min-width: 900px) {
-    .social-grid {
-      grid-template-columns: repeat(4,1fr);
-      gap:2.5em;
-    }
-  }
-  .social-card {
-    background: var(--z-card);
-    border-radius: 1.15em;
-    padding: 2.2em 1.3em 2.7em 1.3em;
-    text-align: center;
-    transition: box-shadow .19s, border .19s, transform .18s;
-    border: 1.5px solid #27274a33;
-    box-shadow: 0 3px 15px #8a2be222;
-    position:relative;
-    z-index:1;
-  }
-  .social-card:hover {
-    border-color: var(--z-accent-neon1);
-    box-shadow: 0 0 18px #9f1fff60, 0 2px 22px #00ffe066;
-    transform: translateY(-7px) scale(1.018);
-  }
-  .social-icon {
-    width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-size:2rem;margin:0 auto 1.1em;
-    box-shadow: 0 2px 24px #8a2be230;
-    color:#fff;
-  }
-  .social-card.instagram .social-icon { background: linear-gradient(45deg,#405DE6,#5851DB,#833AB4,#C13584,#E1306C,#FD1D1D);}
-  .social-card.tiktok .social-icon { background: linear-gradient(45deg, #000, #25F4EE, #FE2C55);}
-  .social-card.youtube .social-icon { background: #ff0000;}
-  .social-card.facebook .social-icon { background: #1877F2;}
-  .social-card h3 { font-weight:800;margin-bottom:.4em; font-size:1.15rem;}
-  .social-card p { color: var(--z-text-faint); font-size: .99em; margin-bottom: 1.14em;}
-  .social-stats {
-    display: flex;
-    justify-content: center;
-    gap:1.2em;
-    margin-bottom:.5em;
-    align-items:center;
-  }
-  .social-stat-number {
-    font-family: 'Outfit',sans-serif;
-    font-size: 1.7rem;
-    background: var(--z-gradient-accent);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    font-weight: 800;
-    line-height:1.0;
-    text-shadow:0 2px 10px #00ffe050;
-  }
-  .btn {margin-top:.4em;}
+.section-title h2 {
+  font-size: 36px;
+  letter-spacing: -0.8px;
+  margin-bottom: 12px;
+}
 
-  /* =========== BOOKING CTA ============= */
-  .booking-cta {
-    background: var(--z-gradient-accent);
-    padding: 2.6em 0 2.2em 0;
-    text-align: center;
-    margin-top:2.2em;
-    border-radius:0 0 1.7em 1.7em;
-    box-shadow:0 6px 40px #9f1fff31;
-    position:relative;z-index:1;
-  }
-  .booking-cta h2 {
-    font-size: 2.2rem;
-    margin-bottom:.7em;
-    color: #fff; letter-spacing:.04em;
-    font-family:'Outfit',sans-serif;
-    background:none;
-  }
-  .booking-cta p {color:#fff; font-size:1.12rem; margin-bottom: 2.1em; letter-spacing:.03em;}
+.section-title p { color: var(--text-sub); }
 
-  /* ================ FOOTER ================ */
-  footer {
-    background: #17171d;
-    position:relative;
-    overflow:hidden;
-    padding: 3.5em 0 1.3em 0;
-    z-index: 2;
-  }
-  footer::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 78% 10%,#8a2be218 0%,transparent 70%), radial-gradient(circle at 21% 90%,rgba(0,255,224,0.10) 0%,transparent 65%);
-    z-index: 0; pointer-events:none; opacity:.7;
-  }
-  .footer-content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.7em;
-    margin-bottom: 2.7em;
-    position:relative;z-index:1;
-  }
-  @media(min-width:700px) {
-    .footer-content {grid-template-columns: repeat(4,1fr);}
-  }
-  .footer-logo {
-    font-family: 'Outfit',sans-serif;
-    font-size: 2.1rem;
-    padding-top:.4em;
-    margin-bottom: .8em;
-    background: var(--z-gradient-accent);
-    -webkit-background-clip: text;background-clip: text; color: transparent;
-    text-transform:uppercase;
-    letter-spacing:-.8px;
-    font-weight:900;
-  }
-  .footer-social {
-    display:flex; gap: .8em; margin-top:1.3em;
-  }
-  .footer-social a {
-    width: 42px; height:42px;
-    background: #20202b;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.15rem;
-    color: #fff;
-    transition: box-shadow .19s, background .16s, color .16s;
-  }
-  .footer-social a:hover {
-    background: var(--z-gradient-accent);
-    color: #fff;
-    box-shadow: 0 2px 16px #9f1fff65;
-  }
-  .footer-content h4 {
-    color: #fff;
-    margin-bottom:.9em;
-    font-size:1.07em;
-    font-family:'Outfit',sans-serif;
-    letter-spacing:.06em;
-  }
-  .footer-content a {
-    color: var(--z-text-faint);
-    font-size:.97em;
-    background:none;
-    text-decoration:none;
-    padding:0; border:none;
-    transition: color .14s;
-    font-weight:500;
-  }
-  .footer-content a:hover { color: var(--z-accent-neon2);}
-  .footer-content a[href='/booking.html'] { color: var(--z-accent-neon2); font-weight: 700;}
-  .newsletter-form {
-    display:flex; gap: .6em; margin-top:.6em;
-  }
-  .newsletter-form input[type="email"] {
-    background: #20202f;
-    color:#fff;
-    border:none;
-    border-radius:2em;
-    padding:.74em 1.4em;
-    flex:1;
-    min-width:80px;
-    font-family:'Poppins',sans-serif; font-size:.97em;
-    outline:none;
-    transition: background .15s;
-  }
-  .newsletter-form input[type="email"]:focus {
-    background: #232342;
-  }
-  .newsletter-form button {
-    background: var(--z-gradient-alt);
-    color: #18181b;
-    border:none;
-    border-radius: 2em;
-    padding:.74em 1.1em;
-    font-weight: 700;
-    font-size:1em;
-    cursor:pointer;
-    transition: background .13s, color .13s;
-  }
-  .newsletter-form button:hover {
-    background: var(--z-gradient-accent);
-    color:#fff;
-  }
-  .copyright {
-    text-align: center;
-    color: var(--z-text-faint);
-    font-size: .94em;
-    padding-top: 1.9em;
-    border-top: 1px solid #31314a27;
-    position:relative;
-    z-index:1;
-    letter-spacing:.02em;
-  }
+/* ===================== CARDS ===================== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+}
 
-  /* ============= RESPONSIVE ============= */
-  @media (max-width: 730px) {
-    .header-container, .footer-content, .container { padding-left:.7em; padding-right:.7em;}
-    .hero-content h1 {font-size:2.3rem;}
-    .hero-tagline { font-size:.97em;}
-    .team-carousel-container{height:210px;}
-    .booking-cta h2 { font-size: 1.38rem;}
-    .event-info{padding:1.1em 1em; margin:1em;}
-    section {padding:2.2em 0;}
-  }
+.card {
+  background: var(--bg-alt);
+  border-radius: 20px;
+  padding: 32px;
+}
 
-  /* Remove underline for all links (CRITICAL) */
-  a{text-decoration:none!important;}
-  </style>
+.card h3 { margin-bottom: 8px; }
+.card p { color: var(--text-sub); margin-bottom: 20px; }
+
+/* ===================== GALLERY ===================== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.gallery img {
+  width: 100%;
+  border-radius: 20px;
+}
+
+/* ===================== CONNECT ===================== */
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+.social {
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--bg-alt);
+  text-align: center;
+}
+.social p {
+  color: var(--text-sub);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* ===================== FOOTER ===================== */
+footer {
+  background: var(--bg-alt);
+  padding: 60px 0 30px;
+  margin-top: 80px;
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+}
+footer p { font-size: 14px; color: var(--text-sub); }
+.copyright {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+/* ===================== SCROLL ANIMATIONS ===================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(.2,.8,.2,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+  nav ul { display: none; }
+}
+</style>
 </head>
+
 <body>
-  <!-- =================== HEADER ==================== -->
-  <header>
-    <div class="container header-container">
-      <a href="#home" class="logo">
-        <div class="logo-icon">B</div>
-        <div class="logo-text">BYZ IN THE HOOD</div>
-      </a>
-      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation">
-        <i class="fas fa-bars"></i>
-      </button>
-      <nav>
-        <ul id="mainMenu">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#events">We Host</a></li>
-          <li><a href="#team">The Team</a></li>
-          <li><a href="#youtube">Videos</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#connect">Connect</a></li>
-          <li><a href="/booking.html">Book Now</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
 
-  <!-- ================== HERO ==================== -->
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="container">
-      <div class="hero-content">
-        <span class="hero-tagline">
-          🎉 More Than The Life Of The Party — We Are The Party Groove
-        </span>
-        <h1>
-          EXPERIENCE <span>DAR ES SALAAM'S</span> ULTIMATE NIGHTLIFE
-        </h1>
-        <p class="hero-subtitle">
-          BYZ in the Hood creates unforgettable experiences through exclusive parties, legendary events, and vibrant community gatherings.
-        </p>
-        <div class="hero-btns">
-          <a href="#events" class="btn btn-primary"><i class="fas fa-calendar-star"></i> Explore Events</a>
-          <a href="/booking.html" class="btn btn-success"><i class="fas fa-crown"></i> Book VIP Table</a>
-          <a href="https://wa.me/255768464367" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Booking</a>
-        </div>
-        <div class="hero-stats">
-          <div class="stat-item">
-            <div class="stat-number">50K+</div>
-            <div class="stat-label">Community</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">200+</div>
-            <div class="stat-label">Events Hosted</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">5</div>
-            <div class="stat-label">Event Series</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============== EVENTS SECTION =============== -->
-  <section class="events-section" id="events">
-    <div class="container">
-      <div class="section-title">
-        <h2>WE HOST LEGENDARY SERIES</h2>
-        <p>Five iconic event series that define Dar es Salaam's nightlife</p>
-      </div>
-      <div class="event-slider-container">
-        <div class="event-slider" id="eventSlider">
-          <!-- ===== Groove Series (Insert photo here) ===== -->
-          <div class="event-slide groove">
-            <div class="event-info">
-              <h3>GROOVE SERIES</h3>
-              <div class="event-type">Every Friday at Tips Coco Beach</div>
-              <p>The heartbeat of Dar nightlife. Weekly Afro-house sessions.</p>
-              <a href="/booking.html?event=groove" class="btn btn-primary">Book Table</a>
-            </div>
-          </div>
-          <!-- ===== APT Session (Insert photo here) ===== -->
-          <div class="event-slide apt">
-            <div class="event-info">
-              <h3>APT. SESSION</h3>
-              <div class="event-type">Monthly • Exclusive Locations</div>
-              <p>Intimate apartment sessions with premium vibes.</p>
-              <a href="/booking.html?event=apt" class="btn btn-primary">Request Invite</a>
-            </div>
-          </div>
-          <!-- ===== Tempo (Insert photo here) ===== -->
-          <div class="event-slide tempo">
-            <div class="event-info">
-              <h3>TEMPO</h3>
-              <div class="event-type">Seasonal • Various Venues</div>
-              <p>Evolving themes and international vibes.</p>
-              <a href="/booking.html?event=tempo" class="btn btn-primary">View Schedule</a>
-            </div>
-          </div>
-        </div>
-        <div class="slider-dots" id="eventSliderDots">
-          <span class="slider-dot active"></span>
-          <span class="slider-dot"></span>
-          <span class="slider-dot"></span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =============== MEET THE TEAM ================ -->
-  <section class="team-section" id="team">
-    <div class="container">
-      <div class="section-title">
-        <h2>MEET THE BYZ TEAM</h2>
-        <p>The crew that makes every legendary night happen</p>
-      </div>
-      <div class="team-carousel-container">
-        <div class="team-carousel">
-          <!-- Edson Talawa -->
-          <div class="team-member">
-            <div class="team-avatar">
-              <!-- TODO: Insert Edson Talawa photo here -->
-              <div class="avatar-placeholder">ET</div>
-            </div>
-            <div class="team-info">
-              <h4>Edson Talawa</h4>
-              <p>Founder & Creative Director</p>
-              <a href="https://www.instagram.com/edsont.11" target="_blank" class="team-instagram">
-                <i class="fab fa-instagram"></i> @edsont.11
-              </a>
-            </div>
-          </div>
-          <!-- Frank Mgogo -->
-          <div class="team-member">
-            <div class="team-avatar">
-              <!-- TODO: Insert Frank Mgogo photo here -->
-              <div class="avatar-placeholder">FJ</div>
-            </div>
-            <div class="team-info">
-              <h4>Frank Mgogo</h4>
-              <p>Event Operations</p>
-              <a href="https://www.instagram.com/jrmgoyo" target="_blank" class="team-instagram">
-                <i class="fab fa-instagram"></i> @jrmgoyo
-              </a>
-            </div>
-          </div>
-          <!-- Kayla -->
-          <div class="team-member">
-            <div class="team-avatar">
-              <!-- TODO: Insert Kayla photo here -->
-              <div class="avatar-placeholder">K</div>
-            </div>
-            <div class="team-info">
-              <h4>Kayla</h4>
-              <p>Marketing & Social Media</p>
-              <a href="https://www.instagram.com/kayllaa.tx" target="_blank" class="team-instagram">
-                <i class="fab fa-instagram"></i> @kayllaa.tx
-              </a>
-            </div>
-          </div>
-          <!-- Samantha -->
-          <div class="team-member">
-            <div class="team-avatar">
-              <!-- TODO: Insert Samantha photo here -->
-              <div class="avatar-placeholder">S</div>
-            </div>
-            <div class="team-info">
-              <h4>Samantha</h4>
-              <p>Content & Photography</p>
-              <a href="https://www.instagram.com/sams__cam" target="_blank" class="team-instagram">
-                <i class="fab fa-instagram"></i> @sams__cam
-              </a>
-            </div>
-          </div>
-          <!-- ABD -->
-          <div class="team-member">
-            <div class="team-avatar">
-              <!-- TODO: Insert ABD photo here -->
-              <div class="avatar-placeholder">A</div>
-            </div>
-            <div class="team-info">
-              <h4>ABD</h4>
-              <p>Music & Vibes Curator</p>
-              <a href="https://www.instagram.com/abd.raww" target="_blank" class="team-instagram">
-                <i class="fab fa-instagram"></i> @abd.raww
-              </a>
-            </div>
-          </div>
-          <!-- Tuari -->
-          <div class="team-member">
-            <div class="team-avatar">
-              <!-- TODO: Insert Tuari photo here -->
-              <div class="avatar-placeholder">T</div>
-            </div>
-            <div class="team-info">
-              <h4>Tuari</h4>
-              <p>Logistics & Venue Management</p>
-              <a href="https://www.instagram.com/tuariotk" target="_blank" class="team-instagram">
-                <i class="fab fa-instagram"></i> @tuariotk
-              </a>
-            </div>
-          </div>
-          <!-- Julius -->
-          <div class="team-member">
-            <div class="team-avatar">
-              <!-- TODO: Insert Julius photo here -->
-              <div class="avatar-placeholder">J</div>
-            </div>
-            <div class="team-info">
-              <h4>Julius</h4>
-              <p>Brand Partnerships</p>
-              <a href="https://www.instagram.com/jayraww_" target="_blank" class="team-instagram">
-                <i class="fab fa-instagram"></i> @jayraww_
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================== YOUTUBE/Videos SECTION =================== -->
-  <section class="youtube-section" id="youtube">
-    <div class="container">
-      <div class="section-title">
-        <h2>BYZ CONTENT UNIVERSE</h2>
-        <p>Watch our latest videos, challenges, and behind-the-scenes moments</p>
-      </div>
-      <div class="video-showcase">
-        <div class="main-video">
-          <div class="video-container">
-            <iframe
-              src="https://www.youtube.com/embed/ca3BVFtfFIg"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen title="Featured BYZ Video"></iframe>
-          </div>
-          <div class="video-info">
-            <h3>General Knowledge (Egg Forfeit) w/Jimmy</h3>
-            <div class="video-stats">
-              <span><i class="fas fa-eye"></i> 342 views</span>
-              <span><i class="fas fa-clock"></i> 1 year ago</span>
-            </div>
-            <p>Test your knowledge in this hilarious challenge with forfeits.</p>
-            <a href="https://www.youtube.com/@byzinthehood" target="_blank" class="btn btn-primary"><i class="fab fa-youtube"></i> Subscribe</a>
-          </div>
-        </div>
-        <div class="video-countdown">
-          <h3>Next Video Drops In:</h3>
-          <div class="countdown-timer">
-            <div class="countdown-unit">
-              <div class="countdown-number" id="days">07</div>
-              <div class="countdown-label">Days</div>
-            </div>
-            <div class="countdown-unit">
-              <div class="countdown-number" id="hours">12</div>
-              <div class="countdown-label">Hours</div>
-            </div>
-            <div class="countdown-unit">
-              <div class="countdown-number" id="minutes">45</div>
-              <div class="countdown-label">Minutes</div>
-            </div>
-          </div>
-          <p>New content every week! Don't miss out.</p>
-          <div class="popular-videos">
-            <h4>Popular Videos:</h4>
-            <a href="https://www.youtube.com/watch?v=_G0ku7jfWTI" target="_blank">• The Challenge - BYZ Edition</a>
-            <a href="https://www.youtube.com/watch?v=b7bWk1SRvvU" target="_blank">• Worst Trauma - Dilemma Ep.3</a>
-            <a href="https://www.youtube.com/watch?v=uJEvtnC-SVo" target="_blank">• Truth, Dare &amp; Most likely to</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- =============== GALLERY ================ -->
-  <section class="gallery-section" id="gallery">
-    <div class="container">
-      <div class="section-title">
-        <h2>MEMORY GALLERY</h2>
-        <p>Relive the magic through photos from our legendary events</p>
-      </div>
-      <div class="gallery-grid">
-        <!-- TODO: Insert event gallery photo here -->
-        <div class="gallery-item">
-          <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Event">
-          <div class="gallery-overlay">
-            <span class="gallery-event">GROOVE SERIES</span>
-            <span class="gallery-details">Tips Coco Beach • April 2024</span>
-          </div>
-        </div>
-        <!-- TODO: Insert event gallery photo here -->
-        <div class="gallery-item">
-          <img src="https://images.unsplash.com/photo-1492684223066-dd23140edf6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Event">
-          <div class="gallery-overlay">
-            <span class="gallery-event">APT. SESSION</span>
-            <span class="gallery-details">Private Venue • March 2024</span>
-          </div>
-        </div>
-        <!-- TODO: Insert event gallery photo here -->
-        <div class="gallery-item">
-          <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Event">
-          <div class="gallery-overlay">
-            <span class="gallery-event">TEMPO</span>
-            <span class="gallery-details">Exclusive Venue • February 2024</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =============== CONNECT SECTION ================ -->
-  <section class="connect-section" id="connect">
-    <div class="container">
-      <div class="section-title">
-        <h2>CONNECT WITH BYZ</h2>
-        <p>Join our growing community across all platforms</p>
-      </div>
-      <div class="social-grid">
-
-        <!-- Instagram -->
-        <div class="social-card instagram">
-          <div class="social-icon"><i class="fab fa-instagram"></i></div>
-          <h3>Instagram</h3>
-          <p>Daily updates and behind-the-scenes moments</p>
-          <div class="social-stats">
-            <span><span class="social-stat-number">3.9K</span><br><span style="color:var(--z-text-faint);font-size:.97em;">Followers</span></span>
-            <span><span class="social-stat-number">575</span><br><span style="color:var(--z-text-faint);font-size:.97em;">Posts</span></span>
-          </div>
-          <a href="https://www.instagram.com/byzinthehood" target="_blank" class="btn btn-primary"><i class="fab fa-instagram"></i> Follow @byzinthehood</a>
-        </div>
-
-        <!-- TikTok -->
-        <div class="social-card tiktok">
-          <div class="social-icon"><i class="fab fa-tiktok"></i></div>
-          <h3>TikTok</h3>
-          <p>Viral moments and event highlights</p>
-          <div class="social-stats">
-            <span><span class="social-stat-number">10K+</span><br><span style="color:var(--z-text-faint);font-size:.97em;">Followers</span></span>
-          </div>
-          <a href="https://www.tiktok.com/@byzinthehood" target="_blank" class="btn btn-primary"><i class="fab fa-tiktok"></i> Follow @byzinthehood</a>
-        </div>
-
-        <!-- YouTube -->
-        <div class="social-card youtube">
-          <div class="social-icon"><i class="fab fa-youtube"></i></div>
-          <h3>YouTube</h3>
-          <p>Full episodes and exclusive content series</p>
-          <div class="social-stats">
-            <span><span class="social-stat-number">1.2K</span><br><span style="color:var(--z-text-faint);font-size:.97em;">Subscribers</span></span>
-          </div>
-          <a href="https://www.youtube.com/@byzinthehood" target="_blank" class="btn btn-primary"><i class="fab fa-youtube"></i> Subscribe</a>
-        </div>
-
-        <!-- Facebook -->
-        <div class="social-card facebook">
-          <div class="social-icon"><i class="fab fa-facebook"></i></div>
-          <h3>Facebook</h3>
-          <p>Event announcements and community updates</p>
-          <div class="social-stats">
-            <span><span class="social-stat-number">2.5K</span><br><span style="color:var(--z-text-faint);font-size:.97em;">Followers</span></span>
-          </div>
-          <a href="https://www.facebook.com/share/16ZE9bhJQf" target="_blank" class="btn btn-primary"><i class="fab fa-facebook"></i> Like Page</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= BOOKING CTA ============== -->
-  <div class="booking-cta">
-    <div class="container">
-      <h2>READY TO BOOK YOUR EXPERIENCE?</h2>
-      <p>Reserve your table now with our automated booking system</p>
-      <a href="/booking.html" class="btn btn-success" style="padding:1.3em 3em; font-size:1.15em;">
-        <i class="fas fa-bolt"></i> BOOK NOW
-      </a>
+<header>
+  <div class="container header-inner">
+    <div class="logo">BYZ in the Hood</div>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#events">We Host</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#connect">Connect</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <div class="toggle" id="themeToggle"></div>
+      <a href="/booking.html" class="cta">Book Now</a>
     </div>
   </div>
+</header>
 
-  <!-- =================== FOOTER ================== -->
-  <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div>
-          <div class="footer-logo">BYZ IN THE HOOD</div>
-          <p style="color: var(--z-text-faint); margin-bottom: .9em;">Creating legendary experiences in Dar es Salaam since 2018.</p>
-          <div class="footer-social">
-            <a href="https://www.instagram.com/byzinthehood" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.tiktok.com/@byzinthehood" target="_blank"><i class="fab fa-tiktok"></i></a>
-            <a href="https://x.com/byzinthehood" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.youtube.com/@byzinthehood" target="_blank"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.facebook.com/share/16ZE9bhJQf" target="_blank"><i class="fab fa-facebook"></i></a>
-          </div>
-        </div>
-        <div>
-          <h4>Quick Links</h4>
-          <div style="display:flex; flex-direction:column; gap:.6em;">
-            <a href="#home">Home</a>
-            <a href="#events">We Host</a>
-            <a href="#team">The Team</a>
-            <a href="#youtube">Videos</a>
-            <a href="#gallery">Gallery</a>
-            <a href="/booking.html">Book Now</a>
-          </div>
-        </div>
-        <div>
-          <h4>Contact Info</h4>
-          <div style="display: flex; flex-direction: column; gap: .7em;">
-            <div>
-              <div style="color:var(--z-accent-neon2);font-weight:700;">Booking &amp; WhatsApp</div>
-              <div style="color:var(--z-text-faint);">+255 768 464 367</div>
-            </div>
-            <div>
-              <div style="color:var(--z-accent-neon2);font-weight:700;">M-Pesa Payments</div>
-              <div style="color:var(--z-text-faint);">68286833</div>
-            </div>
-            <div>
-              <div style="color:var(--z-accent-neon2);font-weight:700;">Email</div>
-              <div style="color:var(--z-text-faint);">info@byzinthehood.com</div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <h4>Stay Updated</h4>
-          <p style="color:var(--z-text-faint);margin-bottom:.8em;font-size:.99em;">Subscribe for event invites and updates</p>
-          <form class="newsletter-form" autocomplete="off" onsubmit="return false;">
-            <input type="email" placeholder="Your email address" required>
-            <button class="btn btn-primary" aria-label="Subscribe to BYZ news">
-              <i class="fas fa-paper-plane"></i>
-            </button>
-          </form>
-        </div>
+<section class="hero reveal" id="home">
+  <div class="container">
+    <h1>Dar es Salaam’s Ultimate Nightlife Experience</h1>
+    <p>BYZ in the Hood creates unforgettable moments through premium events.</p>
+    <div class="hero-buttons">
+      <a href="#events" class="btn primary">Explore Events</a>
+      <a href="/booking.html" class="btn">Book VIP</a>
+    </div>
+  </div>
+</section>
+
+<section id="events">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>We Host Legendary Series</h2>
+      <p>Events that define Dar nightlife</p>
+    </div>
+    <div class="card-grid">
+      <div class="card reveal">
+        <h3>Groove Series</h3>
+        <p>Weekly Afro-house nights at Coco Beach.</p>
+        <a href="/booking.html" class="btn primary">Book</a>
       </div>
-      <div class="copyright">
-        <p>&copy; 2024 BYZ in the Hood. All rights reserved. | Dar es Salaam's Ultimate Nightlife Experience</p>
+      <div class="card reveal">
+        <h3>APT. Session</h3>
+        <p>Invite-only apartment sessions.</p>
+        <a href="/booking.html" class="btn primary">Request Invite</a>
+      </div>
+      <div class="card reveal">
+        <h3>Tempo</h3>
+        <p>Seasonal international-style events.</p>
+        <a href="/booking.html" class="btn primary">View Schedule</a>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <!-- ================= SCRIPTS ================ -->
-  <script>
-  // Mobile Menu Toggle
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mainMenu = document.getElementById('mainMenu');
-  mobileMenuBtn.addEventListener('click', () => {
-    mainMenu.classList.toggle('active');
-    const icon = mobileMenuBtn.querySelector('i');
-    icon.classList.toggle('fa-bars');
-    icon.classList.toggle('fa-times');
+<section id="gallery">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Memory Gallery</h2>
+      <p>Moments from our events</p>
+    </div>
+    <div class="gallery">
+      <img class="reveal" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745">
+      <img class="reveal" src="https://images.unsplash.com/photo-1492684223066-dd23140edf6d">
+      <img class="reveal" src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3">
+    </div>
+  </div>
+</section>
+
+<section id="connect">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Connect With BYZ</h2>
+      <p>Follow us across platforms</p>
+    </div>
+    <div class="social-grid">
+      <div class="social reveal">
+        <h4>Instagram</h4>
+        <p>@byzinthehood</p>
+        <a href="https://instagram.com/byzinthehood" target="_blank" class="btn primary">Follow</a>
+      </div>
+      <div class="social reveal">
+        <h4>TikTok</h4>
+        <p>@byzinthehood</p>
+        <a href="https://tiktok.com/@byzinthehood" target="_blank" class="btn primary">Follow</a>
+      </div>
+      <div class="social reveal">
+        <h4>YouTube</h4>
+        <p>@byzinthehood</p>
+        <a href="https://youtube.com/@byzinthehood" target="_blank" class="btn primary">Subscribe</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <strong>BYZ in the Hood</strong>
+      <p>Dar es Salaam nightlife brand</p>
+    </div>
+    <div>
+      <p>Booking: +255 768 464 367</p>
+      <p>Email: info@byzinthehood.com</p>
+    </div>
+  </div>
+  <div class="copyright">
+    © 2024 BYZ in the Hood. All rights reserved.
+  </div>
+</footer>
+
+<script>
+/* ===== DARK MODE TOGGLE ===== */
+const toggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+toggle.onclick = () => {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", isDark ? "light" : "dark");
+  localStorage.setItem("theme", isDark ? "light" : "dark");
+};
+
+/* ===== SCROLL REVEAL ===== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add("visible");
   });
+}, { threshold: 0.15 });
 
-  // Smooth scrolling (except external links)
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      const targetId = this.getAttribute('href');
-      if (targetId === '#' || !document.querySelector(targetId)) return;
-      e.preventDefault();
-      // Close mobile nav on click
-      mainMenu.classList.remove('active');
-      window.scrollTo({
-        top: document.querySelector(targetId).offsetTop - 70,
-        behavior: 'smooth'
-      });
-    });
-  });
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+</script>
 
-  // Event Slider
-  let currentSlide = 0;
-  const slides = document.querySelectorAll('.event-slide');
-  const dots = document.getElementById('eventSliderDots').children;
-  function showSlide(idx) {
-    currentSlide = idx;
-    document.querySelector('.event-slider').style.transform = `translateX(-${currentSlide * 100}%)`;
-    Array.from(dots).forEach((dot, i) => {
-      dot.classList.toggle('active', i === currentSlide);
-    });
-  }
-  Array.from(dots).forEach((dot, i) => {
-    dot.addEventListener('click',()=>showSlide(i));
-  });
-  setInterval(function() {
-    showSlide((currentSlide + 1) % slides.length);
-  }, 5000);
-
-  // YouTube Countdown Timer (to next Friday 6PM)
-  function updateCountdown() {
-    const now = new Date();
-    const nextFriday = new Date();
-    let daysToFriday = (5 - now.getDay() + 7) % 7;
-    if(daysToFriday === 0 && now.getHours() >= 18) daysToFriday = 7;
-    nextFriday.setDate(now.getDate() + daysToFriday);
-    nextFriday.setHours(18,0,0,0); // Friday 6pm
-    const diff = nextFriday - now;
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff % (1000 * 60 * 60 *24)) / (1000*60*60));
-    const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-    document.getElementById('days').textContent = d.toString().padStart(2,'0');
-    document.getElementById('hours').textContent = h.toString().padStart(2,'0');
-    document.getElementById('minutes').textContent = m.toString().padStart(2,'0');
-  }
-  updateCountdown();
-  setInterval(updateCountdown, 60000);
-
-  // Header scroll effect
-  window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    if (window.scrollY > 36) {
-      header.style.background = 'rgba(18,18,30,0.98)';
-    } else {
-      header.style.background = 'rgba(22,22,34, 0.93)';
-    }
-  });
-  </script>
 </body>
 </html>
-<!-- End of Selection -->
