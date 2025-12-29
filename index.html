@@ -307,20 +307,7 @@ main{padding-top:var(--header-h)}
   letter-spacing:.12em;
   text-transform:uppercase;
 }
-/* ✅ Event poster (image above countdown) */
-.event-poster{
-  margin-top:12px;
-  border-radius:18px;
-  overflow:hidden;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
-}
-.event-poster img{
-  width:100%;
-  height:auto;
-  display:block;
-  object-fit:cover;
-}
+
 /* ===================== SECTIONS ===================== */
 section{padding: 92px 0}
 .section-title{
@@ -1216,24 +1203,23 @@ footer{
       </div>
 
       <div class="hero-card reveal">
-        <div class="hero-card-media" aria-hidden="true"></div>
+        <div class="hero-card-media" aria-hidden="true"
+  style="background:
+    linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.28)),
+    url('assets/events/carribean-groove.jpg') center/cover no-repeat;">
+</div>
         <div class="hero-card-body">
-          
           <h3>Carribean Groove Countdown</h3>
-<p>Sunset into late night, pure rhythm, pure vibes.
+          <p>Sunset into late night, pure rhythm, pure vibes.
 Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
 
-<div class="event-poster">
-  <img src="assets/events/carribean-groove.jpg" alt="Carribean Groove flyer" loading="lazy">
-</div>
-
-<!-- Countdown -->
-<div class="countdown" aria-label="Countdown timer">
-  <div class="timebox"><div class="num" id="cdDays">--</div><div class="lab">Days</div></div>
-  <div class="timebox"><div class="num" id="cdHours">--</div><div class="lab">Hours</div></div>
-  <div class="timebox"><div class="num" id="cdMins">--</div><div class="lab">Mins</div></div>
-  <div class="timebox"><div class="num" id="cdSecs">--</div><div class="lab">Secs</div></div>
-</div>
+          <!-- Countdown -->
+          <div class="countdown" aria-label="Countdown timer">
+            <div class="timebox"><div class="num" id="cdDays">--</div><div class="lab">Days</div></div>
+            <div class="timebox"><div class="num" id="cdHours">--</div><div class="lab">Hours</div></div>
+            <div class="timebox"><div class="num" id="cdMins">--</div><div class="lab">Mins</div></div>
+            <div class="timebox"><div class="num" id="cdSecs">--</div><div class="lab">Secs</div></div>
+          </div>
 
           <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Now</a>
