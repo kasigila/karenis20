@@ -45,6 +45,7 @@
 
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
+    html{scroll-behavior:smooth; scroll-padding-top: calc(var(--header-h) + 24px);}
     body{
       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
       background:var(--bg);
@@ -111,7 +112,10 @@
     .theme-btn i{font-size:18px;color:var(--text)}
 
     /* ===================== PAGE ===================== */
-    main{padding-top: calc(var(--header-h) + 28px); padding-bottom: 90px;}
+    main{
+  padding-top: calc(var(--header-h) + 28px + env(safe-area-inset-top));
+  padding-bottom: 90px;
+}
     .hero{
       margin-top: 8px;
       border-radius: var(--radius-lg);
