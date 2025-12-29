@@ -705,6 +705,131 @@ section{padding: 92px 0}
   position:relative;
   transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
 }
+  /* ===== TEAM (GROUP PHOTO + ROTATING DETAILS) ===== */
+.team-split{
+  display:grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap:16px;
+  padding: 14px 18px 18px;
+}
+
+@media (max-width: 980px){
+  .team-split{ grid-template-columns:1fr; }
+}
+
+.team-photo-card{
+  border-radius: 22px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-alt) 65%, transparent);
+  overflow:hidden;
+  position:relative;
+  box-shadow: var(--shadow-soft);
+}
+
+.team-photo-card img{
+  width:100%;
+  height:100%;
+  max-height: 420px;
+  object-fit: cover;
+  display:block;
+}
+
+.team-photo-card::after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(700px 220px at 20% 0%, rgba(255,255,255,.22), transparent 55%),
+    linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.35));
+  pointer-events:none;
+}
+
+.team-rotator{
+  border-radius: 22px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
+  box-shadow: var(--shadow-soft);
+  padding: 18px;
+  position:relative;
+  overflow:hidden;
+}
+
+.team-rotator::before{
+  content:"";
+  position:absolute; inset:-2px;
+  background: radial-gradient(600px 220px at 110% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%);
+  pointer-events:none;
+}
+
+.rotator-kicker{
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+  color:var(--sub);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.rotator-card{
+  margin-top:14px;
+  border-radius: 18px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  padding: 16px;
+}
+
+.rotator-name{
+  display:block;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:-.4px;
+}
+
+.rotator-role{
+  display:block;
+  margin-top:6px;
+  color:var(--sub);
+  font-size:14px;
+}
+
+.rotator-ig{
+  margin-top:12px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius: 999px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  font-size:13px;
+  font-weight:900;
+}
+
+.rotator-ig:hover{ box-shadow: var(--shadow-soft); }
+
+.rotator-dots{
+  margin-top:14px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.dot{
+  width:8px;height:8px;border-radius:999px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+  opacity:.75;
+}
+.dot.active{
+  opacity:1;
+  background: color-mix(in srgb, var(--accent) 45%, var(--bg-alt));
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
 .member.spotlight{
   transform: translateY(-4px);
   box-shadow: var(--shadow);
@@ -1491,93 +1616,33 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           <a class="btn primary" href="https://www.instagram.com/byzinthehood" target="_blank" rel="noopener">Follow BYZ</a>
         </div>
 
-        <div class="team-strip" id="teamStrip" aria-label="Team carousel">
-          <!-- Photos are placeholders so you can swap later -->
-          <div class="member spotlight" data-member>
-            <div class="photo" style="background:url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
-            <div class="info">
-              <strong>Edson Talawa</strong>
-              <span>Finance</span>
-              <a class="ig" href="https://www.instagram.com/edsont.11" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.2-2.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
-                @edsont.11
-              </a>
-            </div>
-          </div>
+        <div class="team-split">
+  <!-- Fixed group photo -->
+  <div class="team-photo-card">
+    <img src="assets/assets/team-photo/team-photo.jpg" alt="BYZ Team" />
+  </div>
 
-          <div class="member" data-member>
-            <div class="photo" style="background:url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
-            <div class="info">
-              <strong>Frank Mgogo</strong>
-              <span>CEO</span>
-              <a class="ig" href="https://www.instagram.com/jrmgoyo" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.2-2.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
-                @jrmgoyo
-              </a>
-            </div>
-          </div>
+  <!-- Rotating name/title/IG -->
+  <div class="team-rotator" aria-label="Team details carousel">
+    <div class="rotator-kicker">BYZ TEAM • ROTATING</div>
 
-          <div class="member" data-member>
-            <div class="photo" style="background:url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
-            <div class="info">
-              <strong>Kayla</strong>
-              <span>Marketing & Social Media</span>
-              <a class="ig" href="https://www.instagram.com/kayllaa.tx" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.2-2.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
-                @kayllaa.tx
-              </a>
-            </div>
-          </div>
+    <div class="rotator-card">
+      <span class="rotator-name" id="teamName">—</span>
+      <span class="rotator-role" id="teamRole">—</span>
 
-          <div class="member" data-member>
-            <div class="photo" style="background:url('https://images.unsplash.com/photo-1520975958225-3a2c08b3a3ab?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
-            <div class="info">
-              <strong>Samantha</strong>
-              <span>Content & Photography</span>
-              <a class="ig" href="https://www.instagram.com/sams__cam" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.2-2.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
-                @sams__cam
-              </a>
-            </div>
-          </div>
+      <a class="rotator-ig" id="teamIg" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;fill:var(--text)">
+          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.2-2.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/>
+        </svg>
+        <span id="teamHandle">@byzinthehood</span>
+      </a>
 
-          <div class="member" data-member>
-            <div class="photo" style="background:url('https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
-            <div class="info">
-              <strong>ABD</strong>
-              <span>Music & Vibes Curator</span>
-              <a class="ig" href="https://www.instagram.com/abd.raww" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.2-2.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
-                @abd.raww
-              </a>
-            </div>
-          </div>
+      <div class="rotator-dots" id="teamDots" aria-label="Carousel position"></div>
+    </div>
+  </div>
+</div>
 
-          <div class="member" data-member>
-            <div class="photo" style="background:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
-            <div class="info">
-              <strong>Tuari</strong>
-              <span>Logistics & Venue Management</span>
-              <a class="ig" href="https://www.instagram.com/tuariotk" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.2-2.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
-                @tuariotk
-              </a>
-            </div>
-          </div>
-
-          <div class="member" data-member>
-            <div class="photo" style="background:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
-            <div class="info">
-              <strong>Julius</strong>
-              <span>Brand Partnerships</span>
-              <a class="ig" href="https://www.instagram.com/jayraww_" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.2-2.4a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
-                @jayraww_
-              </a>
-            </div>
-          </div>
-
-        </div>
+        
       </div>
     </div>
   </section>
