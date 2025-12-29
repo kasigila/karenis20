@@ -73,8 +73,9 @@ header{
   font-weight:700;letter-spacing:-.4px;
 }
 .brand-logo-wrap{
-  width:34px;height:34px;
-  border-radius:12px;
+  width:52px;
+  height:52px;
+  border-radius:14px;
   overflow:hidden;
   display:grid;
   place-items:center;
@@ -1031,6 +1032,23 @@ footer{
   .hero{padding: 64px 0 52px}
   section{padding: 76px 0}
 }
+  .footer-logo{
+  width:120px;           /* make bigger/smaller */
+  height:auto;
+  margin:0 0 10px 0;     /* spacing above the paragraph */
+}
+
+.footer-logo-img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:contain;
+}
+
+.footer-logo .logo-dark{display:none;}
+[data-theme="dark"] .footer-logo .logo-light{display:none;}
+[data-theme="dark"] .footer-logo .logo-dark{display:block;}
+
 </style>
 </head>
 
@@ -1600,8 +1618,12 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     <div class="container">
       <div class="footer-grid">
         <div>
-          <h2>BYZ</h2>
-          <p>Creating legendary experiences in Dar es Salaam since 2018.</p>
+          <div class="footer-logo" aria-label="BYZ logo">
+  <img class="footer-logo-img logo-light" src="assets/BYZ Black.PNG" alt="BYZ logo">
+  <img class="footer-logo-img logo-dark"  src="assets/BYZ W.PNG"     alt="BYZ logo">
+</div>
+
+<p>Creating legendary experiences in Dar es Salaam since 2018.</p>
         </div>
         <div>
           <h4>Quick Links</h4>
