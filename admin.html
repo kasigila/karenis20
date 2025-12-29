@@ -1,427 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>BYZ Admin Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>BYZ Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-<style>
-:root{
-  --bg:#07080c;
-  --bg2:#0b0c12;
-  --card: color-mix(in srgb, #11131d 82%, transparent);
-  --card2: color-mix(in srgb, #0f1016 70%, transparent);
-  --text:#ffffff;
-  --sub: rgba(255,255,255,.68);
-  --border: rgba(255,255,255,.12);
-  --shadow: 0 24px 80px rgba(0,0,0,.55);
-  --shadow-soft: 0 12px 40px rgba(0,0,0,.35);
-  --radius-lg: 24px;
-  --radius: 18px;
-  --ease: cubic-bezier(.2,.8,.2,1);
-  --accent: #7c4dff;
-  --accent2:#ff3df2;
-}
+  <style>
+    /* ===================== APPLE-LIKE DESIGN TOKENS (MATCH INDEX) ===================== */
+    :root{
+      --bg:#ffffff;
+      --bg-alt:#f5f5f7;
+      --bg-elev:#ffffff;
+      --text:#1d1d1f;
+      --sub:#6e6e73;
+      --border:#d2d2d7;
+      --accent:#000000;
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:
-    radial-gradient(1200px 600px at 10% 0%, rgba(124,77,255,.22), transparent 60%),
-    radial-gradient(1000px 700px at 90% 10%, rgba(255,61,242,.16), transparent 60%),
-    linear-gradient(180deg, var(--bg), var(--bg2));
-  color:var(--text);
-}
+      --radius: 22px;
+      --radius-lg: 28px;
+      --shadow: 0 18px 60px rgba(0,0,0,.08);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,.08);
+      --ease: cubic-bezier(.2,.8,.2,1);
+      --max: 1180px;
+      --header-h: 64px;
 
-a{color:inherit;text-decoration:none}
+      --ok:#0a7f3f;
+      --warn:#b45309;
+    }
 
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:24px 18px 60px;
-}
+    [data-theme="dark"]{
+      --bg:#000000;
+      --bg-alt:#1c1c1e;
+      --bg-elev:#0b0b0c;
+      --text:#f5f5f7;
+      --sub:#a1a1a6;
+      --border:#2c2c2e;
+      --accent:#ffffff;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,.35);
+    }
 
-.hidden{display:none}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.55;
+      transition: background .35s var(--ease), color .35s var(--ease);
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max);margin:0 auto;padding:0 24px}
 
-/* Top nav */
-.topnav{
-  position:sticky;
-  top:0;
-  z-index:50;
-  padding:14px 0;
-  backdrop-filter: blur(14px);
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  border-bottom:1px solid var(--border);
-}
-.topnav-inner{
-  max-width:1200px;
-  margin:auto;
-  padding:0 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:800;
-  letter-spacing:-.4px;
-}
-.brand img{
-  width:34px;height:34px;object-fit:contain;
-  border-radius:10px;
-  display:block;
-}
-.nav-actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.pill{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--card2) 70%, transparent);
-  box-shadow: var(--shadow-soft);
-  transition: transform .2s var(--ease);
-  font-weight:700;
-  font-size:13px;
-}
-.pill:hover{transform: translateY(-2px)}
-.pill.primary{
-  border-color: transparent;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-}
+    /* ===================== HEADER ===================== */
+    header{
+      position:fixed;top:0;left:0;right:0;
+      height:var(--header-h);
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(18px);
+      border-bottom:1px solid var(--border);
+      z-index:999;
+    }
+    .header-inner{
+      height:var(--header-h);
+      display:flex;align-items:center;justify-content:space-between;
+      gap:16px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;
+      font-weight:700;letter-spacing:-.4px;
+    }
+    .brand-logo-wrap{
+      width:34px;height:34px;border-radius:12px;
+      overflow:hidden;display:grid;place-items:center;
+    }
+    .brand-logo{width:100%;height:100%;object-fit:contain;display:block}
+    .logo-dark{display:none;}
+    [data-theme="dark"] .logo-light{display:none;}
+    [data-theme="dark"] .logo-dark{display:block;}
 
-/* Login */
-.login-wrap{
-  max-width:420px;
-  margin: 70px auto 0;
-}
-.login-box{
-  background: var(--card);
-  border:1px solid var(--border);
-  border-radius: 26px;
-  padding: 26px;
-  box-shadow: var(--shadow);
-}
-.login-box h1{
-  margin:0;
-  font-size: 24px;
-  letter-spacing:-.6px;
-}
-.login-box p{
-  margin:8px 0 0;
-  color: var(--sub);
-  font-size: 13px;
-}
-.input{
-  width:100%;
-  padding:14px 14px;
-  margin-top:14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, #0b0b12 70%, transparent);
-  color: var(--text);
-  outline:none;
-}
-.input:focus{
-  border-color: color-mix(in srgb, var(--accent) 60%, var(--border) 40%);
-  box-shadow: 0 0 0 6px rgba(124,77,255,.15);
-}
-.btn{
-  width:100%;
-  padding:14px;
-  margin-top:14px;
-  border:none;
-  border-radius:999px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color:white;
-  font-weight:800;
-  cursor:pointer;
-  transition: transform .2s var(--ease);
-}
-.btn:hover{transform: translateY(-2px)}
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 14px;border-radius:999px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+      font-size:13px;
+      color:var(--sub);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+      box-shadow: var(--shadow-soft);
+    }
+    .pill:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .theme-btn{
+      width:42px;height:42px;border-radius:16px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-soft);
+      display:grid;place-items:center;
+      cursor:pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .theme-btn:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .theme-btn i{font-size:18px;color:var(--text)}
 
-/* Dashboard header */
-.dash-head{
-  margin-top: 18px;
-  padding: 16px 18px;
-  border:1px solid var(--border);
-  border-radius: 22px;
-  background: var(--card);
-  box-shadow: var(--shadow-soft);
-}
-.dash-head h1{
-  margin:0;
-  font-size: 22px;
-  letter-spacing:-.5px;
-}
-.dash-head p{
-  margin:6px 0 0;
-  color: var(--sub);
-  font-size: 13px;
-}
+    main{padding-top: calc(var(--header-h) + 26px); padding-bottom: 90px;}
 
-/* Filters row */
-.top-bar{
-  margin-top:14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.filters{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.filters input, .filters select{
-  padding:11px 12px;
-  border-radius:14px;
-  background: color-mix(in srgb, var(--card2) 70%, transparent);
-  color: var(--text);
-  border:1px solid var(--border);
-  outline:none;
-  min-width: 220px;
-}
-.filters input:focus, .filters select:focus{
-  border-color: color-mix(in srgb, var(--accent) 60%, var(--border) 40%);
-  box-shadow: 0 0 0 6px rgba(124,77,255,.12);
-}
-.refresh{
-  padding:11px 14px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--card2) 70%, transparent);
-  color:var(--text);
-  font-weight:800;
-  cursor:pointer;
-  transition: transform .2s var(--ease);
-}
-.refresh:hover{transform: translateY(-2px)}
+    /* ===================== CARDS ===================== */
+    .card{
+      border-radius: var(--radius-lg);
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-head{padding: 18px 18px 0}
+    .card-head h1{
+      font-size: clamp(22px, 3.2vw, 34px);
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+    .card-head p{margin-top:8px;color:var(--sub);font-size:14px}
+    .card-body{padding: 18px}
 
-/* Table card */
-.table-card{
-  margin-top:14px;
-  border:1px solid var(--border);
-  border-radius: 22px;
-  background: var(--card);
-  box-shadow: var(--shadow-soft);
-  overflow:hidden;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-th,td{
-  padding:14px 12px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  text-align:left;
-  vertical-align:top;
-  font-size: 13px;
-}
-th{
-  color: rgba(255,255,255,.55);
-  font-size: 12px;
-  font-weight:800;
-  letter-spacing:.02em;
-}
-tbody tr:hover{
-  background: rgba(255,255,255,.03);
-}
+    /* ===================== LOGIN ===================== */
+    .login-wrap{
+      min-height: calc(100vh - var(--header-h) - 26px);
+      display:grid;
+      place-items:center;
+    }
+    .login-box{
+      width: min(420px, 100%);
+      border-radius: var(--radius-lg);
+      border:1px solid var(--border);
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--bg-alt) 80%, transparent),
+        color-mix(in srgb, var(--bg) 92%, transparent)
+      );
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .login-inner{
+      border-radius: 22px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      box-shadow: var(--shadow-soft);
+      padding: 18px;
+    }
+    .lock-row{
+      display:flex;align-items:center;gap:12px;
+      margin-bottom: 10px;
+    }
+    .lock-icon{
+      width:44px;height:44px;border-radius:16px;
+      border:1px solid var(--border);
+      display:grid;place-items:center;
+      background: var(--bg-elev);
+      box-shadow: var(--shadow-soft);
+    }
+    .lock-icon i{font-size:18px;color:var(--text)}
+    .login-inner h2{font-size:18px;letter-spacing:-.3px}
+    .login-inner .sub{color:var(--sub);font-size:13px;margin-top:4px}
 
-.status{font-weight:900}
-.PENDING{color:#ffd24a}
-.CONFIRMED{color:#25D366}
+    input{
+      width:100%;
+      padding:14px 14px;
+      border-radius: 18px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      outline: none;
+      font-size:14px;
+      box-shadow: var(--shadow-soft);
+      margin-top: 12px;
+    }
+    input:focus{
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent), var(--shadow-soft);
+    }
+    button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+      box-shadow: var(--shadow-soft);
+    }
+    button:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .primary{
+      background: var(--accent);
+      color: var(--bg);
+      border-color: transparent;
+    }
+    .full{width:100%; margin-top: 12px;}
 
-/* Approve button */
-.approve{
-  background:#25D366;
-  padding:8px 14px;
-  border-radius:999px;
-  border:none;
-  color:#08120b;
-  font-weight:900;
-  cursor:pointer;
-  transition: transform .2s var(--ease);
-}
-.approve:hover{transform: translateY(-2px)}
-.approve:disabled{
-  opacity:.4;
-  cursor:not-allowed;
-  transform:none;
-}
+    .hidden{display:none}
 
-/* Mobile tweaks */
-@media (max-width: 800px){
-  th:nth-child(3), td:nth-child(3){display:none} /* hide Description on small screens */
-}
-</style>
+    /* ===================== DASHBOARD TOP ===================== */
+    .dash-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:16px;
+    }
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top: 14px;
+    }
+    @media (max-width: 780px){ .stats{grid-template-columns:1fr;} }
+
+    .stat{
+      border-radius: 22px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      box-shadow: var(--shadow-soft);
+      padding: 14px;
+    }
+    .stat .k{color:var(--sub);font-size:12px}
+    .stat .v{font-size:26px;font-weight:900;letter-spacing:-1px;margin-top:6px}
+
+    .toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top: 14px;
+    }
+    .filters{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    select{
+      padding: 12px 14px;
+      border-radius: 18px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      font-size: 14px;
+      outline:none;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* ===================== TABLE ===================== */
+    .table-wrap{
+      margin-top: 14px;
+      border-radius: var(--radius-lg);
+      border:1px solid var(--border);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      background: var(--bg-elev);
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width: 980px;
+    }
+    thead th{
+      position: sticky;
+      top: 0;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+      font-size: 12px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+      color: var(--sub);
+      padding: 14px;
+      text-align:left;
+    }
+    tbody td{
+      padding: 14px;
+      border-bottom:1px solid var(--border);
+      font-size: 14px;
+      vertical-align: top;
+    }
+    tbody tr:hover{
+      background: color-mix(in srgb, var(--bg-alt) 60%, transparent);
+    }
+    .scroll{
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .status{
+      font-weight:900;
+      letter-spacing:-.3px;
+    }
+    .PENDING{color: var(--warn)}
+    .CONFIRMED{color: var(--ok)}
+
+    .approve{
+      background: #eafff3;
+      color:#0a7f3f;
+      border:1px solid color-mix(in srgb, #0a7f3f 30%, var(--border));
+      font-weight:900;
+    }
+    [data-theme="dark"] .approve{
+      background: rgba(10,127,63,.14);
+      color:#7dffb8;
+      border:1px solid rgba(125,255,184,.22);
+    }
+    .approve:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+  </style>
 </head>
 
-<body>
+<body data-theme="light">
+  <header>
+    <div class="container header-inner">
+      <a class="brand" href="./index.html" aria-label="BYZ Home">
+        <div class="brand-logo-wrap">
+          <img class="brand-logo logo-light" src="assets/BYZ%20Black.PNG" alt="BYZ logo (black)" />
+          <img class="brand-logo logo-dark"  src="assets/BYZ%20W.PNG"     alt="BYZ logo (white)" />
+        </div>
+        <div>BYZ Admin</div>
+      </a>
 
-<div class="topnav">
-  <div class="topnav-inner">
-    <a class="brand" href="index.html" aria-label="Back to BYZ home">
-      <img src="assets/BYZ%20W.PNG" alt="BYZ logo">
-      <span>BYZ Admin</span>
-    </a>
-    <div class="nav-actions">
-      <a class="pill" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
-      <a class="pill primary" href="https://kasigila.github.io/byzmock/booking.html"><i class="fa-solid fa-ticket"></i> Booking Page</a>
+      <div class="top-actions">
+        <a class="pill" href="./index.html"><i class="fa-solid fa-house"></i> Home</a>
+        <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+        </button>
+      </div>
     </div>
-  </div>
-</div>
+  </header>
 
-<!-- LOGIN -->
-<div class="login-wrap" id="login">
-  <div class="login-box">
-    <h1>Secure access</h1>
-    <p>Enter admin password to view live bookings & approvals.</p>
-    <input class="input" id="password" type="password" placeholder="Admin password">
-    <button class="btn" onclick="login()">Enter</button>
-  </div>
-</div>
+  <main class="container">
+    <!-- LOGIN -->
+    <div id="login" class="login-wrap">
+      <div class="login-box">
+        <div class="login-inner">
+          <div class="lock-row">
+            <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+            <div>
+              <h2>Secure access</h2>
+              <div class="sub">Enter admin password to view live bookings.</div>
+            </div>
+          </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="container hidden">
-  <div class="dash-head">
-    <h1>BYZ Admin Dashboard</h1>
-    <p>Live bookings & approvals</p>
-  </div>
+          <input id="password" type="password" placeholder="Admin password" autocomplete="current-password">
+          <button class="primary full" onclick="login()">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            Enter Dashboard
+          </button>
 
-  <div class="top-bar">
-    <div class="filters">
-      <input id="search" placeholder="Search name / booking ID" oninput="render()">
-      <select id="statusFilter" onchange="render()">
-        <option value="">All</option>
-        <option value="PENDING">Pending</option>
-        <option value="CONFIRMED">Confirmed</option>
-      </select>
+          <p style="margin-top:10px;color:var(--sub);font-size:12px;">
+            Tip: approvals update status + trigger confirmation email automatically.
+          </p>
+        </div>
+      </div>
     </div>
-    <button class="refresh" onclick="load()">Refresh</button>
-  </div>
 
-  <div class="table-card">
-    <table>
-      <thead>
-        <tr>
-          <th>Booking ID</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="rows"></tbody>
-    </table>
-  </div>
-</div>
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="dash-grid hidden">
+      <section class="card">
+        <div class="card-head">
+          <h1>BYZ Admin Dashboard</h1>
+          <p>Live bookings & approvals — synced from your booking form.</p>
 
-<script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
-const ADMIN_PASSWORD = "weballwithbyz";
+          <div class="stats">
+            <div class="stat">
+              <div class="k">Total bookings</div>
+              <div class="v" id="statTotal">—</div>
+            </div>
+            <div class="stat">
+              <div class="k">Pending</div>
+              <div class="v" id="statPending">—</div>
+            </div>
+            <div class="stat">
+              <div class="k">Confirmed</div>
+              <div class="v" id="statConfirmed">—</div>
+            </div>
+          </div>
 
-let bookings = [];
+          <div class="toolbar">
+            <div class="filters">
+              <input id="search" placeholder="Search name / booking ID" oninput="render()">
+              <select id="statusFilter" onchange="render()">
+                <option value="">All</option>
+                <option value="PENDING">Pending</option>
+                <option value="CONFIRMED">Confirmed</option>
+              </select>
+            </div>
 
-/* LOGIN */
-function login(){
-  if(password.value === ADMIN_PASSWORD){
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-    load();
-  } else {
-    alert("Incorrect password");
-  }
-}
+            <button class="primary" onclick="load()">
+              <i class="fa-solid fa-rotate"></i>
+              Refresh
+            </button>
+          </div>
+        </div>
 
-/* LOAD DATA */
-function load() {
-  fetch(SCRIPT_URL)
-    .then(res => res.json())
-    .then(data => {
-      console.log("ADMIN RAW RESPONSE:", data);
+        <div class="card-body">
+          <div class="table-wrap">
+            <div class="scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="rows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
 
-      if (!data.bookings || !Array.isArray(data.bookings)) {
-        alert("No bookings returned from server");
-        return;
+  <script>
+    /* ===================== THEME (MATCH INDEX) ===================== */
+    (function initTheme(){
+      const saved = localStorage.getItem("byz_theme");
+      if(saved === "dark"){ document.body.setAttribute("data-theme","dark"); }
+    })();
+
+    function toggleTheme(){
+      const isDark = document.body.getAttribute("data-theme") === "dark";
+      document.body.setAttribute("data-theme", isDark ? "light" : "dark");
+      localStorage.setItem("byz_theme", isDark ? "light" : "dark");
+    }
+
+    /* ===================== YOUR ORIGINAL WORKING LOGIC ===================== */
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
+    const ADMIN_PASSWORD = "weballwithbyz";
+
+    let bookings = [];
+
+    /* LOGIN */
+    function login(){
+      if(password.value === ADMIN_PASSWORD){
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+        load();
+      } else {
+        alert("Incorrect password");
       }
+    }
 
-      bookings = data.bookings;
-      render();
-    })
-    .catch(err => {
-      console.error("ADMIN FETCH ERROR:", err);
-      alert("Failed to load bookings");
-    });
-}
+    /* LOAD DATA */
+    function load() {
+      fetch(SCRIPT_URL)
+        .then(res => res.json())
+        .then(data => {
+          console.log("ADMIN RAW RESPONSE:", data);
 
-/* RENDER TABLE */
-function render(){
-  const q = search.value.toLowerCase();
-  const status = statusFilter.value;
-  rows.innerHTML="";
-
-  bookings
-    .filter(b =>
-      (!status || b.status === status) &&
-      (!q ||
-        (b.name||"").toLowerCase().includes(q) ||
-        (b.bookingId||"").toLowerCase().includes(q)
-      )
-    )
-    .forEach(b=>{
-      const tr=document.createElement("tr");
-
-      tr.innerHTML=`
-        <td>${b.bookingId}</td>
-        <td>${b.bookingType}</td>
-        <td>${b.description}</td>
-        <td>${b.name}</td>
-        <td>${b.phone}</td>
-        <td>${b.amount}</td>
-        <td class="status ${b.status}">${b.status}</td>
-        <td>
-          ${b.status==="PENDING"
-            ? `<button class="approve" onclick="approve('${b.bookingId}')">Approve</button>`
-            : "—"
+          if (!data.bookings || !Array.isArray(data.bookings)) {
+            alert("No bookings returned from server");
+            return;
           }
-        </td>
-      `;
 
-      rows.appendChild(tr);
-    });
-}
+          bookings = data.bookings;
+          render();
+        })
+        .catch(err => {
+          console.error("ADMIN FETCH ERROR:", err);
+          alert("Failed to load bookings");
+        });
+    }
 
-/* APPROVE */
-function approve(id){
-  if(!confirm("Approve this payment?")) return;
+    /* RENDER TABLE */
+    function render(){
+      const q = search.value.toLowerCase();
+      const status = statusFilter.value;
+      rows.innerHTML="";
 
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({action:"approvePayment",bookingId:id})
-  }).then(()=>{
-    alert("Approved & email sent");
-    load();
-  });
-}
-</script>
+      const filtered = bookings
+        .filter(b =>
+          (!status || b.status === status) &&
+          (!q ||
+            (b.name||"").toLowerCase().includes(q) ||
+            (b.bookingId||"").toLowerCase().includes(q)
+          )
+        );
 
+      // Stats (UI only)
+      const total = bookings.length;
+      const pending = bookings.filter(b => b.status === "PENDING").length;
+      const confirmed = bookings.filter(b => b.status === "CONFIRMED").length;
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statPending").textContent = pending;
+      document.getElementById("statConfirmed").textContent = confirmed;
+
+      filtered.forEach(b=>{
+        const tr=document.createElement("tr");
+
+        tr.innerHTML=`
+          <td>${b.bookingId}</td>
+          <td>${b.bookingType}</td>
+          <td>${b.description}</td>
+          <td>${b.name}</td>
+          <td>${b.phone}</td>
+          <td>${b.amount}</td>
+          <td class="status ${b.status}">${b.status}</td>
+          <td>
+            ${b.status==="PENDING"
+              ? `<button class="approve" onclick="approve('${b.bookingId}')">Approve</button>`
+              : "—"
+            }
+          </td>
+        `;
+
+        rows.appendChild(tr);
+      });
+    }
+
+    /* APPROVE */
+    function approve(id){
+      if(!confirm("Approve this payment?")) return;
+
+      fetch(SCRIPT_URL,{
+        method:"POST",
+        body:JSON.stringify({action:"approvePayment",bookingId:id})
+      }).then(()=>{
+        alert("Approved & email sent");
+        load();
+      });
+    }
+  </script>
 </body>
 </html>
