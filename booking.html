@@ -764,9 +764,9 @@
 
     function renderTables(){
       const tiers = [
-  {id:"700K", price:700000, features:["2 × Cognac VS","Mixers/Chasers","Shisha","10 Pax (People)"]},
-  {id:"1.2M", price:1200000, features:["3 × Cognac VS","Mixers/Chasers","2 × Shisha","15 Pax (People)"]},
-  {id:"1.8M", price:1800000, features:["4 × Cognac VS","Mixers/Chasers","2 × Shisha","20 Pax (People)"]}
+  {id:"700K", label:"Thiba Nice Table", price:700000, features:["2 × Cognac VS","Mixers/Chasers","Shisha","10 Pax (People)"]},
+  {id:"1.2M", label:"Yebo Table", price:1200000, features:["3 × Cognac VS","Mixers/Chasers","2 × Shisha","15 Pax (People)"]},
+  {id:"1.8M", label:"Adiwele Table", price:1800000, features:["4 × Cognac VS","Mixers/Chasers","2 × Shisha","20 Pax (People)"]}
 ];
 
       const container = document.getElementById("packages");
@@ -783,7 +783,7 @@
 
         div.innerHTML = `
           <div class="badge">${sold ? "Sold out" : (4-used) + " left"}</div>
-          <h3>${t.id} VIP</h3>
+          <h3>${t.label}</h3>
           <div class="big">${t.price.toLocaleString()} TZS</div>
           <ul>
             ${t.features.map(f => `<li><i class="fa-solid fa-check"></i>${f}</li>`).join("")}
