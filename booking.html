@@ -1,552 +1,840 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>BYZ Booking</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BYZ Booking</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-<style>
-/* ===== RESPONSIVE SAFETY NET (keep) ===== */
-html, body { max-width: 100%; overflow-x: hidden; }
-* { box-sizing: border-box; }
-img, svg { max-width: 100%; height: auto; }
-h1 { font-size: clamp(1.6rem, 6vw, 2.6rem); line-height: 1.15; text-align: center; }
-h2 { font-size: clamp(1.2rem, 5vw, 1.9rem); }
-h3 { font-size: clamp(1.05rem, 4.5vw, 1.5rem); }
-button { max-width: 100%; white-space: normal; }
+  <style>
+    /* ===================== APPLE-LIKE DESIGN TOKENS (MATCH INDEX) ===================== */
+    :root{
+      --bg:#ffffff;
+      --bg-alt:#f5f5f7;
+      --bg-elev:#ffffff;
+      --text:#1d1d1f;
+      --sub:#6e6e73;
+      --border:#d2d2d7;
+      --accent:#000000;
 
-@media (max-width: 768px) {
-  .choice-grid, .packages { grid-template-columns: 1fr !important; }
-  .card, .choice, .package, .selector, .payment { padding: 20px !important; }
-}
+      --radius: 22px;
+      --radius-lg: 28px;
+      --shadow: 0 18px 60px rgba(0,0,0,.08);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,.08);
+      --ease: cubic-bezier(.2,.8,.2,1);
+      --max: 1100px;
+      --header-h: 64px;
 
-@media (max-width: 600px) {
-  .theme-toggle { top: 10px; right: 10px; transform: scale(0.92); }
-}
+      --ok:#0a7f3f;
+      --warn:#b45309;
+      --whatsapp:#25D366;
+    }
 
-/* ===== BYZ APPLE-STYLE TOKENS ===== */
-:root{
-  --bg:#07080c;
-  --bg2:#0b0c12;
-  --card: color-mix(in srgb, #11131d 82%, transparent);
-  --card2: color-mix(in srgb, #0f1016 70%, transparent);
-  --text:#ffffff;
-  --muted: rgba(255,255,255,.68);
-  --border: rgba(255,255,255,.12);
-  --shadow: 0 24px 80px rgba(0,0,0,.55);
-  --shadow-soft: 0 12px 40px rgba(0,0,0,.35);
-  --radius-lg: 28px;
-  --radius: 20px;
-  --ease: cubic-bezier(.2,.8,.2,1);
-  --accent:#7c4dff;
-  --accent2:#ff3df2;
-}
+    [data-theme="dark"]{
+      --bg:#000000;
+      --bg-alt:#1c1c1e;
+      --bg-elev:#0b0b0c;
+      --text:#f5f5f7;
+      --sub:#a1a1a6;
+      --border:#2c2c2e;
+      --accent:#ffffff;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,.35);
+    }
 
-.light{
-  --bg:#f5f6f8;
-  --bg2:#eceef3;
-  --card: rgba(255,255,255,.75);
-  --card2: rgba(255,255,255,.9);
-  --text:#0b0b12;
-  --muted: rgba(11,11,18,.62);
-  --border: rgba(11,11,18,.10);
-  --shadow: 0 18px 60px rgba(0,0,0,.12);
-  --shadow-soft: 0 10px 34px rgba(0,0,0,.10);
-}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.55;
+      transition: background .35s var(--ease), color .35s var(--ease);
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max);margin:0 auto;padding:0 24px}
 
-body{
-  margin:0;
-  color:var(--text);
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:
-    radial-gradient(1200px 600px at 10% 0%, rgba(124,77,255,.22), transparent 60%),
-    radial-gradient(1000px 700px at 90% 10%, rgba(255,61,242,.16), transparent 60%),
-    linear-gradient(180deg, var(--bg), var(--bg2));
-  transition:.3s;
-}
+    /* ===================== HEADER ===================== */
+    header{
+      position:fixed;top:0;left:0;right:0;
+      height:var(--header-h);
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(18px);
+      border-bottom:1px solid var(--border);
+      z-index:999;
+    }
+    .header-inner{
+      height:var(--header-h);
+      display:flex;align-items:center;justify-content:space-between;
+      gap:16px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;
+      font-weight:700;letter-spacing:-.4px;
+    }
+    .brand-logo-wrap{
+      width:34px;height:34px;border-radius:12px;
+      overflow:hidden;display:grid;place-items:center;
+    }
+    .brand-logo{width:100%;height:100%;object-fit:contain;display:block}
+    .logo-dark{display:none;}
+    [data-theme="dark"] .logo-light{display:none;}
+    [data-theme="dark"] .logo-dark{display:block;}
 
-a{color:inherit;text-decoration:none}
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 14px;border-radius:999px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+      font-size:13px;
+      color:var(--sub);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+      box-shadow: var(--shadow-soft);
+    }
+    .pill:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .pill strong{color:var(--text);font-weight:700}
+    .theme-btn{
+      width:42px;height:42px;border-radius:16px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-soft);
+      display:grid;place-items:center;
+      cursor:pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .theme-btn:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .theme-btn i{font-size:18px;color:var(--text)}
 
-/* ===== Sticky header to match index aesthetic ===== */
-.topnav{
-  position:sticky;
-  top:0;
-  z-index:50;
-  padding:14px 0;
-  backdrop-filter: blur(14px);
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  border-bottom:1px solid var(--border);
-}
-.topnav-inner{
-  max-width:1100px;
-  margin:auto;
-  padding:0 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:800;
-  letter-spacing:-.4px;
-}
-.brand img{ width:34px;height:34px;object-fit:contain; border-radius:10px; display:block; }
-.pills{ display:flex; gap:10px; flex-wrap:wrap; }
-.pill{
-  display:inline-flex; align-items:center; gap:10px;
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--card2) 70%, transparent);
-  box-shadow: var(--shadow-soft);
-  transition: transform .2s var(--ease);
-  font-weight:800;
-  font-size:13px;
-}
-.pill:hover{ transform: translateY(-2px); }
-.pill.primary{
-  border-color: transparent;
-  background: linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;
-}
+    /* ===================== PAGE ===================== */
+    main{padding-top: calc(var(--header-h) + 28px); padding-bottom: 90px;}
+    .hero{
+      margin-top: 8px;
+      border-radius: var(--radius-lg);
+      border:1px solid var(--border);
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--bg-alt) 85%, transparent),
+        color-mix(in srgb, var(--bg) 92%, transparent)
+      );
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero-inner{
+      padding: 28px 22px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .hero h1{
+      font-size: clamp(26px, 4vw, 40px);
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+    .hero p{
+      margin-top:10px;
+      color:var(--sub);
+      max-width: 60ch;
+      font-size: 15px;
+    }
+    .hero-right{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:flex-end;
+      min-width: 220px;
+      flex: 1;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      box-shadow: var(--shadow-soft);
+      color:var(--sub);
+      font-size:13px;
+      white-space:nowrap;
+    }
+    .tag i{color:var(--text)}
+    .progress{
+      width: min(360px, 100%);
+      border:1px solid var(--border);
+      border-radius: 999px;
+      background: var(--bg-elev);
+      overflow:hidden;
+      box-shadow: var(--shadow-soft);
+    }
+    .bar{
+      height: 10px;
+      width: 25%;
+      background: var(--accent);
+      transition: width .35s var(--ease);
+    }
 
-/* THEME TOGGLE */
-.theme-toggle{
-  position:fixed;
-  top:18px;
-  right:18px;
-  background: color-mix(in srgb, var(--card2) 70%, transparent);
-  border:1px solid var(--border);
-  border-radius:999px;
-  padding:12px 14px;
-  cursor:pointer;
-  box-shadow: var(--shadow-soft);
-  z-index: 80;
-}
+    /* ===================== CARD SECTIONS ===================== */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:16px;
+      margin-top:16px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns: 1fr;} }
 
-/* Page container */
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:26px 18px 90px;
-}
+    .card{
+      border-radius: var(--radius-lg);
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-head{
+      padding: 18px 18px 0;
+    }
+    .card-head h2{
+      font-size: 18px;
+      letter-spacing:-.3px;
+    }
+    .card-head p{
+      margin-top:6px;
+      color:var(--sub);
+      font-size: 14px;
+    }
+    .card-body{
+      padding: 18px;
+    }
 
-.subtitle{
-  text-align:center;
-  color:var(--muted);
-  margin: 10px 0 20px;
-  font-size: 14px;
-}
+    /* ===================== CHOICES ===================== */
+    .choice-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 640px){ .choice-grid{grid-template-columns:1fr;} }
 
-/* Steps */
-.step{
-  opacity:0;
-  transform:translateY(26px);
-  transition:.6s var(--ease);
-  margin:0;
-  padding:0;
-}
-.step.active{
-  opacity:1;
-  transform:none;
-}
+    .choice{
+      border-radius: 20px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      box-shadow: var(--shadow-soft);
+      padding:16px;
+      cursor:pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+      position:relative;
+      overflow:hidden;
+    }
+    .choice:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .choice.active{
+      outline: 2px solid color-mix(in srgb, var(--accent) 65%, transparent);
+      background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+    }
+    .choice .row{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+    }
+    .choice h3{font-size:16px;letter-spacing:-.3px}
+    .choice p{margin-top:6px;color:var(--sub);font-size:13px}
+    .choice .icon{
+      width:40px;height:40px;border-radius:14px;
+      border:1px solid var(--border);
+      display:grid;place-items:center;
+      background: var(--bg-elev);
+      box-shadow: var(--shadow-soft);
+      flex:0 0 auto;
+    }
+    .choice .icon i{color:var(--text)}
 
-/* Cards / blocks */
-.block{
-  border:1px solid var(--border);
-  background: var(--card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
-  padding: 26px;
-}
+    /* ===================== STEPS ===================== */
+    .step{display:none}
+    .step.active{display:block}
 
-/* CHOICE */
-.choice-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:16px;
-}
-.choice{
-  background: var(--card);
-  border:1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding:28px;
-  text-align:center;
-  cursor:pointer;
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
-  box-shadow: var(--shadow-soft);
-}
-.choice:hover{ transform: translateY(-4px); }
-.choice.active{
-  border-color: color-mix(in srgb, var(--accent2) 65%, var(--border) 35%);
-  box-shadow: 0 28px 90px rgba(255,61,242,.22);
-}
-.choice i{ font-size: 2.4rem; color: var(--accent2); margin-bottom: 10px; }
+    /* Ticket Selector */
+    .selector{
+      margin-top: 12px;
+      border-radius: 22px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      padding:16px;
+      box-shadow: var(--shadow-soft);
+    }
+    .selector .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    select{
+      padding: 12px 14px;
+      border-radius: 16px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px 16px;border-radius:999px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      font-weight:700;
+      cursor:pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+      box-shadow: var(--shadow-soft);
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .btn.primary{
+      background: var(--accent);
+      color: var(--bg);
+      border-color: transparent;
+    }
+    .btn.ghost{
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+    }
+    .price-display{
+      margin-left:auto;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: -.3px;
+      box-shadow: var(--shadow-soft);
+      white-space:nowrap;
+    }
 
-/* Selector */
-.selector{
-  max-width:520px;
-  margin:18px auto 0;
-  background: var(--card);
-  border:1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 22px;
-  box-shadow: var(--shadow-soft);
-  text-align:center;
-}
-.selector select{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--card2) 80%, transparent);
-  color:var(--text);
-  font-size:1rem;
-  outline:none;
-}
-.selector select:focus{
-  border-color: color-mix(in srgb, var(--accent) 60%, var(--border) 40%);
-  box-shadow: 0 0 0 6px rgba(124,77,255,.12);
-}
+    /* Packages */
+    .packages{
+      margin-top: 12px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 900px){ .packages{grid-template-columns:1fr;} }
 
-.price-display{
-  margin-top:14px;
-  font-size:1.4rem;
-  font-weight:900;
-  color: var(--accent2);
-}
+    .package{
+      border-radius: 22px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      box-shadow: var(--shadow-soft);
+      padding:16px;
+      cursor:pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+      position:relative;
+      overflow:hidden;
+      min-height: 160px;
+    }
+    .package:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .package.active{
+      outline: 2px solid color-mix(in srgb, var(--accent) 65%, transparent);
+      background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+    }
+    .package.sold{
+      opacity:.55;
+      cursor:not-allowed;
+      filter: grayscale(.2);
+    }
+    .package .badge{
+      position:absolute; top:14px; right:14px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      font-size:12px;
+      color:var(--sub);
+      box-shadow: var(--shadow-soft);
+    }
+    .package h3{font-size:15px;letter-spacing:-.2px}
+    .package .big{
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-top: 10px;
+    }
+    .package ul{margin-top:10px;display:flex;flex-direction:column;gap:6px;list-style:none}
+    .package li{font-size:13px;color:var(--sub)}
+    .package li i{margin-right:8px;color:var(--text)}
 
-/* VIP packages */
-.packages{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:16px;
-  margin-top: 10px;
-}
-.package{
-  position:relative;
-  background: var(--card);
-  border:1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 22px;
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
-  cursor:pointer;
-  box-shadow: var(--shadow-soft);
-}
-.package:hover{ transform: translateY(-4px); }
-.package.active{
-  border-color: color-mix(in srgb, var(--accent2) 65%, var(--border) 35%);
-  box-shadow: 0 28px 90px rgba(255,61,242,.22);
-}
-.package h1{ margin: 10px 0 10px; text-align:left; }
-.package h3{ margin:0; }
-.package p{ margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    /* Payment */
+    .paybox{
+      margin-top: 12px;
+      border-radius: var(--radius-lg);
+      border:1px solid var(--border);
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--bg-alt) 80%, transparent),
+        color-mix(in srgb, var(--bg) 92%, transparent)
+      );
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .paygrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .paycard{
+      border-radius: 22px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      box-shadow: var(--shadow-soft);
+      padding: 16px;
+    }
+    .muted{color:var(--sub);font-size:13px}
+    .mpesa-number{
+      font-size: clamp(24px, 6vw, 34px);
+      letter-spacing: .14em;
+      font-weight: 900;
+      margin-top: 6px;
+      word-break: break-word;
+    }
+    .whatsapp-hint{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:12px 14px;
+      border-radius: 18px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      box-shadow: var(--shadow-soft);
+      color:var(--sub);
+      font-size:13px;
+    }
+    .whatsapp-dot{
+      width:10px;height:10px;border-radius:999px;
+      background: var(--whatsapp);
+      margin-top:4px;
+      flex:0 0 auto;
+    }
 
-.sold{ pointer-events:none; opacity:.35; }
-.sold::after{
-  content:"SOLD OUT";
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,.65);
-  border-radius: var(--radius-lg);
-  font-size:1.2rem;
-  font-weight:900;
-}
+    /* Form */
+    .form{
+      margin-top: 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    input{
+      width:100%;
+      padding: 14px 14px;
+      border-radius: 18px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      outline: none;
+      font-size:14px;
+      transition: box-shadow .2s var(--ease), transform .2s var(--ease);
+      box-shadow: var(--shadow-soft);
+    }
+    input:focus{
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent), var(--shadow-soft);
+    }
+    .notice{
+      margin-top: 6px;
+      color: var(--sub);
+      font-size: 13px;
+    }
 
-/* Payment */
-.payment{
-  border:1px solid var(--border);
-  background: var(--card);
-  border-radius: var(--radius-lg);
-  padding: 22px;
-  box-shadow: var(--shadow-soft);
-  text-align:center;
-}
-.kv{
-  margin: 14px auto 0;
-  max-width: 520px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--card2) 70%, transparent);
-  border-radius: 22px;
-  padding: 18px;
-}
-.kv .label{ color: var(--muted); font-size: 12px; margin: 0 0 6px; }
-.kv .value{ margin: 0; font-weight: 900; letter-spacing: .14em; }
+    /* Small footer */
+    .foot{
+      margin-top: 16px;
+      color: var(--sub);
+      font-size: 12px;
+      text-align:center;
+    }
 
-.btn{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:999px;
-  background: linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-  transition: transform .2s var(--ease);
-}
-.btn:hover{ transform: translateY(-2px); }
-
-.form{ max-width:560px; margin: 0 auto; }
-input{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--card2) 80%, transparent);
-  color:var(--text);
-  margin:10px 0;
-  outline:none;
-}
-input:focus{
-  border-color: color-mix(in srgb, var(--accent) 60%, var(--border) 40%);
-  box-shadow: 0 0 0 6px rgba(124,77,255,.12);
-}
-
-.notice{
-  text-align:center;
-  color:#ffcc00;
-  font-weight:800;
-  margin-top:14px;
-  font-size: 13px;
-}
-</style>
+    /* Mobile padding */
+    @media (max-width: 520px){
+      .hero-inner{padding: 22px 16px}
+      .card-head{padding: 16px 16px 0}
+      .card-body{padding: 16px}
+    }
+  </style>
 </head>
 
-<body>
+<body data-theme="light">
+  <header>
+    <div class="container header-inner">
+      <a class="brand" href="./index.html" aria-label="BYZ Home">
+        <div class="brand-logo-wrap">
+          <img class="brand-logo logo-light" src="assets/BYZ%20Black.PNG" alt="BYZ logo (black)" />
+          <img class="brand-logo logo-dark"  src="assets/BYZ%20W.PNG"     alt="BYZ logo (white)" />
+        </div>
+        <div>BYZ</div>
+      </a>
 
-<div class="topnav">
-  <div class="topnav-inner">
-    <a class="brand" href="index.html" aria-label="BYZ home">
-      <img src="assets/BYZ%20W.PNG" alt="BYZ logo">
-      <span>Booking</span>
-    </a>
-    <div class="pills">
-      <a class="pill" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
-      <a class="pill primary" href="https://kasigila.github.io/byzmock/admin.html"><i class="fa-solid fa-lock"></i> Admin</a>
-    </div>
-  </div>
-</div>
-
-<div class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-  <i class="fa-solid fa-circle-half-stroke"></i>
-</div>
-
-<div class="container">
-
-  <h1>Reserve Your Night with BYZ</h1>
-  <p class="subtitle">Choose your experience</p>
-
-  <!-- STEP 1 -->
-  <div class="step active" id="step1">
-    <div class="choice-grid">
-      <div class="choice" onclick="selectType('TICKET',this)">
-        <i class="fa-solid fa-ticket"></i>
-        <h2>Tickets</h2>
-        <p class="subtitle">30,000 TZS per ticket</p>
-      </div>
-      <div class="choice" onclick="selectType('TABLE',this)">
-        <i class="fa-solid fa-couch"></i>
-        <h2>VIP Tables</h2>
-        <p class="subtitle">Premium experience</p>
+      <div class="top-actions">
+        <a class="pill" href="./index.html">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Back to <strong>Home</strong></span>
+        </a>
+        <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+        </button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- TICKET SELECTOR -->
-  <div class="step" id="ticketStep">
-    <div class="selector">
-      <h2>Select Number of Tickets</h2>
-      <select id="ticketQty" onchange="updateTicketPrice()">
-        <option value="1">1 Ticket</option>
-        <option value="2">2 Tickets</option>
-        <option value="3">3 Tickets</option>
-        <option value="4">4 Tickets</option>
-        <option value="5">5 Tickets</option>
-        <option value="6">6 Tickets</option>
-        <option value="7">7 Tickets</option>
-        <option value="8">8 Tickets</option>
-        <option value="9">9 Tickets</option>
-        <option value="10">10 Tickets</option>
-      </select>
-      <div class="price-display" id="ticketTotal">30,000 TZS</div>
-    </div>
-  </div>
-
-  <!-- TABLES -->
-  <div class="step" id="tablesStep">
-    <p class="subtitle">Choose your VIP package</p>
-    <div class="packages" id="packages"></div>
-  </div>
-
-  <!-- PAYMENT -->
-  <div class="step" id="paymentStep">
-    <div class="payment">
-      <h2>Pay via M-Pesa</h2>
-      <p class="subtitle">Complete payment before submitting your booking</p>
-
-      <div class="kv">
-        <p class="label">Business Name</p>
-        <h3 style="margin:0 0 12px;">BYZ Entertainment</h3>
-
-        <p class="label">M-Pesa Lipa Number</p>
-        <h1 id="mpesaNumber" class="value" style="text-align:center;">68286833</h1>
-
-        <div style="max-width:420px;margin:14px auto 0;">
-          <button class="btn" type="button" onclick="copyMpesa()">📋 Copy Lipa Number</button>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <h1>Book your BYZ experience</h1>
+          <p>
+            Choose tickets or a VIP table, complete M-Pesa payment, then submit your details.
+            WhatsApp will open for verification — just press <b>SEND</b>.
+          </p>
         </div>
 
-        <p style="font-size:.85rem;color:var(--muted);margin:12px 0 0;">
-          Once payment is completed copy-paste the Transaction ID into this form.
-        </p>
+        <div class="hero-right">
+          <div class="tag"><i class="fa-solid fa-shield-halved"></i> Secure checkout flow</div>
+          <div class="progress" aria-label="Progress">
+            <div class="bar" id="progressBar"></div>
+          </div>
+          <div class="tag"><i class="fa-solid fa-location-dot"></i> Dar es Salaam</div>
+        </div>
       </div>
+    </section>
+
+    <div class="grid">
+      <!-- LEFT: selection + steps -->
+      <section class="card">
+        <div class="card-head">
+          <h2>1) Choose booking type</h2>
+          <p>Tickets for individuals — VIP tables for groups.</p>
+        </div>
+
+        <div class="card-body">
+          <div class="choice-grid">
+            <div class="choice" onclick="selectType('TICKET', this)" role="button" tabindex="0">
+              <div class="row">
+                <div>
+                  <h3>Tickets</h3>
+                  <p>Fast entry. Simple checkout.</p>
+                </div>
+                <div class="icon"><i class="fa-solid fa-ticket"></i></div>
+              </div>
+            </div>
+
+            <div class="choice" onclick="selectType('TABLE', this)" role="button" tabindex="0">
+              <div class="row">
+                <div>
+                  <h3>VIP Table</h3>
+                  <p>Reserved seating + premium service.</p>
+                </div>
+                <div class="icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TICKET SELECTOR -->
+          <div class="step" id="ticketStep">
+            <div class="selector">
+              <h3 style="letter-spacing:-.3px;">Select number of tickets</h3>
+              <div class="controls">
+                <button class="btn ghost" type="button" onclick="stepTicket(-1)"><i class="fa-solid fa-minus"></i></button>
+
+                <select id="ticketQty" onchange="updateTicketPrice()">
+                  <option value="1">1 Ticket</option>
+                  <option value="2">2 Tickets</option>
+                  <option value="3">3 Tickets</option>
+                  <option value="4">4 Tickets</option>
+                  <option value="5">5 Tickets</option>
+                  <option value="6">6 Tickets</option>
+                  <option value="7">7 Tickets</option>
+                  <option value="8">8 Tickets</option>
+                  <option value="9">9 Tickets</option>
+                  <option value="10">10 Tickets</option>
+                </select>
+
+                <button class="btn ghost" type="button" onclick="stepTicket(1)"><i class="fa-solid fa-plus"></i></button>
+
+                <div class="price-display" id="ticketTotal">30,000 TZS</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TABLES -->
+          <div class="step" id="tablesStep">
+            <h3 style="letter-spacing:-.3px;margin-top:14px;">Choose your VIP package</h3>
+            <p class="muted">Each tier has limited availability.</p>
+            <div class="packages" id="packages"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: payment + form -->
+      <section class="card">
+        <div class="card-head">
+          <h2>2) Pay + submit details</h2>
+          <p>Complete M-Pesa first, then paste transaction code.</p>
+        </div>
+
+        <div class="card-body">
+          <!-- PAYMENT -->
+          <div class="step" id="paymentStep">
+            <div class="paybox">
+              <div class="paygrid">
+                <div class="paycard">
+                  <div class="muted">Business name</div>
+                  <div style="font-weight:800;letter-spacing:-.3px;margin-top:4px;">BYZ Entertainment</div>
+
+                  <div style="height:10px"></div>
+
+                  <div class="muted">M-Pesa Lipa Number</div>
+                  <div class="mpesa-number" id="mpesaNumber">68286833</div>
+
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+                    <button class="btn primary" onclick="copyMpesa()" type="button">
+                      <i class="fa-regular fa-copy"></i>
+                      Copy Lipa Number
+                    </button>
+
+                    <a class="btn" href="tel:*150*00#" style="text-decoration:none">
+                      <i class="fa-solid fa-phone"></i>
+                      Open M-Pesa
+                    </a>
+                  </div>
+
+                  <div class="whatsapp-hint">
+                    <div class="whatsapp-dot"></div>
+                    <div>
+                      After submitting, WhatsApp opens automatically for payment verification.
+                      Press <b>SEND</b>.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FORM -->
+          <div class="step" id="formStep">
+            <div class="form">
+              <input id="fullName" placeholder="Full Name" autocomplete="name">
+              <input id="phone" placeholder="Phone (WhatsApp)" autocomplete="tel">
+              <input id="email" placeholder="Email" autocomplete="email">
+              <input id="txn" placeholder="M-Pesa Transaction Code">
+
+              <button class="btn primary" onclick="submitBooking()" type="button">
+                <i class="fa-solid fa-lock"></i>
+                Submit Booking
+              </button>
+
+              <div class="notice">WhatsApp will open — press <b>SEND</b> to verify payment.</div>
+            </div>
+
+            <div class="foot">BYZ • Bookings sync to your Sheet + Admin Dashboard automatically.</div>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
+  </main>
 
-  <!-- FORM -->
-  <div class="step" id="formStep">
-    <div class="form">
-      <input id="fullName" placeholder="Full Name">
-      <input id="phone" placeholder="Phone (WhatsApp)">
-      <input id="email" placeholder="Email">
-      <input id="txn" placeholder="M-Pesa Transaction Code">
-      <button class="btn" onclick="submitBooking()">Submit Booking</button>
-      <div class="notice">WhatsApp will open — press SEND to verify payment</div>
-    </div>
-  </div>
+  <script>
+    /* ===================== UNCHANGED BACKEND CONSTANTS ===================== */
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
+    const BYZ_WHATSAPP = "255768464367";
+    const TICKET_PRICE = 30000;
 
-</div>
+    let bookingType="", tier="", ticketQty=1, availability=[];
 
-<script>
-function copyMpesa(){
-  const number = document.getElementById("mpesaNumber").innerText;
+    /* ===================== THEME (MATCH INDEX) ===================== */
+    (function initTheme(){
+      const saved = localStorage.getItem("byz_theme");
+      if(saved === "dark"){ document.body.setAttribute("data-theme","dark"); }
+    })();
 
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(number);
-  } else {
-    const temp = document.createElement("textarea");
-    temp.value = number;
-    document.body.appendChild(temp);
-    temp.select();
-    document.execCommand("copy");
-    document.body.removeChild(temp);
-  }
+    function toggleTheme(){
+      const isDark = document.body.getAttribute("data-theme") === "dark";
+      document.body.setAttribute("data-theme", isDark ? "light" : "dark");
+      localStorage.setItem("byz_theme", isDark ? "light" : "dark");
+    }
 
-  alert("Lipa number copied. Open M-Pesa to complete payment.");
-}
+    /* ===================== PROGRESS ===================== */
+    function setProgress(pct){
+      const bar = document.getElementById("progressBar");
+      bar.style.width = pct + "%";
+    }
+    setProgress(25);
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
-const BYZ_WHATSAPP = "255768464367";
-const TICKET_PRICE = 30000;
+    /* ===================== COPY MPESA ===================== */
+    function copyMpesa(){
+      const number = document.getElementById("mpesaNumber").innerText.trim();
 
-let bookingType="", tier="", ticketQty=1, availability={};
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(number);
+      } else {
+        const temp = document.createElement("textarea");
+        temp.value = number;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        document.body.removeChild(temp);
+      }
 
-/* THEME */
-function toggleTheme(){
-  document.body.classList.toggle("light");
-}
+      alert("Lipa number copied. Open M-Pesa to complete payment.");
+    }
 
-/* TYPE SELECT */
-function selectType(type,el){
-  bookingType=type;
-  document.querySelectorAll(".choice").forEach(c=>c.classList.remove("active"));
-  el.classList.add("active");
+    /* ===================== TYPE SELECT ===================== */
+    function selectType(type, el){
+      bookingType = type;
 
-  document.getElementById("ticketStep").classList.remove("active");
-  document.getElementById("tablesStep").classList.remove("active");
+      document.querySelectorAll(".choice").forEach(c => c.classList.remove("active"));
+      el.classList.add("active");
 
-  if(type==="TICKET"){
-    document.getElementById("ticketStep").classList.add("active");
-  } else {
-    document.getElementById("tablesStep").classList.add("active");
-  }
+      document.getElementById("ticketStep").classList.remove("active");
+      document.getElementById("tablesStep").classList.remove("active");
 
-  document.getElementById("paymentStep").classList.add("active");
-  document.getElementById("formStep").classList.add("active");
-}
+      if(type === "TICKET"){
+        document.getElementById("ticketStep").classList.add("active");
+      } else {
+        document.getElementById("tablesStep").classList.add("active");
+      }
 
-/* TICKET PRICE */
-function updateTicketPrice(){
-  ticketQty = Number(ticketQtyEl.value);
-  document.getElementById("ticketTotal").textContent =
-    (ticketQty * TICKET_PRICE).toLocaleString()+" TZS";
-}
-const ticketQtyEl=document.getElementById("ticketQty");
+      document.getElementById("paymentStep").classList.add("active");
+      document.getElementById("formStep").classList.add("active");
 
-/* TABLES */
-fetch(SCRIPT_URL)
-  .then(r=>r.json())
-  .then(d=>{
-    availability = d.bookings || [];
-    renderTables();
-  });
+      setProgress(66);
+    }
 
-function renderTables(){
-  const tiers=[
-    {id:"700K",price:700000,features:["Reserved VIP","Group Entry","Standard Service"]},
-    {id:"1.2M",price:1200000,features:["Prime View","Fast Service","Priority Seating"]},
-    {id:"1.8M",price:1800000,features:["Best View","Top Service","Elite Experience"]}
-  ];
-  const container=document.getElementById("packages");
-  tiers.forEach(t=>{
-    const used=availability.filter(b=>b.tier===t.id && b.status==="CONFIRMED").length;
-    const div=document.createElement("div");
-    div.className="package"+(used>=4?" sold":"");
-    div.onclick=()=>tier=t.id;
-    div.innerHTML=`<h3>${t.id}</h3><h1>${t.price.toLocaleString()}</h1>`+
-      t.features.map(f=>`<p>✔ ${f}</p>`).join("");
-    container.appendChild(div);
-  });
-}
+    /* ===================== TICKET PRICE ===================== */
+    function updateTicketPrice(){
+      const qtyEl = document.getElementById("ticketQty");
+      ticketQty = Number(qtyEl.value || 1);
 
-/* SUBMIT */
-function submitBooking(){
-  let amount=0, desc="";
+      document.getElementById("ticketTotal").textContent =
+        (ticketQty * TICKET_PRICE).toLocaleString() + " TZS";
+    }
 
-  if(bookingType==="TICKET"){
-    amount=ticketQty*TICKET_PRICE;
-    desc=`${ticketQty} Ticket(s)`;
-  } else {
-    if(!tier) return alert("Select a VIP table");
-    amount = tier==="700K"?700000:tier==="1.2M"?1200000:1800000;
-    desc = `VIP Table ${tier}`;
-  }
+    function stepTicket(delta){
+      const qtyEl = document.getElementById("ticketQty");
+      const current = Number(qtyEl.value || 1);
+      const next = Math.min(10, Math.max(1, current + delta));
+      qtyEl.value = String(next);
+      updateTicketPrice();
+    }
 
-  const data={
-    bookingType,
-    tier,
-    description:desc,
-    quantity:ticketQty,
-    amount,
-    name:fullName.value,
-    phone:phone.value,
-    email:email.value,
-    transactionCode:txn.value
-  };
+    updateTicketPrice();
 
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({action:"addBooking",data})
-  });
+    /* ===================== TABLES AVAILABILITY ===================== */
+    function safeArrayBookings(d){
+      // expect { bookings: [...] }
+      if(d && Array.isArray(d.bookings)) return d.bookings;
+      return [];
+    }
 
-  window.open(
-    `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(
-      `NEW BYZ BOOKING\nName:${data.name}\n${desc}\nAmount:${amount}\nTxn:${data.transactionCode}`
-    )}`,
-    "_blank"
-  );
+    fetch(SCRIPT_URL)
+      .then(r => r.json())
+      .then(d => {
+        availability = safeArrayBookings(d);
+        renderTables();
+      })
+      .catch(() => {
+        availability = [];
+        renderTables();
+      });
 
-  alert("Booking submitted. Please press SEND on WhatsApp.");
-}
-</script>
+    function renderTables(){
+      const tiers = [
+        {id:"700K", price:700000, features:["Reserved VIP","Group Entry","Standard Service"]},
+        {id:"1.2M", price:1200000, features:["Prime View","Fast Service","Priority Seating"]},
+        {id:"1.8M", price:1800000, features:["Best View","Top Service","Elite Experience"]}
+      ];
 
+      const container = document.getElementById("packages");
+      container.innerHTML = "";
+
+      tiers.forEach(t => {
+        const used = availability.filter(b => b.tier === t.id && b.status === "CONFIRMED").length;
+        const sold = used >= 4;
+
+        const div = document.createElement("div");
+        div.className = "package" + (sold ? " sold" : "");
+        div.setAttribute("role","button");
+        div.setAttribute("tabindex","0");
+
+        div.innerHTML = `
+          <div class="badge">${sold ? "Sold out" : (4-used) + " left"}</div>
+          <h3>${t.id} VIP</h3>
+          <div class="big">${t.price.toLocaleString()} TZS</div>
+          <ul>
+            ${t.features.map(f => `<li><i class="fa-solid fa-check"></i>${f}</li>`).join("")}
+          </ul>
+        `;
+
+        div.onclick = () => {
+          if(sold) return;
+          tier = t.id;
+          document.querySelectorAll(".package").forEach(p => p.classList.remove("active"));
+          div.classList.add("active");
+        };
+
+        div.onkeydown = (e) => {
+          if(e.key !== "Enter") return;
+          div.click();
+        };
+
+        container.appendChild(div);
+      });
+    }
+
+    /* ===================== SUBMIT (KEEP YOUR INNER WORKINGS) ===================== */
+    function submitBooking(){
+      let amount = 0, desc = "";
+
+      if(bookingType === "TICKET"){
+        amount = ticketQty * TICKET_PRICE;
+        desc = `${ticketQty} Ticket(s)`;
+      } else {
+        if(!tier) return alert("Select a VIP table");
+        amount = tier === "700K" ? 700000 : tier === "1.2M" ? 1200000 : 1800000;
+        desc = `VIP Table ${tier}`;
+      }
+
+      const data = {
+        bookingType,
+        tier,
+        description: desc,
+        quantity: ticketQty,
+        amount,
+        name: fullName.value,
+        phone: phone.value,
+        email: email.value,
+        transactionCode: txn.value
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "addBooking", data })
+      });
+
+      window.open(
+        `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(
+          `NEW BYZ BOOKING\nName:${data.name}\n${desc}\nAmount:${amount}\nTxn:${data.transactionCode}`
+        )}`,
+        "_blank"
+      );
+
+      setProgress(100);
+      alert("Booking submitted. Please press SEND on WhatsApp.");
+    }
+  </script>
 </body>
 </html>
