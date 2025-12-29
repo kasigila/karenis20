@@ -391,6 +391,12 @@ section{padding: 92px 0}
 }
 .party-chip:hover{transform: translateY(-2px)}
 .party-chip svg{width:22px;height:22px;fill:var(--text)}
+.party-chip img.party-icon-img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  display:block;
+}
 .party-pop{
   position:absolute;
   left: 62px;
@@ -1127,7 +1133,7 @@ footer{
   </div>
   <!-- Tempo -->
   <div class="party-chip" aria-label="Tempo quick action">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4.2L18.5 21 12 16.9 5.5 21l2-7.8L2 9h7l3-7z"/></svg>
+      <img class="party-icon-img" src="assets/assets/events/tempo.PNG" alt="" aria-hidden="true">
     <div class="party-pop">
       <h4>Tempo</h4>
       <p>Seasonal themes. Big energy. Premium crowd.</p>
