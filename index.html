@@ -442,42 +442,54 @@ section{padding: 92px 0}
   border-color: transparent;
 }
 
-/* ===================== SOCIAL FLOATING DOCK (IG / TIKTOK / WHATSAPP) ===================== */
+/* ===================== SOCIAL FLOATING DOCK (IG / TIKTOK / WHATSAPP / ADMIN) ===================== */
 .social-dock{
   position:fixed;
   right:16px;
   bottom:16px;
   display:flex;
   gap:10px;
-  z-index:900;
+  z-index: 900;
 }
 
 .soc{
-  width:52px;
-  height:52px;
-  border-radius:18px;
+  width:52px;height:52px;border-radius:18px;
   border:1px solid var(--border);
-  background:color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter:blur(12px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:var(--shadow-soft);
-  transition:transform .2s var(--ease), background .2s var(--ease);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow: var(--shadow-soft);
+  transition: transform .2s var(--ease), background .2s var(--ease);
 }
 
-.soc:hover{
-  transform:translateY(-2px);
-}
+.soc:hover{transform: translateY(-2px)}
 
+/* Font Awesome icons */
 .soc i{
   font-size:22px;
   color:var(--text);
 }
-  
-.soc.whatsapp i{
-  color:#25D366;
+
+/* ✅ WhatsApp original green */
+.soc.whatsapp i{ color:#25D366; }
+.soc.whatsapp:hover{
+  background: color-mix(in srgb, #25D366 14%, var(--bg) 86%);
+  border-color: color-mix(in srgb, #25D366 45%, var(--border) 55%);
 }
+
+/* Optional: subtle platform hover cues */
+.soc.instagram:hover{
+  background: color-mix(in srgb, #E1306C 14%, var(--bg) 86%);
+}
+.soc.tiktok:hover{
+  background: color-mix(in srgb, #00f2ea 10%, var(--bg) 90%);
+}
+
+/* Admin lock hover */
+.soc.admin-lock:hover{
+  background: color-mix(in srgb, var(--accent) 16%, var(--bg) 84%);
+}
+
 
 /* ===================== YOUTUBE SECTION (FEATURE + 3 THUMBNAILS) ===================== */
 .youtube-wrap{
@@ -1082,7 +1094,7 @@ footer{
         </svg>
       </button>
       <div class="toggle" id="themeToggle" aria-label="Toggle dark mode" role="switch" aria-checked="false"></div>
-      <a class="cta" href="/booking.html">Book Now</a>
+      <a class="mini" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
     </div>
   </div>
 
@@ -1095,7 +1107,7 @@ footer{
     <a href="#team">Meet the Team</a>
     <a href="#gallery">Gallery</a>
     <a href="#connect">Connect</a>
-    <a href="/booking.html" class="btn primary" style="margin-top:10px; width:100%;">Book Now</a>
+    <a href="https://kasigila.github.io/byzmock/booking.html" class="btn primary" style="margin-top:10px; width:100%;">Book Now</a>
   </div>
 </header>
 
@@ -1108,8 +1120,8 @@ footer{
       <h4>Groove Series</h4>
       <p>Weekly Afro-house nights. Reserve a table in seconds.</p>
       <div class="pop-actions">
-        <a class="mini primary" href="/booking.html?event=groove">Book</a>
-        <a class="mini" href="/booking.html">Reserve</a>
+        <a class="mini primary" href="https://kasigila.github.io/byzmock/booking.html">Book</a>
+        <a class="mini" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
       </div>
     </div>
   </div>
@@ -1120,8 +1132,8 @@ footer{
       <h4>Tempo</h4>
       <p>Seasonal themes. Big energy. Premium crowd.</p>
       <div class="pop-actions">
-        <a class="mini primary" href="/booking.html?event=tempo">Book</a>
-        <a class="mini" href="/booking.html">Reserve</a>
+        <a class="mini primary" href="https://kasigila.github.io/byzmock/booking.html">Book</a>
+        <a class="mini" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
       </div>
     </div>
   </div>
@@ -1132,8 +1144,8 @@ footer{
       <h4>APT. Session</h4>
       <p>Invite-only. Intimate location. Premium vibe.</p>
       <div class="pop-actions">
-        <a class="mini primary" href="/booking.html?event=apt">Request Invite</a>
-        <a class="mini" href="/booking.html">Reserve</a>
+        <a class="mini primary" href="https://kasigila.github.io/byzmock/booking.html">Request Invite</a>
+        <a class="mini" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
       </div>
     </div>
   </div>
@@ -1141,19 +1153,24 @@ footer{
 
 <!-- Floating Social Dock -->
 <div class="social-dock" aria-label="Social links">
-  <a class="soc" href="https://www.instagram.com/byzinthehood" target="_blank" rel="noopener" aria-label="Instagram">
+  <a class="soc instagram" href="https://www.instagram.com/byzinthehood" target="_blank" rel="noopener" aria-label="Instagram">
     <i class="fa-brands fa-instagram"></i>
   </a>
 
-  <a class="soc" href="https://www.tiktok.com/@byzinthehood" target="_blank" rel="noopener" aria-label="TikTok">
+  <a class="soc tiktok" href="https://www.tiktok.com/@byzinthehood" target="_blank" rel="noopener" aria-label="TikTok">
     <i class="fa-brands fa-tiktok"></i>
   </a>
 
   <a class="soc whatsapp" href="https://wa.me/255768464367" target="_blank" rel="noopener" aria-label="WhatsApp">
-  <i class="fa-brands fa-whatsapp"></i>
-</a>
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
 
+  <!-- Admin lock -->
+  <a class="soc admin-lock" href="https://kasigila.github.io/byzmock/admin.html" aria-label="Admin dashboard">
+    <i class="fa-solid fa-lock"></i>
+  </a>
 </div>
+
 
 
 
@@ -1168,7 +1185,7 @@ footer{
 
         <div class="hero-actions">
           <a href="#events" class="btn primary">Explore Events</a>
-          <a href="/booking.html" class="btn">Book VIP Table</a>
+          <a href="https://kasigila.github.io/byzmock/booking.html" class="btn">Book VIP Table</a>
           <a href="https://wa.me/255768464367" target="_blank" rel="noopener" class="btn">WhatsApp Booking</a>
         </div>
 
@@ -1201,7 +1218,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           </div>
 
           <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="btn primary" href="/booking.html">Book Now</a>
+            <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Now</a>
             <a class="btn" href="#dj">See Lineup</a>
           </div>
         </div>
@@ -1224,8 +1241,8 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
             <h3>Groove Series</h3>
             <p>The heartbeat of Dar nightlife. Weekly Afro-house sessions.</p>
             <div class="card-actions">
-              <a class="btn primary" href="/booking.html?event=groove">Book Table</a>
-              <a class="btn" href="/booking.html">Reserve</a>
+              <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Table</a>
+              <a class="btn" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
             </div>
           </div>
         </div>
@@ -1236,8 +1253,8 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
             <h3>APT. Session</h3>
             <p>Invite-only apartment sessions with premium vibes.</p>
             <div class="card-actions">
-              <a class="btn primary" href="/booking.html?event=apt">Request Invite</a>
-              <a class="btn" href="/booking.html">Reserve</a>
+              <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Request Invite</a>
+              <a class="btn" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
             </div>
           </div>
         </div>
@@ -1248,8 +1265,8 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
             <h3>Tempo</h3>
             <p>Seasonal events with evolving themes.</p>
             <div class="card-actions">
-              <a class="btn primary" href="/booking.html?event=tempo">Book</a>
-              <a class="btn" href="/booking.html">View Schedule</a>
+              <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book</a>
+              <a class="btn" href="https://kasigila.github.io/byzmock/booking.html">View Schedule</a>
             </div>
           </div>
         </div>
@@ -1261,7 +1278,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           <div style="font-weight:800;letter-spacing:-.3px">Already know what event to attend?</div>
           <div style="color:var(--sub);font-size:13px;margin-top:4px">Click Book Now and we’ll take care of the rest.</div>
         </div>
-        <a class="btn primary" href="/booking.html">Book Now</a>
+        <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Now</a>
       </div>
     </div>
   </section>
@@ -1332,7 +1349,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           </div>
 
           <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="btn primary" href="/booking.html">Reserve</a>
+            <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
             <a class="btn" href="https://wa.me/255768464367" target="_blank" rel="noopener">Ask on WhatsApp</a>
           </div>
         </div>
@@ -1606,7 +1623,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           <div style="color:var(--sub);font-size:13px;margin-top:4px">Use our automated booking system — or WhatsApp us instantly.</div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn primary" href="/booking.html">Book Now</a>
+          <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Now</a>
           <a class="btn" href="https://wa.me/255768464367" target="_blank" rel="noopener">WhatsApp</a>
         </div>
       </div>
