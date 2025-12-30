@@ -713,7 +713,7 @@
 async function approve(id){
   if(!confirm("Approve this payment?")) return;
 
-  // ✅ disable the clicked button immediately
+  // disable clicked button immediately
   const btn = document.querySelector(`button.approve[onclick="approve('${id}')"]`);
   const oldHtml = btn ? btn.innerHTML : "";
   if(btn){
@@ -726,38 +726,58 @@ async function approve(id){
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: "approvePayment", bookingId: id }),
+      body: JSON.stringify({
+        action: "approvePayment",
+        bookingId: id,
+        pin: ADMIN_PASSWORD   // ✅ REQUIRED for the new Apps Script
+        // resend: true        // (optional) uncomment if you want to force resend emails
+      }),
+      cache: "no-store",
       keepalive: true
     });
 
-    // ✅ read as text first (handles HTML / redirects / non-JSON)
     const raw = await res.text();
 
-    // ✅ try JSON parse if possible
     let out = null;
     try { out = JSON.parse(raw); } catch(e) {}
 
-    // ✅ if proper JSON came back, respect it
-    if(out && out.success === true){
-      if(out.alreadyConfirmed){
-        alert("Already confirmed (email was not resent).");
-      }else{
-        alert("Approved ✅ Confirmation email + QR sent.");
+    // If script returned non-JSON, show raw (this is where “authority”/HTML shows up)
+    if(!out){
+      alert("Server did not return JSON:\n\n" + raw.slice(0, 600));
+      if(btn){
+        btn.disabled = false;
+        btn.style.opacity = "";
+        btn.innerHTML = oldHtml;
       }
-      load();
       return;
     }
 
-    // ✅ if response isn't JSON (common cause of your “authority” message),
-    // still refresh because the update often succeeded server-side
-    alert("Approved ✅ (Refreshing to confirm…)"); 
-    load();
+    // ✅ if Apps Script says success false, show the REAL error (EMAIL_FAILED etc.)
+    if(out.success !== true){
+      alert("Approve failed:\n\n" + (out.error || "Unknown error"));
+      if(btn){
+        btn.disabled = false;
+        btn.style.opacity = "";
+        btn.innerHTML = oldHtml;
+      }
+      return;
+    }
+
+    // ✅ success true
+    if(out.alreadyConfirmed && !out.emailSent){
+      alert("Already confirmed (no resend).");
+    } else if(out.emailSent){
+      alert("Approved ✅ Confirmation email sent.");
+    } else {
+      alert("Approved ✅ (No email on file).");
+    }
+
+    await load();
 
   }catch(err){
     console.error(err);
     alert("Approve failed. Check internet / Apps Script deployment.");
 
-    // re-enable if truly failed
     if(btn){
       btn.disabled = false;
       btn.style.opacity = "";
