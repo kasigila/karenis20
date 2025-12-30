@@ -651,7 +651,7 @@
               <div class="notice">WhatsApp will open — press <b>SEND</b> to verify payment.</div>
             </div>
 
-            <div class="foot">BYZ • Bookings sync to your Sheet + Admin Dashboard automatically.</div>
+            <div class="foot"> </div>
           </div>
         </div>
       </section>
@@ -884,11 +884,16 @@ async function submitBooking(){
   }
 
   try{
+    
     const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: "addBooking", data })
-    }).then(r => r.json());
+  method: "POST",
+  headers: { "Content-Type": "text/plain;charset=utf-8" },
+  body: JSON.stringify({ action: "addBooking", data }),
+  keepalive: true
+}).then(r => r.json());
+
+// tiny buffer so Safari/iPhone doesn’t cut anything off before the redirect
+await new Promise(r => setTimeout(r, 700));
 
     const bookingId = res && res.bookingId ? res.bookingId : "(pending)";
 
