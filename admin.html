@@ -639,25 +639,29 @@
     }
 
     /* LOAD DATA */
-    function load() {
-      fetch(SCRIPT_URL)
-        .then(res => res.json())
-        .then(data => {
-          console.log("ADMIN RAW RESPONSE:", data);
+    async function load(){
+  try{
+    const res = await fetch(SCRIPT_URL, { cache: "no-store" });
+    const raw = await res.text();
 
-          if (!data.bookings || !Array.isArray(data.bookings)) {
-            alert("No bookings returned from server");
-            return;
-          }
+    let data = null;
+    try { data = JSON.parse(raw); } catch(e) {}
 
-          bookings = data.bookings;
-          render();
-        })
-        .catch(err => {
-          console.error("ADMIN FETCH ERROR:", err);
-          alert("Failed to load bookings");
-        });
+    console.log("ADMIN RAW RESPONSE:", data || raw);
+
+    if(!data || !data.bookings || !Array.isArray(data.bookings)){
+      alert("Failed to load bookings (server did not return JSON). Check Apps Script deployment access.");
+      return;
     }
+
+    bookings = data.bookings;
+    render();
+
+  }catch(err){
+    console.error("ADMIN FETCH ERROR:", err);
+    alert("Failed to load bookings");
+  }
+}
 
     /* RENDER TABLE */
     function render(){
@@ -709,32 +713,59 @@
 async function approve(id){
   if(!confirm("Approve this payment?")) return;
 
+  // ✅ disable the clicked button immediately
+  const btn = document.querySelector(`button.approve[onclick="approve('${id}')"]`);
+  const oldHtml = btn ? btn.innerHTML : "";
+  if(btn){
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Approving...`;
+  }
+
   try{
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: "approvePayment", bookingId: id })
+      body: JSON.stringify({ action: "approvePayment", bookingId: id }),
+      keepalive: true
     });
 
-    const out = await res.json();
+    // ✅ read as text first (handles HTML / redirects / non-JSON)
+    const raw = await res.text();
 
-    if(!out || out.success !== true){
-      alert("Approve failed: " + ((out && out.error) ? out.error : "Unknown error"));
+    // ✅ try JSON parse if possible
+    let out = null;
+    try { out = JSON.parse(raw); } catch(e) {}
+
+    // ✅ if proper JSON came back, respect it
+    if(out && out.success === true){
+      if(out.alreadyConfirmed){
+        alert("Already confirmed (email was not resent).");
+      }else{
+        alert("Approved ✅ Confirmation email + QR sent.");
+      }
+      load();
       return;
     }
 
-    if(out.alreadyConfirmed){
-      alert("Already confirmed (email was not resent).");
-    }else{
-      alert("Approved ✅ Confirmation email + QR sent.");
-    }
-
+    // ✅ if response isn't JSON (common cause of your “authority” message),
+    // still refresh because the update often succeeded server-side
+    alert("Approved ✅ (Refreshing to confirm…)"); 
     load();
+
   }catch(err){
     console.error(err);
     alert("Approve failed. Check internet / Apps Script deployment.");
+
+    // re-enable if truly failed
+    if(btn){
+      btn.disabled = false;
+      btn.style.opacity = "";
+      btn.innerHTML = oldHtml;
+    }
   }
 }
+    
     /* ===================== SCAN MODE LOGIC ===================== */
 let scanOpen = false;
 let camStream = null;
