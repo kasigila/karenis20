@@ -320,6 +320,106 @@
       transform:none;
       box-shadow:none;
     }
+    /* ===================== SCAN MODE (APPLE-LIKE) ===================== */
+.scan{
+  margin-top: 16px;
+  border-radius: var(--radius-lg);
+  border:1px solid var(--border);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-alt) 80%, transparent),
+    color-mix(in srgb, var(--bg) 92%, transparent)
+  );
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+.scan-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:flex-start;
+}
+.scan-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  color: var(--sub);
+  font-size:13px;
+  width:fit-content;
+}
+.scan-h{font-size:20px;font-weight:900;letter-spacing:-.6px;margin-top:10px}
+.scan-sub{color:var(--sub);font-size:13px;margin-top:4px}
+.scan-actions{display:flex;gap:10px;flex-wrap:wrap}
+.scan-grid{
+  margin-top: 14px;
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap:12px;
+}
+@media (max-width: 980px){ .scan-grid{grid-template-columns:1fr;} }
+
+.scan-video{
+  border-radius: 22px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  overflow:hidden;
+  position:relative;
+  min-height: 280px;
+}
+#cam{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  background: #000;
+}
+.scan-hint{
+  position:absolute;
+  left:14px;
+  bottom:14px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-soft);
+  color: var(--sub);
+  font-size:13px;
+}
+
+.scan-side{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.scan-manual{
+  border-radius: 22px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  padding: 14px;
+}
+.scan-manual .k{color:var(--sub);font-size:12px;margin-bottom:10px}
+.scan-manual .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.scan-manual input{margin-top:0}
+
+.scan-result{
+  border-radius: 22px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  box-shadow: var(--shadow-soft);
+  padding: 14px;
+}
+.scan-result .big{font-size:22px;font-weight:900;letter-spacing:-.6px}
+.scan-result .sub{margin-top:6px;color:var(--sub);font-size:13px}
+.scan-result .meta{margin-top:10px;color:var(--sub);font-size:13px;display:flex;flex-direction:column;gap:6px}
+
+.scan-cta{display:flex;gap:10px;flex-wrap:wrap}
+.scan-cta button:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
   </style>
 </head>
 
@@ -404,6 +504,76 @@
               <i class="fa-solid fa-rotate"></i>
               Refresh
             </button>
+            
+            <button onclick="openScan()" class="primary">
+  <i class="fa-solid fa-qrcode"></i>
+  Scan Mode
+</button>
+
+            
+            <div id="scanPanel" class="scan hidden">
+  <div class="scan-top">
+    <div class="scan-title">
+      <div class="scan-badge"><i class="fa-solid fa-sparkles"></i> Door Check-in</div>
+      <div class="scan-h">Scan booking QR</div>
+      <div class="scan-sub">Fast entry • shows remaining wristbands • check in 1 or all</div>
+    </div>
+
+    <div class="scan-actions">
+      <button onclick="startScan()" class="primary">
+        <i class="fa-solid fa-camera"></i> Start Camera
+      </button>
+      <button onclick="stopScan()">
+        <i class="fa-solid fa-circle-stop"></i> Stop
+      </button>
+      <button onclick="closeScan()">
+        <i class="fa-solid fa-xmark"></i> Close
+      </button>
+    </div>
+  </div>
+
+  <div class="scan-grid">
+    <div class="scan-video">
+      <video id="cam" playsinline muted></video>
+      <canvas id="scanCanvas" class="hidden"></canvas>
+      <div class="scan-hint" id="scanHint">Point camera at the QR code</div>
+    </div>
+
+    <div class="scan-side">
+      <div class="scan-manual">
+        <div class="k">Manual Booking ID</div>
+        <div class="row">
+          <input id="manualBid" placeholder="e.g., BYZ-9F3K2A" />
+          <button class="primary" onclick="verifyById(manualBid.value)">
+            <i class="fa-solid fa-magnifying-glass"></i> Verify
+          </button>
+        </div>
+      </div>
+
+      <div id="scanResult" class="scan-result">
+        <div class="big">Ready</div>
+        <div class="sub">Scan a QR or search a Booking ID.</div>
+      </div>
+
+      <div class="scan-cta">
+        <button id="btnOne" class="primary" onclick="checkIn(1)" disabled>
+          <i class="fa-solid fa-right-to-bracket"></i> Check in 1
+        </button>
+        <button id="btnAll" onclick="checkIn('all')" disabled>
+          <i class="fa-solid fa-people-group"></i> Check in all
+        </button>
+      </div>
+
+      <div class="scan-mini">
+        <a href="./verify.html" class="pill" style="width:fit-content">
+          <i class="fa-solid fa-shield"></i> Open Verify Page
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+            
           </div>
         </div>
 
@@ -541,6 +711,177 @@
         load();
       });
     }
+    /* ===================== SCAN MODE LOGIC ===================== */
+let scanOpen = false;
+let camStream = null;
+let scanLoopRunning = false;
+let lastSeen = "";
+let currentBooking = null;
+
+function openScan(){
+  document.getElementById("scanPanel").classList.remove("hidden");
+  scanOpen = true;
+}
+function closeScan(){
+  stopScan();
+  document.getElementById("scanPanel").classList.add("hidden");
+  scanOpen = false;
+}
+function startScan(){
+  if(!scanOpen) openScan();
+  startCamera();
+}
+function stopScan(){
+  scanLoopRunning = false;
+  lastSeen = "";
+  currentBooking = null;
+  setScanResult("Ready", "Scan a QR or search a Booking ID.", null, false);
+  if(camStream){
+    camStream.getTracks().forEach(t => t.stop());
+    camStream = null;
+  }
+  const v = document.getElementById("cam");
+  if(v) v.srcObject = null;
+}
+
+async function startCamera(){
+  try{
+    const v = document.getElementById("cam");
+    camStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" },
+      audio: false
+    });
+    v.srcObject = camStream;
+    await v.play();
+
+    if(!("BarcodeDetector" in window)){
+      document.getElementById("scanHint").textContent = "Camera on. QR scanning not supported here — use Manual Booking ID.";
+      return;
+    }
+
+    const detector = new BarcodeDetector({ formats: ["qr_code"] });
+    scanLoopRunning = true;
+    document.getElementById("scanHint").textContent = "Scanning…";
+
+    const loop = async () => {
+      if(!scanLoopRunning) return;
+      try{
+        const bmp = await createImageBitmap(v);
+        const codes = await detector.detect(bmp);
+        if(codes && codes.length){
+          const raw = (codes[0].rawValue || "").trim();
+          if(raw && raw !== lastSeen){
+            lastSeen = raw;
+            // raw might be "BYZ-XXXX" or a full URL containing ?bid=
+            const bid = extractBid(raw);
+            if(bid) verifyById(bid);
+          }
+        }
+      }catch(e){}
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  }catch(err){
+    console.error(err);
+    alert("Camera blocked. Allow camera permission then try again.");
+  }
+}
+
+function extractBid(raw){
+  // If QR contains URL like ...verify.html?bid=BYZ-ABC, pull out bid
+  try{
+    if(raw.includes("bid=")){
+      const u = new URL(raw);
+      return u.searchParams.get("bid");
+    }
+  }catch(e){}
+  // Otherwise treat QR as bookingId itself
+  return raw;
+}
+
+async function verifyById(bid){
+  bid = (bid || "").trim();
+  if(!bid) return;
+
+  setScanResult("Checking…", "Verifying booking…", null, false);
+
+  try{
+    const res = await fetch(`${SCRIPT_URL}?bid=${encodeURIComponent(bid)}`).then(r=>r.json());
+
+    if(!res.found){
+      setScanResult("❌ Not found", "This booking ID does not exist.", null, false);
+      return;
+    }
+
+    currentBooking = res.booking;
+    const b = currentBooking;
+
+    const ok = !!res.validForEntry;
+    const title = ok ? "✅ Valid for entry" : "❌ Not valid";
+    const sub = ok
+      ? `Remaining wristbands: ${res.remaining}`
+      : (b.status !== "CONFIRMED" ? "Status is not confirmed." : "No remaining entries on this booking.");
+
+    setScanResult(title, sub, res, ok);
+  }catch(err){
+    console.error(err);
+    setScanResult("⚠️ Error", "Could not reach server. Check internet.", null, false);
+  }
+}
+
+function setScanResult(title, subtitle, res, enableButtons){
+  const box = document.getElementById("scanResult");
+  box.innerHTML = `
+    <div class="big">${title}</div>
+    <div class="sub">${subtitle}</div>
+    ${res ? `
+      <div class="meta">
+        <div><b>ID:</b> ${res.booking.bookingId}</div>
+        <div><b>Name:</b> ${res.booking.name}</div>
+        <div><b>Description:</b> ${res.booking.description}</div>
+        <div><b>Qty:</b> ${res.booking.quantity} • <b>Checked in:</b> ${res.booking.checkedInCount} • <b>Remaining:</b> ${res.remaining}</div>
+        <div><b>Last:</b> ${res.booking.lastCheckInTime || "—"}</div>
+        <div><b>Status:</b> <span class="status ${res.booking.status}">${res.booking.status}</span></div>
+      </div>
+    ` : ``}
+  `;
+
+  document.getElementById("btnOne").disabled = !enableButtons;
+  document.getElementById("btnAll").disabled = !enableButtons;
+}
+
+async function checkIn(count){
+  if(!currentBooking) return;
+
+  try{
+    const payload = {
+      action: "checkin",
+      bookingId: currentBooking.bookingId,
+      count: count,
+      pin: ADMIN_PASSWORD
+    };
+
+    const res = await fetch(SCRIPT_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).then(r=>r.json());
+
+    if(!res.ok){
+      setScanResult("❌ Check-in blocked", res.error || "Not allowed.", null, false);
+      return;
+    }
+
+    // re-verify to refresh remaining
+    await verifyById(currentBooking.bookingId);
+
+    // also refresh table
+    load();
+  }catch(err){
+    console.error(err);
+    setScanResult("⚠️ Error", "Check-in failed. Try again.", null, false);
+  }
+}
   </script>
 </body>
 </html>
