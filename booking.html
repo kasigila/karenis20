@@ -594,7 +594,7 @@
       <section class="card">
         <div class="card-head">
           <h2>2) Pay + submit details</h2>
-          <p>Complete M-Pesa first, then paste transaction code.</p>
+          <p>Complete M-Pesa first, then paste Transaction ID.</p>
         </div>
 
         <div class="card-body">
@@ -641,7 +641,7 @@
               <input id="fullName" placeholder="Full Name" autocomplete="name">
               <input id="phone" placeholder="Phone (WhatsApp)" autocomplete="tel">
               <input id="email" placeholder="Email" autocomplete="email">
-              <input id="txn" placeholder="M-Pesa Transaction Code">
+              <input id="txn" placeholder="M-Pesa Transaction ID">
 
               <button class="btn primary" onclick="submitBooking()" type="button">
                 <i class="fa-solid fa-lock"></i>
@@ -846,7 +846,7 @@
 
   // basic guard (keeps your UI clean)
   if(!data.name || !data.phone || !data.transactionCode){
-    return alert("Please enter Name, Phone, and Transaction Code.");
+    return alert("Please enter Name, Phone, and Transaction ID.");
   }
 
   try{
