@@ -643,7 +643,7 @@
               <input id="email" placeholder="Email" autocomplete="email">
               <input id="txn" placeholder="M-Pesa Transaction ID">
 
-              <button class="btn primary" onclick="submitBooking()" type="button">
+              <button class="btn primary" id="submitBookingBtn" onclick="submitBooking()" type="button">
                 <i class="fa-solid fa-lock"></i>
                 Submit Booking
               </button>
@@ -817,14 +817,39 @@
 
   return 1;
 }
-    async function submitBooking(){
+    let __submittingBooking = false;
+
+async function submitBooking(){
+  // ✅ hard block double taps / lag taps
+  if(__submittingBooking) return;
+  __submittingBooking = true;
+
+  // ✅ disable the actual button so user can't click twice
+  const btn = document.querySelector('button.btn.primary[onclick="submitBooking()"]');
+  const btnText = btn ? btn.innerHTML : "";
+  if(btn){
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
+    btn.style.pointerEvents = "none";
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
+  }
+
   let amount = 0, desc = "";
 
   if(bookingType === "TICKET"){
     amount = ticketQty * TICKET_PRICE;
     desc = `${ticketQty} Ticket(s)`;
   } else {
-    if(!tier) return alert("Select a VIP table");
+    if(!tier){
+      if(btn){
+        btn.disabled = false;
+        btn.style.opacity = "";
+        btn.style.pointerEvents = "";
+        btn.innerHTML = btnText;
+      }
+      __submittingBooking = false;
+      return alert("Select a VIP table");
+    }
     amount = tier === "700K" ? 700000 : tier === "1.2M" ? 1200000 : 1800000;
     desc = `VIP Table ${tier}`;
   }
@@ -835,17 +860,26 @@
     bookingType,
     tier,
     description: desc,
-    quantity,                 // ✅ IMPORTANT: tickets OR pax count
-    checkedInCount: 0,        // optional (server will default)
+    quantity,
+    checkedInCount: 0,
     amount,
     name: fullName.value,
     phone: phone.value,
     email: email.value,
-    transactionCode: txn.value
+    transactionCode: txn.value,
+
+    // ✅ idempotency key (prevents duplicate rows if user taps twice)
+    requestId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2))
   };
 
-  // basic guard (keeps your UI clean)
   if(!data.name || !data.phone || !data.transactionCode){
+    if(btn){
+      btn.disabled = false;
+      btn.style.opacity = "";
+      btn.style.pointerEvents = "";
+      btn.innerHTML = btnText;
+    }
+    __submittingBooking = false;
     return alert("Please enter Name, Phone, and Transaction ID.");
   }
 
@@ -858,18 +892,36 @@
 
     const bookingId = res && res.bookingId ? res.bookingId : "(pending)";
 
-    window.open(
-      `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(
-        `NEW BYZ BOOKING\nBookingID:${bookingId}\nName:${data.name}\n${desc}\nQty:${quantity}\nAmount:${amount}\nTxn:${data.transactionCode}`
-      )}`,
-      "_blank"
-    );
+    // ✅ WhatsApp open (works better than window.open on iPhone Safari)
+    const msg =
+`NEW BYZ BOOKING
+BookingID: ${bookingId}
+Name: ${data.name}
+Phone: ${data.phone}
+${desc}
+Qty: ${quantity}
+Amount: ${amount}
+Txn: ${data.transactionCode}`;
+
+    const waUrl = `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+
+    // Use same-tab navigation to avoid popup blocking
+    window.location.href = waUrl;
 
     setProgress(100);
-    alert(`Booking submitted.\nBooking ID: ${bookingId}\nPlease press SEND on WhatsApp.`);
+
   }catch(err){
     console.error(err);
     alert("Booking failed. Please try again.");
+
+    // re-enable if failed
+    if(btn){
+      btn.disabled = false;
+      btn.style.opacity = "";
+      btn.style.pointerEvents = "";
+      btn.innerHTML = btnText;
+    }
+    __submittingBooking = false;
   }
 }
   </script>
