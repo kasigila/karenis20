@@ -772,16 +772,16 @@ async function startCamera(){
   try{
     const v = document.getElementById("cam");
     camStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
+      video: { facingMode: { ideal: "environment" } },
       audio: false
     });
+
     v.srcObject = camStream;
     await v.play();
 
-        if(!("BarcodeDetector" in window)){
+    if(!("BarcodeDetector" in window)){
       document.getElementById("scanHint").textContent =
-        "Camera on ✅ but QR auto-scan isn’t supported in this browser. Use Manual Booking ID (right side), or open this page in Chrome/Safari updated.";
-      // keep camera on anyway (manual still works)
+        "Camera on. QR scanning not supported here — use Manual Booking ID.";
       return;
     }
 
@@ -789,30 +789,31 @@ async function startCamera(){
     scanLoopRunning = true;
     document.getElementById("scanHint").textContent = "Scanning…";
 
-    const loop = async () => {
-      if(!scanLoopRunning) return;
-      try{
-        const bmp = await createImageBitmap(v);
-        const codes = await detector.detect(bmp);
-        if(codes && codes.length){
-          const raw = (codes[0].rawValue || "").trim();
-          if(raw && raw !== lastSeen){
-            lastSeen = raw;
-            // raw might be "BYZ-XXXX" or a full URL containing ?bid=
-            const bid = extractBid(raw);
-            if(bid) verifyById(bid);
+    // ✅ lighter loop: detect every 150ms (no createImageBitmap per frame)
+    (async function scanLoop(){
+      while(scanLoopRunning){
+        try{
+          const codes = await detector.detect(v);
+          if(codes && codes.length){
+            const raw = (codes[0].rawValue || "").trim();
+            if(raw && raw !== lastSeen){
+              lastSeen = raw;
+              const bid = extractBid(raw);
+              if(bid) await verifyById(bid);
+            }
           }
-        }
-      }catch(e){}
-      requestAnimationFrame(loop);
-    };
-    requestAnimationFrame(loop);
+        }catch(e){}
+        await new Promise(r => setTimeout(r, 150));
+      }
+    })();
+
   }catch(err){
     console.error(err);
     alert("Camera blocked. Allow camera permission then try again.");
   }
 }
 
+    
 function extractBid(raw){
   // If QR contains URL like ...verify.html?bid=BYZ-ABC, pull out bid
   try{
