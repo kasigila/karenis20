@@ -477,6 +477,87 @@
       .card-head{padding: 16px 16px 0}
       .card-body{padding: 16px}
     }
+    /* ===================== TOAST (BOOKING SUBMITTED) ===================== */
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%) translateY(18px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
+  width: min(520px, calc(100% - 24px));
+}
+
+.toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.toast-card{
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+  padding: 14px 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.toast-body{
+  flex: 1;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.toast-sub{
+  margin-top: 6px;
+  color: var(--sub);
+  font-size: 13px;
+}
+
+.toast-actions{
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.toast-link{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text);
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: var(--shadow-soft);
+}
+
+.toast-close{
+  width: 36px;
+  height: 36px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.toast-close i{ font-size: 14px; }
+    
   </style>
 </head>
 
@@ -935,6 +1016,48 @@ window.location.href = waUrl;
     __submittingBooking = false;
   }
 }
+    /* ===================== TOAST HELPERS ===================== */
+let __toastTimer = null;
+
+function ensureToast(){
+  if(document.getElementById("byzToast")) return;
+
+  const wrap = document.createElement("div");
+  wrap.id = "byzToast";
+  wrap.className = "toast";
+  wrap.innerHTML = `
+    <div class="toast-card" role="status" aria-live="polite">
+      <div class="toast-body" id="byzToastBody"></div>
+      <button class="toast-close" type="button" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(wrap);
+
+  wrap.querySelector(".toast-close").addEventListener("click", () => {
+    wrap.classList.remove("show");
+    if(__toastTimer) clearTimeout(__toastTimer);
+    __toastTimer = null;
+  });
+}
+
+function showToast(html, ms = 7000){
+  ensureToast();
+  const toast = document.getElementById("byzToast");
+  const body = document.getElementById("byzToastBody");
+
+  body.innerHTML = html;
+
+  toast.classList.add("show");
+
+  if(__toastTimer) clearTimeout(__toastTimer);
+  __toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+    __toastTimer = null;
+  }, ms);
+}
     function resetSubmitUI(){
   __submittingBooking = false;
 
@@ -951,21 +1074,25 @@ function showBookingSubmittedUI(){
   const bookingId = sessionStorage.getItem("byz_last_bookingId") || "";
   const wa = sessionStorage.getItem("byz_last_wa") || "";
 
-  // ✅ Change the small text under the button
+  // update the small text under the button
   const notice = document.querySelector("#formStep .notice");
   if(notice){
-    notice.innerHTML = `Booking submitted ✅ WhatsApp opened for verification — press <b>SEND</b>.`;
+    notice.innerHTML = `Booking submitted ✅ WhatsApp opened — press <b>SEND</b> to verify payment.`;
   }
 
-  // ✅ Put a clear message + a fallback WhatsApp link
+  // optional: clear footer so it doesn’t look cluttered
   const foot = document.querySelector(".foot");
-  if(foot){
-    foot.innerHTML = `
-      <b>Booking submitted ✅</b>
-      ${bookingId ? `<br/>Your Booking ID: <b>${bookingId}</b>` : ``}
-      ${wa ? `<br/><a href="${wa}" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:800;">Open WhatsApp again</a>` : ``}
-    `;
-  }
+  if(foot){ foot.innerHTML = ""; }
+
+  // ✅ show toast popup
+  const toastHtml = `
+    <div><b>Booking submitted ✅</b></div>
+    ${bookingId ? `<div class="toast-sub">Booking ID: <b>${bookingId}</b></div>` : ``}
+    <div class="toast-actions">
+      ${wa ? `<a class="toast-link" href="${wa}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp again</a>` : ``}
+    </div>
+  `;
+  showToast(toastHtml, 9000);
 
   setProgress(100);
 }
