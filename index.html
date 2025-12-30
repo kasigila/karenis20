@@ -168,22 +168,26 @@ nav a:hover{color:var(--text)}
 
 /* Dark mode toggle (Apple-ish) */
 .toggle{
-  width:44px;height:26px;border-radius:999px;
-  background: color-mix(in srgb, var(--border) 80%, transparent);
-  border:1px solid var(--border);
   position:relative;
-  cursor:pointer;
-  transition: background .25s var(--ease), border-color .25s var(--ease);
 }
-.toggle::after{
-  content:"";
-  width:20px;height:20px;border-radius:50%;
-  background:var(--bg);
-  position:absolute;top:2px;left:2px;
-  transition: transform .25s var(--ease), background .25s var(--ease);
-  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+.toggle::before{
+  content:"\f185"; /* sun */
+  font-family:"Font Awesome 6 Free";
+  font-weight:900;
+  position:absolute;
+  top:50%;
+  left:9px;
+  transform: translateY(-50%);
+  font-size:12px;
+  color:var(--sub);
+  opacity:.9;
+  pointer-events:none;
+  transition: left .25s var(--ease);
 }
-[data-theme="dark"] .toggle::after{ transform: translateX(18px) }
+[data-theme="dark"] .toggle::before{
+  content:"\f186"; /* moon */
+  left: calc(100% - 21px);
+}
 
 /* ===================== HERO (APPLE STORYTELLING) ===================== */
 main{padding-top:var(--header-h)}
@@ -864,7 +868,26 @@ section{padding: 92px 0}
   border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
   box-shadow: var(--shadow-soft);
 }
+.tab{
+  color: var(--text);
+  background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
+}
 
+[data-theme="dark"] .tab{
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+  border-color: color-mix(in srgb, var(--border) 85%, transparent);
+}
+
+.tab.active{
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-elev));
+  color: var(--text);
+}
+
+[data-theme="dark"] .tab.active{
+  background: var(--accent);
+  color: var(--bg);
+  border-color: transparent;
+}
 .gallery-meta{
   margin-left:auto;
   color: var(--sub);
@@ -1336,7 +1359,7 @@ footer{
           <path fill="currentColor" d="M4 7h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2zm16 4H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2zm0 6H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2z"/>
         </svg>
       </button>
-      <div class="toggle" id="themeToggle" aria-label="Toggle dark mode" role="switch" aria-checked="false"></div>
+      <div class="toggle" id="themeToggle" role="switch" aria-label="Toggle theme" aria-checked="false" title="Toggle light/dark"></div>
       <a class="mini" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
     </div>
   </div>
