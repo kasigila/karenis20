@@ -706,17 +706,35 @@
     }
 
     /* APPROVE */
-    function approve(id){
-      if(!confirm("Approve this payment?")) return;
+async function approve(id){
+  if(!confirm("Approve this payment?")) return;
 
-      fetch(SCRIPT_URL,{
-        method:"POST",
-        body:JSON.stringify({action:"approvePayment",bookingId:id})
-      }).then(()=>{
-        alert("Approved & email sent");
-        load();
-      });
+  try{
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "approvePayment", bookingId: id })
+    });
+
+    const out = await res.json();
+
+    if(!out || out.success !== true){
+      alert("Approve failed: " + ((out && out.error) ? out.error : "Unknown error"));
+      return;
     }
+
+    if(out.alreadyConfirmed){
+      alert("Already confirmed (email was not resent).");
+    }else{
+      alert("Approved ✅ Confirmation email + QR sent.");
+    }
+
+    load();
+  }catch(err){
+    console.error(err);
+    alert("Approve failed. Check internet / Apps Script deployment.");
+  }
+}
     /* ===================== SCAN MODE LOGIC ===================== */
 let scanOpen = false;
 let camStream = null;
@@ -760,8 +778,10 @@ async function startCamera(){
     v.srcObject = camStream;
     await v.play();
 
-    if(!("BarcodeDetector" in window)){
-      document.getElementById("scanHint").textContent = "Camera on. QR scanning not supported here — use Manual Booking ID.";
+        if(!("BarcodeDetector" in window)){
+      document.getElementById("scanHint").textContent =
+        "Camera on ✅ but QR auto-scan isn’t supported in this browser. Use Manual Booking ID (right side), or open this page in Chrome/Safari updated.";
+      // keep camera on anyway (manual still works)
       return;
     }
 
@@ -878,16 +898,32 @@ async function checkIn(count){
       return;
     }
 
-    // re-verify to refresh remaining
-    await verifyById(currentBooking.bookingId);
+    const added = (res.added ?? "");
+    setScanResult(
+      "✅ Check-in complete",
+      `Entry recorded${added !== "" ? " (+" + added + ")" : ""}. Ready for next scan.`,
+      null,
+      false
+    );
 
-    // also refresh table
+    // reset so the next scan/manual verify starts fresh
+    currentBooking = null;
+    manualBid.value = "";
+
+    // small UX reset
+    setTimeout(() => {
+      setScanResult("Ready", "Scan a QR or search a Booking ID.", null, false);
+    }, 1200);
+
+    // refresh table list
     load();
+
   }catch(err){
     console.error(err);
     setScanResult("⚠️ Error", "Check-in failed. Try again.", null, false);
   }
 }
+    
   </script>
 </body>
 </html>
