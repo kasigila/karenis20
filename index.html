@@ -1275,6 +1275,24 @@ footer{
   background: color-mix(in srgb, #ff5ea8 22%, var(--accent));
   color: var(--bg);
 }
+  /* Platform-colored buttons in the developer modal */
+.byz-modal-btn.wa{
+  background: color-mix(in srgb, #25D366 14%, var(--bg-elev) 86%);
+  border-color: color-mix(in srgb, #25D366 40%, var(--border) 60%);
+}
+.byz-modal-btn.wa i{ color:#25D366; }
+
+.byz-modal-btn.ig{
+  background: color-mix(in srgb, #E1306C 14%, var(--bg-elev) 86%);
+  border-color: color-mix(in srgb, #E1306C 40%, var(--border) 60%);
+}
+.byz-modal-btn.ig i{ color:#E1306C; }
+
+.byz-modal-btn.wa:hover,
+.byz-modal-btn.ig:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
   
 </style>
 </head>
@@ -1900,13 +1918,34 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
         </a>
       </div>
 
+      <div class="byz-modal-row">
+  <div class="k">WhatsApp</div>
+  <a class="byz-modal-link" href="https://wa.me/12698613487" target="_blank" rel="noopener">
+    +1 (269) 861-3487
+  </a>
+</div>
+
       <div class="byz-modal-actions">
-        <a class="byz-modal-btn primary"
-           href="mailto:Karen_Marie1@icloud.com?subject=BYZ%20Website%20Support&body=Hi%20Karen%2C%0A%0AI%20need%20help%20with%3A%0A%0APage%3A%0AIssue%3A%0AUrgency%3A%0A%0AThank%20you!">
-          <i class="fa-solid fa-envelope"></i> Email Developer
-        </a>
-        <button class="byz-modal-btn" id="devModalCloseBtn2" type="button">Close</button>
-      </div>
+  <a class="byz-modal-btn primary"
+     href="mailto:Karen_Marie1@icloud.com?subject=BYZ%20Website%20Support&body=Hi%20Karen%2C%0A%0AI%20need%20help%20with%3A%0A%0APage%3A%0AIssue%3A%0AUrgency%3A%0A%0AThank%20you!">
+    <i class="fa-solid fa-envelope"></i> Email
+  </a>
+
+  <a class="byz-modal-btn wa"
+     href="https://wa.me/12698613487"
+     target="_blank" rel="noopener" aria-label="WhatsApp Karen">
+    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+  </a>
+
+  <a class="byz-modal-btn ig"
+     href="https://www.instagram.com/karenmarieeee/"
+     target="_blank" rel="noopener" aria-label="Instagram Karen">
+    <i class="fa-brands fa-instagram"></i> Instagram
+  </a>
+
+  <button class="byz-modal-btn" id="devModalCloseBtn2" type="button">Close</button>
+</div>
+      
     </div>
   </div>
 </div>
