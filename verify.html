@@ -11,145 +11,191 @@
     :root{
       --bg:#ffffff; --bg-alt:#f5f5f7; --bg-elev:#ffffff;
       --text:#1d1d1f; --sub:#6e6e73; --border:#d2d2d7; --accent:#000000;
-      --radius-lg: 28px; --shadow: 0 18px 60px rgba(0,0,0,.08); --shadow-soft: 0 10px 30px rgba(0,0,0,.08);
-      --ease: cubic-bezier(.2,.8,.2,1);
-      --ok:#0a7f3f; --warn:#b45309; --bad:#b42318;
-      --max: 980px; --header-h: 64px;
+      --radius:22px; --radius-lg:28px;
+      --shadow:0 18px 60px rgba(0,0,0,.08);
+      --shadow-soft:0 10px 30px rgba(0,0,0,.08);
+      --ease:cubic-bezier(.2,.8,.2,1);
+      --ok:#0a7f3f; --bad:#b42318; --warn:#b45309;
+      --max:980px;
     }
     [data-theme="dark"]{
-      --bg:#000000; --bg-alt:#1c1c1e; --bg-elev:#0b0b0c;
-      --text:#f5f5f7; --sub:#a1a1a6; --border:#2c2c2e; --accent:#ffffff;
-      --shadow: 0 18px 60px rgba(0,0,0,.35); --shadow-soft: 0 10px 30px rgba(0,0,0,.35);
+      --bg:#000; --bg-alt:#1c1c1e; --bg-elev:#0b0b0c;
+      --text:#f5f5f7; --sub:#a1a1a6; --border:#2c2c2e; --accent:#fff;
+      --shadow:0 18px 60px rgba(0,0,0,.35);
+      --shadow-soft:0 10px 30px rgba(0,0,0,.35);
     }
+
     *{box-sizing:border-box;margin:0;padding:0}
     body{
       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.55;
+      background:var(--bg); color:var(--text); line-height:1.55;
       transition: background .35s var(--ease), color .35s var(--ease);
-      padding: 24px;
+      overflow-x:hidden;
     }
-    .container{max-width:var(--max);margin:0 auto}
+    .container{max-width:var(--max);margin:0 auto;padding:24px}
     .card{
-      border-radius: var(--radius-lg);
+      border-radius:var(--radius-lg);
       border:1px solid var(--border);
-      background: linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--bg-alt) 80%, transparent),
-        color-mix(in srgb, var(--bg) 92%, transparent)
-      );
-      box-shadow: var(--shadow);
-      padding: 16px;
+      background:var(--bg-elev);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .inner{
-      border-radius: 22px;
-      border:1px solid var(--border);
-      background: var(--bg-elev);
-      box-shadow: var(--shadow-soft);
-      padding: 16px;
-    }
-    .top{
-      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;
-      margin-bottom: 12px;
-    }
-    .badge{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:10px 14px;border-radius:999px;border:1px solid var(--border);
-      background: var(--bg-elev); box-shadow: var(--shadow-soft);
-      color: var(--sub); font-size:13px;
-      width:fit-content;
-    }
-    h1{font-size:22px;font-weight:900;letter-spacing:-.6px;margin-top:10px}
-    .sub{color:var(--sub);font-size:13px;margin-top:4px}
-    .actions{display:flex;gap:10px;flex-wrap:wrap}
-    button{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      padding:12px 16px;border-radius:999px;border:1px solid var(--border);
-      background: var(--bg-elev); color: var(--text);
-      font-weight:800; cursor:pointer;
-      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
-      box-shadow: var(--shadow-soft);
-    }
-    button:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
-    .primary{background:var(--accent);color:var(--bg);border-color:transparent}
-    input{
-      width:100%;
-      padding:14px 14px;border-radius:18px;border:1px solid var(--border);
-      background: var(--bg-elev); color: var(--text); outline:none;
-      box-shadow: var(--shadow-soft);
-      font-size:14px;
-    }
-    .grid{display:grid;grid-template-columns: 1.1fr .9fr;gap:12px;margin-top:12px}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} }
-    .video{
-      border-radius: 22px;
-      border:1px solid var(--border);
-      background: var(--bg-elev);
-      box-shadow: var(--shadow-soft);
-      overflow:hidden; position:relative; min-height: 280px;
-    }
-    video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
-    .hint{
-      position:absolute;left:14px;bottom:14px;
-      padding:10px 12px;border-radius:999px;border:1px solid var(--border);
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(12px);
-      box-shadow: var(--shadow-soft);
-      color: var(--sub);
-      font-size:13px;
-    }
-    .result{
-      border-radius: 22px;
+    .head{padding:18px 18px 0}
+    .head h1{font-size:clamp(20px,3.2vw,30px);letter-spacing:-1px;line-height:1.1}
+    .head p{margin-top:8px;color:var(--sub);font-size:14px}
+    .body{padding:18px}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+    @media(max-width:920px){.grid{grid-template-columns:1fr}}
+
+    .videoWrap{
+      border-radius:22px;
       border:1px solid var(--border);
       background: color-mix(in srgb, var(--bg) 92%, transparent);
-      box-shadow: var(--shadow-soft);
-      padding: 14px;
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+      position:relative;
+      min-height: 320px;
     }
-    .big{font-size:22px;font-weight:900;letter-spacing:-.6px}
-    .meta{margin-top:10px;color:var(--sub);font-size:13px;display:flex;flex-direction:column;gap:6px}
-    .ok{color:var(--ok);font-weight:900}
-    .bad{color:var(--bad);font-weight:900}
-    .warn{color:var(--warn);font-weight:900}
+    video{width:100%;height:100%;object-fit:cover;display:block}
+    .scanOverlay{
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      pointer-events:none;
+    }
+    .reticle{
+      width:min(260px,70%); aspect-ratio:1/1;
+      border-radius:28px;
+      border:2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      box-shadow: 0 0 0 999px rgba(0,0,0,.12) inset;
+      backdrop-filter: blur(2px);
+    }
+
+    .panel{
+      border-radius:22px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      box-shadow:var(--shadow-soft);
+      padding:16px;
+    }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    input{
+      width:100%;
+      padding:14px 14px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:var(--bg-elev);
+      color:var(--text);
+      outline:none;
+      font-size:14px;
+      box-shadow:var(--shadow-soft);
+      margin-top:10px;
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px 16px;border-radius:999px;
+      border:1px solid var(--border);
+      background:var(--bg-elev);
+      color:var(--text);
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+      box-shadow:var(--shadow-soft);
+      user-select:none;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+    .primary{background:var(--accent);color:var(--bg);border-color:transparent}
+    .ghost{background: color-mix(in srgb, var(--bg) 88%, transparent)}
+    .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 14px;border-radius:999px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      color:var(--sub);
+      font-size:13px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .statusLine{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:var(--bg-elev);
+      box-shadow:var(--shadow-soft);
+      font-weight:900;
+      letter-spacing:-.3px;
+    }
+    .ok{color:var(--ok)}
+    .bad{color:var(--bad)}
+    .warn{color:var(--warn)}
+    .kv{margin-top:12px;color:var(--sub);font-size:13px;display:flex;flex-direction:column;gap:6px}
+    .kv b{color:var(--text)}
   </style>
 </head>
 
 <body data-theme="light">
   <div class="container">
     <div class="card">
-      <div class="inner">
-        <div class="top">
-          <div>
-            <div class="badge"><i class="fa-solid fa-shield-halved"></i> BYZ Verification</div>
-            <h1>Verify booking</h1>
-            <div class="sub">Scan QR or enter a Booking ID (works best on strong internet).</div>
-          </div>
-          <div class="actions">
-            <button class="primary" onclick="startCam()"><i class="fa-solid fa-camera"></i> Start</button>
-            <button onclick="stopCam()"><i class="fa-solid fa-circle-stop"></i> Stop</button>
-          </div>
-        </div>
+      <div class="head">
+        <h1>BYZ Door Verify</h1>
+        <p>Scan QR → instant status → check-in. (Fast entry mode)</p>
 
+        <div class="row" style="margin-top:12px">
+          <span class="pill"><i class="fa-solid fa-wifi"></i> Needs internet</span>
+          <button class="btn ghost" type="button" onclick="toggleTheme()">
+            <i class="fa-solid fa-circle-half-stroke"></i> Theme
+          </button>
+        </div>
+      </div>
+
+      <div class="body">
         <div class="grid">
-          <div class="video">
+          <div class="videoWrap">
             <video id="cam" playsinline muted></video>
-            <div class="hint" id="hint">Point camera at QR</div>
+            <div class="scanOverlay"><div class="reticle"></div></div>
           </div>
 
-          <div>
-            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
-              <input id="manualBid" placeholder="Booking ID (e.g., BYZ-9F3K2A)" />
-              <button class="primary" onclick="verify(manualBid.value)"><i class="fa-solid fa-magnifying-glass"></i> Verify</button>
+          <div class="panel">
+            <div class="row">
+              <button class="btn primary" type="button" onclick="startScan()">
+                <i class="fa-solid fa-camera"></i> Start Scan
+              </button>
+              <button class="btn" type="button" onclick="stopScan()">
+                <i class="fa-solid fa-stop"></i> Stop
+              </button>
             </div>
 
-            <div class="result" id="result">
-              <div class="big">Checking…</div>
-              <div class="meta">If you opened this from a QR link, it will auto-verify.</div>
+            <input id="manual" placeholder="Manual Booking ID (e.g., BYZ-TICKET-1234)" />
+            <div class="row" style="margin-top:10px">
+              <button class="btn" type="button" onclick="verifyManual()">
+                <i class="fa-solid fa-magnifying-glass"></i> Verify
+              </button>
+              <button class="btn" type="button" onclick="checkIn(1)">
+                <i class="fa-solid fa-check"></i> Check in 1
+              </button>
+              <button class="btn" type="button" onclick="checkIn('all')">
+                <i class="fa-solid fa-bolt"></i> Check in all
+              </button>
+            </div>
+
+            <div id="statusBox" class="statusLine warn">Ready to scan.</div>
+
+            <div class="kv" id="info" style="display:none">
+              <div><b>ID:</b> <span id="bid"></span></div>
+              <div><b>Name:</b> <span id="name"></span></div>
+              <div><b>Booking:</b> <span id="desc"></span></div>
+              <div><b>Status:</b> <span id="st"></span></div>
+              <div><b>Quantity:</b> <span id="qty"></span></div>
+              <div><b>Checked in:</b> <span id="checked"></span></div>
+              <div><b>Remaining:</b> <span id="rem"></span></div>
+              <div><b>Last check-in:</b> <span id="last"></span></div>
+            </div>
+
+            <div class="kv" style="margin-top:12px">
+              Tip: first scan asks for admin pin once, then it’s saved on this device.
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -157,119 +203,177 @@
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
 
-  let stream=null, loopRunning=false, lastSeen="";
-
-  (function init(){
-    const bid = new URLSearchParams(location.search).get("bid");
-    if(bid) verify(bid);
+  (function initTheme(){
+    const saved = localStorage.getItem("byz_theme");
+    if(saved === "dark"){ document.body.setAttribute("data-theme","dark"); }
   })();
+  function toggleTheme(){
+    const isDark = document.body.getAttribute("data-theme") === "dark";
+    document.body.setAttribute("data-theme", isDark ? "light" : "dark");
+    localStorage.setItem("byz_theme", isDark ? "light" : "dark");
+  }
 
-  function extractBid(raw){
+  let stream = null;
+  let scanning = false;
+  let lastCode = "";
+  let currentBookingId = "";
+
+  function setStatus(text, cls){
+    const box = document.getElementById("statusBox");
+    box.className = "statusLine " + (cls || "warn");
+    box.textContent = text;
+  }
+
+  async function startScan(){
     try{
-      if(raw.includes("bid=")){
-        const u = new URL(raw);
-        return u.searchParams.get("bid");
+      if(!("BarcodeDetector" in window)){
+        setStatus("Camera scan not supported here. Use Manual Booking ID.", "bad");
+        return;
       }
-    }catch(e){}
+
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: "environment" } },
+        audio: false
+      });
+
+      const video = document.getElementById("cam");
+      video.srcObject = stream;
+      await video.play();
+
+      scanning = true;
+      setStatus("Scanning…", "warn");
+      scanLoop();
+    }catch(err){
+      setStatus("Camera blocked. Allow camera access or use Manual ID.", "bad");
+    }
+  }
+
+  function stopScan(){
+    scanning = false;
+    if(stream){
+      stream.getTracks().forEach(t=>t.stop());
+      stream = null;
+    }
+    setStatus("Stopped.", "warn");
+  }
+
+  async function scanLoop(){
+    const detector = new BarcodeDetector({ formats: ["qr_code"] });
+    const video = document.getElementById("cam");
+
+    while(scanning){
+      try{
+        const codes = await detector.detect(video);
+        if(codes && codes.length){
+          const raw = (codes[0].rawValue || "").trim();
+          if(raw && raw !== lastCode){
+            lastCode = raw;
+            const bid = extractBookingId_(raw);
+            if(bid){
+              document.getElementById("manual").value = bid;
+              await verifyById(bid);
+            }
+          }
+        }
+      }catch(e){}
+      await new Promise(r=>setTimeout(r, 150));
+    }
+  }
+
+  function extractBookingId_(raw){
+    // QR encodes bookingId directly. If it ever encodes a URL, we try to pull bid= too.
+    if(raw.includes("bid=")){
+      try{
+        const u = new URL(raw);
+        return (u.searchParams.get("bid") || "").trim();
+      }catch(e){
+        const m = raw.match(/bid=([^&]+)/);
+        return m ? decodeURIComponent(m[1]) : raw;
+      }
+    }
     return raw;
   }
 
-  async function verify(bid){
-    bid = (bid||"").trim();
-    if(!bid) return;
+  async function verifyManual(){
+    const bid = document.getElementById("manual").value.trim();
+    if(!bid) return setStatus("Enter a Booking ID.", "bad");
+    await verifyById(bid);
+  }
 
-    setResult("Checking…", "Verifying booking…");
+  async function verifyById(bid){
+    setStatus("Checking…", "warn");
+    currentBookingId = bid;
 
-    try{
-      const res = await fetch(`${SCRIPT_URL}?bid=${encodeURIComponent(bid)}`).then(r=>r.json());
+    const res = await fetch(`${SCRIPT_URL}?bid=${encodeURIComponent(bid)}`);
+    const data = await res.json();
 
-      if(!res.found){
-        setResult("❌ Booking not found", "This Booking ID does not exist.", "bad");
-        return;
-      }
+    if(!data.found){
+      document.getElementById("info").style.display="none";
+      setStatus("❌ Not found", "bad");
+      return;
+    }
 
-      const b = res.booking;
-      const ok = !!res.validForEntry;
+    const b = data.booking;
+    const remaining = data.remaining;
+    const ok = data.validForEntry;
 
-      const title = ok ? "✅ Valid for entry" : "❌ Not valid";
-      const tone = ok ? "ok" : (b.status !== "CONFIRMED" ? "warn" : "bad");
-      const subtitle = ok
-        ? `Remaining wristbands: ${res.remaining}`
-        : (b.status !== "CONFIRMED" ? "Not confirmed." : "No remaining entries.");
+    document.getElementById("info").style.display="flex";
+    document.getElementById("bid").textContent = b.bookingId || "";
+    document.getElementById("name").textContent = b.name || "";
+    document.getElementById("desc").textContent = b.description || "";
+    document.getElementById("st").textContent = b.status || "";
+    document.getElementById("qty").textContent = b.quantity ?? "";
+    document.getElementById("checked").textContent = b.checkedInCount ?? "";
+    document.getElementById("rem").textContent = remaining ?? "";
+    document.getElementById("last").textContent = b.lastCheckInTime || "";
 
-      document.getElementById("result").innerHTML = `
-        <div class="big ${tone}">${title}</div>
-        <div class="meta">
-          <div>${subtitle}</div>
-          <div><b>ID:</b> ${b.bookingId}</div>
-          <div><b>Name:</b> ${b.name}</div>
-          <div><b>Description:</b> ${b.description}</div>
-          <div><b>Qty:</b> ${b.quantity} • <b>Checked in:</b> ${b.checkedInCount} • <b>Remaining:</b> ${res.remaining}</div>
-          <div><b>Last check-in:</b> ${b.lastCheckInTime || "—"}</div>
-          <div><b>Status:</b> <span class="${tone}">${b.status}</span></div>
-        </div>
-      `;
-    }catch(e){
-      setResult("⚠️ Error", "Could not reach server. Check internet.", "warn");
+    if(ok){
+      setStatus(`✅ Valid — Remaining: ${remaining}`, "ok");
+    }else{
+      const msg = (b.status !== "CONFIRMED") ? "Not confirmed" : "No remaining entries";
+      setStatus(`❌ Not valid — ${msg}`, "bad");
     }
   }
 
-  function setResult(title, subtitle, tone){
-    document.getElementById("result").innerHTML = `
-      <div class="big ${tone||""}">${title}</div>
-      <div class="meta">${subtitle}</div>
-    `;
+  function getPin_(){
+    let pin = localStorage.getItem("byz_admin_pin") || "";
+    if(!pin){
+      pin = prompt("Enter admin pin (same as admin password):") || "";
+      pin = pin.trim();
+      if(pin) localStorage.setItem("byz_admin_pin", pin);
+    }
+    return pin;
   }
 
-  async function startCam(){
-    try{
-      const v = document.getElementById("cam");
-      stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment" }, audio:false });
-      v.srcObject = stream;
-      await v.play();
-
-      if(!("BarcodeDetector" in window)){
-        document.getElementById("hint").textContent = "Camera on. QR scanning not supported here — use manual Booking ID.";
-        return;
-      }
-
-      const detector = new BarcodeDetector({ formats:["qr_code"] });
-      loopRunning = true;
-      document.getElementById("hint").textContent = "Scanning…";
-
-      const loop = async () => {
-        if(!loopRunning) return;
-        try{
-          const bmp = await createImageBitmap(v);
-          const codes = await detector.detect(bmp);
-          if(codes && codes.length){
-            const raw = (codes[0].rawValue || "").trim();
-            if(raw && raw !== lastSeen){
-              lastSeen = raw;
-              const bid = extractBid(raw);
-              if(bid) verify(bid);
-            }
-          }
-        }catch(e){}
-        requestAnimationFrame(loop);
-      };
-      requestAnimationFrame(loop);
-    }catch(e){
-      alert("Camera blocked. Allow permissions and try again.");
+  async function checkIn(count){
+    if(!currentBookingId){
+      const bid = document.getElementById("manual").value.trim();
+      if(!bid) return setStatus("Scan or enter a Booking ID first.", "bad");
+      currentBookingId = bid;
     }
-  }
 
-  function stopCam(){
-    loopRunning = false;
-    lastSeen = "";
-    if(stream){
-      stream.getTracks().forEach(t=>t.stop());
-      stream=null;
+    const pin = getPin_();
+    if(!pin) return setStatus("Admin pin required.", "bad");
+
+    setStatus("Checking in…", "warn");
+
+    const r = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action:"checkin", pin, bookingId: currentBookingId, count })
+    });
+
+    const out = await r.json();
+
+    if(!out.ok){
+      setStatus(`❌ ${out.error || "Check-in failed"}`, "bad");
+      return;
     }
-    const v = document.getElementById("cam");
-    if(v) v.srcObject = null;
-    document.getElementById("hint").textContent = "Point camera at QR";
+
+    // refresh UI with new remaining
+    const bid = currentBookingId;
+    await verifyById(bid);
   }
 </script>
+
 </body>
 </html>
