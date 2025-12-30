@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
   <style>
     /* ===================== APPLE-LIKE DESIGN TOKENS (MATCH INDEX) ===================== */
     :root{
@@ -822,6 +822,9 @@ function stopScan(){
 async function startCamera(){
   try{
     const v = document.getElementById("cam");
+    const canvas = document.getElementById("scanCanvas");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
     camStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: { ideal: "environment" } },
       audio: false
@@ -830,23 +833,61 @@ async function startCamera(){
     v.srcObject = camStream;
     await v.play();
 
-    if(!("BarcodeDetector" in window)){
-      document.getElementById("scanHint").textContent =
-        "Camera on. QR scanning not supported here — use Manual Booking ID.";
-      return;
-    }
-
-    const detector = new BarcodeDetector({ formats: ["qr_code"] });
     scanLoopRunning = true;
     document.getElementById("scanHint").textContent = "Scanning…";
 
-    // ✅ lighter loop: detect every 150ms (no createImageBitmap per frame)
+    // ✅ PATH 1: Use native BarcodeDetector when available (fast)
+    if("BarcodeDetector" in window){
+      const detector = new BarcodeDetector({ formats: ["qr_code"] });
+
+      (async function scanLoop(){
+        while(scanLoopRunning){
+          try{
+            const codes = await detector.detect(v);
+            if(codes && codes.length){
+              const raw = (codes[0].rawValue || "").trim();
+              if(raw && raw !== lastSeen){
+                lastSeen = raw;
+                const bid = extractBid(raw);
+                if(bid) await verifyById(bid);
+              }
+            }
+          }catch(e){}
+          await new Promise(r => setTimeout(r, 150));
+        }
+      })();
+
+      return;
+    }
+
+    // ✅ PATH 2: Safari fallback using jsQR (works on iPhone)
+    if(typeof jsQR !== "function"){
+      document.getElementById("scanHint").textContent =
+        "Camera on, but QR library missing — use Manual Booking ID.";
+      return;
+    }
+
+    document.getElementById("scanHint").textContent = "Scanning… (Safari mode)";
+
     (async function scanLoop(){
       while(scanLoopRunning){
         try{
-          const codes = await detector.detect(v);
-          if(codes && codes.length){
-            const raw = (codes[0].rawValue || "").trim();
+          const w = v.videoWidth;
+          const h = v.videoHeight;
+          if(!w || !h){
+            await new Promise(r => setTimeout(r, 120));
+            continue;
+          }
+
+          canvas.width = w;
+          canvas.height = h;
+
+          ctx.drawImage(v, 0, 0, w, h);
+          const img = ctx.getImageData(0, 0, w, h);
+
+          const code = jsQR(img.data, w, h, { inversionAttempts: "dontInvert" });
+          if(code && code.data){
+            const raw = String(code.data || "").trim();
             if(raw && raw !== lastSeen){
               lastSeen = raw;
               const bid = extractBid(raw);
@@ -854,7 +895,7 @@ async function startCamera(){
             }
           }
         }catch(e){}
-        await new Promise(r => setTimeout(r, 150));
+        await new Promise(r => setTimeout(r, 220));
       }
     })();
 
