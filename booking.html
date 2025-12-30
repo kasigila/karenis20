@@ -909,12 +909,17 @@ Amount: ${amount}
 Txn: ${data.transactionCode}`;
 
     const waUrl = `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+
+// ✅ Save state so when they come back, we can show “Booking submitted”
 sessionStorage.setItem("byz_last_wa", waUrl);
 sessionStorage.setItem("byz_last_ts", String(Date.now()));
-    // Use same-tab navigation to avoid popup blocking
-    window.location.href = waUrl;
+sessionStorage.setItem("byz_last_bookingId", bookingId);
+sessionStorage.setItem("byz_last_status", "submitted");
 
-    setProgress(100);
+setProgress(100);
+
+// Use same-tab navigation to avoid popup blocking
+window.location.href = waUrl;
 
   }catch(err){
     console.error(err);
@@ -942,34 +947,52 @@ sessionStorage.setItem("byz_last_ts", String(Date.now()));
   }
 }
 
-// When user returns from WhatsApp (iOS Safari uses bfcache)
-window.addEventListener("pageshow", () => {
-  const wa = sessionStorage.getItem("byz_last_wa");
+function showBookingSubmittedUI(){
+  const bookingId = sessionStorage.getItem("byz_last_bookingId") || "";
+  const wa = sessionStorage.getItem("byz_last_wa") || "";
+
+  // ✅ Change the small text under the button
+  const notice = document.querySelector("#formStep .notice");
+  if(notice){
+    notice.innerHTML = `Booking submitted ✅ WhatsApp opened for verification — press <b>SEND</b>.`;
+  }
+
+  // ✅ Put a clear message + a fallback WhatsApp link
+  const foot = document.querySelector(".foot");
+  if(foot){
+    foot.innerHTML = `
+      <b>Booking submitted ✅</b>
+      ${bookingId ? `<br/>Your Booking ID: <b>${bookingId}</b>` : ``}
+      ${wa ? `<br/><a href="${wa}" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:800;">Open WhatsApp again</a>` : ``}
+    `;
+  }
+
+  setProgress(100);
+}
+
+function handleReturnFromWhatsApp(){
+  const status = sessionStorage.getItem("byz_last_status");
   const ts = Number(sessionStorage.getItem("byz_last_ts") || "0");
 
-  // if they just came back recently, reset UI so it doesn't look stuck
-  if(wa && (Date.now() - ts < 5 * 60 * 1000)){
+  // ✅ only show “Booking submitted” if they came back recently
+  if(status === "submitted" && (Date.now() - ts < 10 * 60 * 1000)){
     resetSubmitUI();
-
-    // OPTIONAL: show a helpful prompt instead of confusion
-    // (You can replace alert with a nicer UI later)
-    // alert("Booking saved. WhatsApp opened — press SEND to verify payment.");
-
-    // Optional: add a quick "Open WhatsApp again" link somewhere
-    const foot = document.querySelector(".foot");
-    if(foot){
-      foot.innerHTML = `
-        Booking saved. If WhatsApp didn’t send, open it again:
-        <a href="${wa}" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:800;">Open WhatsApp</a>
-      `;
-    }
+    showBookingSubmittedUI();
+  } else {
+    resetSubmitUI();
   }
-});
+}
 
-// Also handle switching back without full reload
+// iOS Safari + back/forward cache
+window.addEventListener("pageshow", handleReturnFromWhatsApp);
+
+// Coming back from WhatsApp often triggers focus/visibility instead of pageshow
+window.addEventListener("focus", handleReturnFromWhatsApp);
+
 document.addEventListener("visibilitychange", () => {
-  if(!document.hidden) resetSubmitUI();
+  if(!document.hidden) handleReturnFromWhatsApp();
 });
+    
   </script>
 </body>
 </html>
