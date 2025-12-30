@@ -9,6 +9,85 @@
 
 <style>
 /* ===================== APPLE-LIKE DESIGN TOKENS ===================== */
+  .hidden{display:none !important;}
+
+.byz-modal-backdrop{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(10px);
+  display:grid;
+  place-items:center;
+  padding:20px;
+  z-index:9999;
+}
+
+.byz-modal{
+  width:min(520px, 100%);
+  border-radius: 24px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.byz-modal-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 16px 0 16px;
+}
+
+.byz-modal-title{font-weight:900;letter-spacing:-.6px;font-size:18px}
+.byz-modal-sub{color:var(--sub);font-size:13px;margin-top:4px}
+
+.byz-modal-x{
+  width:42px;height:42px;border-radius:16px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  box-shadow: var(--shadow-soft);
+  cursor:pointer;
+}
+
+.byz-modal-body{padding:16px}
+.byz-modal-row{
+  border-radius:18px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  padding:12px 14px;
+  margin-top:10px;
+}
+.byz-modal-row .k{color:var(--sub);font-size:12px}
+.byz-modal-row .v{font-weight:900;margin-top:4px}
+
+.byz-modal-link{
+  display:inline-block;
+  margin-top:6px;
+  text-decoration:underline;
+  font-weight:900;
+}
+
+.byz-modal-actions{
+  display:flex; gap:10px; flex-wrap:wrap;
+  margin-top:14px;
+}
+.byz-modal-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:12px 16px;border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text);
+  font-weight:900;
+  cursor:pointer;
+  box-shadow: var(--shadow-soft);
+  text-decoration:none;
+}
+.byz-modal-btn.primary{
+  background: var(--accent);
+  color: var(--bg);
+  border-color: transparent;
+}
 :root{
   --bg:#ffffff;
   --bg-alt:#f5f5f7;
@@ -1712,11 +1791,32 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           <p><a href="#youtube">YouTube</a></p>
           <p><a href="/booking.html">Book Now</a></p>
         </div>
+
         <div>
-          <h4>Contact</h4>
-          <p>Booking & WhatsApp:</b> +255 768 464 367</p>
-          <p>Business Email: <a href="mailto:byzentertainment@gmail.com?subject=BYZ%20Booking%20Inquiry&body=Hi%20BYZ%20Team%2C%0A%0AName%3A%0APhone%3A%0AEvent%20Date%3A%0AQuestion%3A%0A%0AThanks!" style="text-decoration:underline;">byzentertainment@gmail.com</a></p>
-        </div>
+  <h4>Contact</h4>
+
+  <p>
+    Booking & WhatsApp:
+    <a href="tel:+255768464367" style="text-decoration:underline;font-weight:800;">
+      +255 768 464 367
+    </a>
+  </p>
+
+  <p>
+    Business Email:
+    <a href="mailto:byzentertainment@gmail.com?subject=BYZ%20Booking%20Inquiry&body=Hi%20BYZ%20Team%2C%0A%0AName%3A%0APhone%3A%0AEvent%20Date%3A%0AQuestion%3A%0A%0AThanks!"
+       style="text-decoration:underline;font-weight:800;">
+      byzentertainment@gmail.com
+    </a>
+  </p>
+
+  <p style="margin-top:10px;">
+    <a href="#" id="devContactLink" style="text-decoration:underline;font-weight:800;">
+      Contact Developer
+    </a>
+  </p>
+</div>
+        
         <div>
           <h4>Social</h4>
           <p><a href="https://www.instagram.com/byzinthehood" target="_blank" rel="noopener">Instagram</a></p>
@@ -2042,6 +2142,87 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   // Initial render
   render("groove");
 })();
+  <script>
+  // Developer modal wiring
+  (function(){
+    const openLink = document.getElementById("devContactLink");
+    const backdrop = document.getElementById("devModalBackdrop");
+    const close1 = document.getElementById("devModalCloseBtn");
+    const close2 = document.getElementById("devModalCloseBtn2");
+
+    if(!openLink || !backdrop) return;
+
+    function openModal(e){
+      if(e) e.preventDefault();
+      backdrop.classList.remove("hidden");
+      backdrop.setAttribute("aria-hidden","false");
+    }
+
+    function closeModal(){
+      backdrop.classList.add("hidden");
+      backdrop.setAttribute("aria-hidden","true");
+    }
+
+    openLink.addEventListener("click", openModal);
+    if(close1) close1.addEventListener("click", closeModal);
+    if(close2) close2.addEventListener("click", closeModal);
+
+    backdrop.addEventListener("click", (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeModal();
+    });
+  })();
 </script>
+</script>
+  <!-- Developer Contact Modal -->
+<div id="devModalBackdrop" class="byz-modal-backdrop hidden" aria-hidden="true">
+  <div class="byz-modal" role="dialog" aria-modal="true" aria-labelledby="devModalTitle">
+    <div class="byz-modal-head">
+      <div>
+        <div id="devModalTitle" class="byz-modal-title">Contact Developer</div>
+        <div class="byz-modal-sub">Website updates & support</div>
+      </div>
+      <button class="byz-modal-x" id="devModalCloseBtn" type="button" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="byz-modal-body">
+      <div class="byz-modal-row">
+        <div class="k">Name</div>
+        <div class="v">Karen Marie Kasigila</div>
+      </div>
+
+      <div class="byz-modal-row">
+        <div class="k">Email</div>
+        <a class="byz-modal-link"
+           href="mailto:Karen_Marie1@icloud.com?subject=BYZ%20Website%20Support&body=Hi%20Karen%2C%0A%0AI%20need%20help%20with%3A%0A%0APage%3A%0AIssue%3A%0AUrgency%3A%0A%0AThank%20you!">
+          Karen_Marie1@icloud.com
+        </a>
+      </div>
+
+      <div class="byz-modal-row">
+        <div class="k">WhatsApp</div>
+        <a class="byz-modal-link"
+           href="https://wa.me/?text=Hi%20Karen%2C%20I%20need%20help%20with%20the%20BYZ%20website%3A%20">
+          Message on WhatsApp
+        </a>
+      </div>
+
+      <div class="byz-modal-actions">
+        <a class="byz-modal-btn primary"
+           href="mailto:Karen_Marie1@icloud.com?subject=BYZ%20Website%20Support&body=Hi%20Karen%2C%0A%0AI%20need%20help%20with%3A%0A%0APage%3A%0AIssue%3A%0AUrgency%3A%0A%0AThank%20you!">
+          <i class="fa-solid fa-envelope"></i> Email Developer
+        </a>
+        <button class="byz-modal-btn" id="devModalCloseBtn2" type="button">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
