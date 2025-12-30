@@ -807,45 +807,71 @@
     }
 
     /* ===================== SUBMIT (KEEP YOUR INNER WORKINGS) ===================== */
-    function submitBooking(){
-      let amount = 0, desc = "";
+    function getOrderQuantity(){
+  if(bookingType === "TICKET") return ticketQty;
 
-      if(bookingType === "TICKET"){
-        amount = ticketQty * TICKET_PRICE;
-        desc = `${ticketQty} Ticket(s)`;
-      } else {
-        if(!tier) return alert("Select a VIP table");
-        amount = tier === "700K" ? 700000 : tier === "1.2M" ? 1200000 : 1800000;
-        desc = `VIP Table ${tier}`;
-      }
+  // VIP tables = wristbands for pax count
+  if(tier === "700K") return 10;
+  if(tier === "1.2M") return 15;
+  if(tier === "1.8M") return 20;
 
-      const data = {
-        bookingType,
-        tier,
-        description: desc,
-        quantity: ticketQty,
-        amount,
-        name: fullName.value,
-        phone: phone.value,
-        email: email.value,
-        transactionCode: txn.value
-      };
+  return 1;
+}
+    async function submitBooking(){
+  let amount = 0, desc = "";
 
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "addBooking", data })
-      });
+  if(bookingType === "TICKET"){
+    amount = ticketQty * TICKET_PRICE;
+    desc = `${ticketQty} Ticket(s)`;
+  } else {
+    if(!tier) return alert("Select a VIP table");
+    amount = tier === "700K" ? 700000 : tier === "1.2M" ? 1200000 : 1800000;
+    desc = `VIP Table ${tier}`;
+  }
 
-      window.open(
-        `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(
-          `NEW BYZ BOOKING\nName:${data.name}\n${desc}\nAmount:${amount}\nTxn:${data.transactionCode}`
-        )}`,
-        "_blank"
-      );
+  const quantity = getOrderQuantity();
 
-      setProgress(100);
-      alert("Booking submitted. Please press SEND on WhatsApp.");
-    }
+  const data = {
+    bookingType,
+    tier,
+    description: desc,
+    quantity,                 // ✅ IMPORTANT: tickets OR pax count
+    checkedInCount: 0,        // optional (server will default)
+    amount,
+    name: fullName.value,
+    phone: phone.value,
+    email: email.value,
+    transactionCode: txn.value
+  };
+
+  // basic guard (keeps your UI clean)
+  if(!data.name || !data.phone || !data.transactionCode){
+    return alert("Please enter Name, Phone, and Transaction Code.");
+  }
+
+  try{
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "addBooking", data })
+    }).then(r => r.json());
+
+    const bookingId = res && res.bookingId ? res.bookingId : "(pending)";
+
+    window.open(
+      `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(
+        `NEW BYZ BOOKING\nBookingID:${bookingId}\nName:${data.name}\n${desc}\nQty:${quantity}\nAmount:${amount}\nTxn:${data.transactionCode}`
+      )}`,
+      "_blank"
+    );
+
+    setProgress(100);
+    alert(`Booking submitted.\nBooking ID: ${bookingId}\nPlease press SEND on WhatsApp.`);
+  }catch(err){
+    console.error(err);
+    alert("Booking failed. Please try again.");
+  }
+}
   </script>
 </body>
 </html>
