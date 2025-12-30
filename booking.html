@@ -909,7 +909,8 @@ Amount: ${amount}
 Txn: ${data.transactionCode}`;
 
     const waUrl = `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(msg)}`;
-
+sessionStorage.setItem("byz_last_wa", waUrl);
+sessionStorage.setItem("byz_last_ts", String(Date.now()));
     // Use same-tab navigation to avoid popup blocking
     window.location.href = waUrl;
 
@@ -929,6 +930,46 @@ Txn: ${data.transactionCode}`;
     __submittingBooking = false;
   }
 }
+    function resetSubmitUI(){
+  __submittingBooking = false;
+
+  const btn = document.getElementById("submitBookingBtn");
+  if(btn){
+    btn.disabled = false;
+    btn.style.opacity = "";
+    btn.style.pointerEvents = "";
+    btn.innerHTML = `<i class="fa-solid fa-lock"></i> Submit Booking`;
+  }
+}
+
+// When user returns from WhatsApp (iOS Safari uses bfcache)
+window.addEventListener("pageshow", () => {
+  const wa = sessionStorage.getItem("byz_last_wa");
+  const ts = Number(sessionStorage.getItem("byz_last_ts") || "0");
+
+  // if they just came back recently, reset UI so it doesn't look stuck
+  if(wa && (Date.now() - ts < 5 * 60 * 1000)){
+    resetSubmitUI();
+
+    // OPTIONAL: show a helpful prompt instead of confusion
+    // (You can replace alert with a nicer UI later)
+    // alert("Booking saved. WhatsApp opened — press SEND to verify payment.");
+
+    // Optional: add a quick "Open WhatsApp again" link somewhere
+    const foot = document.querySelector(".foot");
+    if(foot){
+      foot.innerHTML = `
+        Booking saved. If WhatsApp didn’t send, open it again:
+        <a href="${wa}" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:800;">Open WhatsApp</a>
+      `;
+    }
+  }
+});
+
+// Also handle switching back without full reload
+document.addEventListener("visibilitychange", () => {
+  if(!document.hidden) resetSubmitUI();
+});
   </script>
 </body>
 </html>
