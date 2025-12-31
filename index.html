@@ -575,18 +575,14 @@ section{padding: 92px 0}
   flex-wrap:wrap;
   align-items:center;
 }
-.subscribe{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:10px 14px;border-radius:999px;
-  background:#ff0000;
-  color:#fff;
-  font-weight:700;
-  font-size:13px;
-  border:none;
-  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+.yt-subscribe{
+  width: 180px;
+  height: 32px;
+  border: 0;
+  overflow: hidden;
+  border-radius: 10px;
 }
-.subscribe:hover{transform: translateY(-2px); box-shadow: var(--shadow-soft)}
-.subscribe svg{width:18px;height:18px;fill:#fff}
+  
 .channel-link{
   font-size:13px;
   color:var(--sub);
@@ -1698,12 +1694,17 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
             <p id="featuredDesc">Test your knowledge in this hilarious challenge with forfeits.</p>
 
             <div class="youtube-actions">
-              <a class="subscribe" href="https://www.youtube.com/@byzinthehood?sub_confirmation=1" target="_blank" rel="noopener">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15l5-3-5-3v6zm12-7.5s0-2.1-0.8-3c-.9-1-1.9-1-2.4-1.1C15.6 3 12 3 12 3h0s-3.6 0-6.8.4c-.5.1-1.5.1-2.4 1.1-.8.9-.8 3-.8 3S1 9.9 1 12.3v1.4c0 2.4.8 4.8.8 4.8s0 2.1.8 3c.9 1 2.1 1 2.6 1.1 1.9.2 7.8.4 7.8.4s3.6 0 6.8-.4c.5-.1 1.5-.1 2.4-1.1.8-.9.8-3 .8-3s.8-2.4.8-4.8v-1.4C22.8 9.9 22 7.5 22 7.5z"/></svg>
-                Subscribe
-              </a>
-              <a class="channel-link" href="https://www.youtube.com/@byzinthehood" target="_blank" rel="noopener">Visit Channel</a>
-            </div>
+  <iframe
+    class="yt-subscribe"
+    src="https://www.youtube.com/subscribe_embed?usegapi=1&channelid=UCYkRnLh4_hIGgHg5PgqoUKw&layout=default&count=default"
+    title="Subscribe to BYZ on YouTube"
+    scrolling="no"
+    frameborder="0">
+  </iframe>
+
+  <a class="channel-link" href="https://www.youtube.com/@byzinthehood" target="_blank" rel="noopener">Visit Channel</a>
+</div>
+            
           </div>
         </div>
 
