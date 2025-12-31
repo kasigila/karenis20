@@ -3472,7 +3472,92 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     if(e.key === "Escape" && !backdrop.classList.contains("byz-hidden")) closeModal();
   });
 })();
-  
+  /* =====================================================
+   MEMORY GALLERY – VISUAL FIX ONLY (NO FUNCTION CHANGES)
+   Paste ABOVE </style>
+===================================================== */
+
+/* 1. REMOVE RANDOM BOLD / ANDROID FEEL */
+#gallery .pin-label,
+#gallery .gallery-note,
+#gallery .gallery-meta,
+#gallery .tab,
+#gallery .lb-copy,
+#gallery .lb-download {
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Album titles / tabs get a VERY slight emphasis only */
+#gallery .tab.active {
+  font-weight: 500 !important;
+}
+
+/* 2. FIX CARD SHAPE – LESS CURVE, MORE PINTEREST */
+#gallery .pin {
+  border-radius: 12px !important;     /* was too rounded */
+  overflow: hidden !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06) !important;
+}
+
+[data-theme="dark"] #gallery .pin {
+  box-shadow: 0 8px 22px rgba(0,0,0,.35) !important;
+}
+
+/* 3. IMAGES FILL CARD – NO INNER GAPS */
+#gallery .pin img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;        /* removes inner rounding */
+}
+
+/* 4. CLEAN HOVER (SUBTLE, APPLE-LIKE) */
+#gallery .pin:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,.12) !important;
+}
+
+/* 5. DARK MODE TEXT FIX (YOUR CURRENT BUG) */
+#gallery {
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] #gallery {
+  color: var(--text) !important;
+}
+
+#gallery .pin-label,
+#gallery .gallery-note,
+#gallery .gallery-meta {
+  color: var(--sub) !important;
+}
+
+/* 6. BULK SELECT POPUP – FIX IPHONE OVERFLOW + SPACING */
+#gallery #bulkbar {
+  max-width: calc(100vw - 24px) !important;
+  padding: 12px 14px !important;
+}
+
+#gallery #bulkbar > div {
+  display: flex !important;
+  gap: 12px !important;                /* THIS fixes touching borders */
+  flex-wrap: wrap !important;
+}
+
+@media (max-width: 520px) {
+  #gallery #bulkbar {
+    left: 12px !important;
+    right: 12px !important;
+  }
+
+  #gallery #bulkbar > div {
+    justify-content: space-between !important;
+  }
+}
 </script>
 </body>
 </html>
