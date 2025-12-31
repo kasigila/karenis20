@@ -1812,7 +1812,7 @@ footer{
   transform: translateY(-2px);
   box-shadow: var(--shadow-soft);
 }
-<style>
+
 /* ============================= */
 /* MEMORY GALLERY UI REFINEMENT  */
 /* ============================= */
@@ -1876,42 +1876,73 @@ html.dark .album-info span {
 }
 
 /* ============================= */
-/* POPUP BUTTONS SPACING FIX     */
+/* FIX #4: BULK BAR BUTTON SPACING */
 /* ============================= */
 
-.gallery-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem; /* Add breathing space between buttons */
-  justify-content: center;
-  padding: 1rem 0.8rem;
+.bulk-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;              /* ✅ this is the spacing */
+  justify-content:flex-end;
+  align-items:center;
 }
 
-.gallery-actions button {
-  padding: 0.6rem 1.4rem;
-  border-radius: 8px;
+/* iPhone: stack them nicely */
+@media (max-width: 480px){
+  .bulk-actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .bulk-actions .btn{
+    width:100%;
+    justify-content:center;
+  }
+}
+/* =========================================
+   MEMORY GALLERY — TYPOGRAPHY NORMALIZATION
+   (UI ONLY — NO FUNCTIONALITY CHANGES)
+========================================= */
+
+#gallery,
+#gallery * {
+  font-weight: inherit;
+}
+
+/* Tabs */
+#gallery .tab {
   font-weight: 500;
-  background: var(--button-bg, #111);
-  color: var(--button-text, #fff);
-  border: none;
-  transition: background 0.25s;
+  letter-spacing: -0.2px;
 }
 
-.gallery-actions button:hover {
-  background: var(--button-hover, #333);
+/* Active tab */
+#gallery .tab.active {
+  font-weight: 600;
 }
 
-/* Ensure popup fits on iPhone */
-@media (max-width: 480px) {
-  .gallery-actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
-  }
-  .gallery-actions button {
-    width: 100%;
-  }
+/* Board titles (Pinterest-like) */
+#gallery .board-title {
+  font-weight: 500;
 }
+
+/* Pills + meta text */
+#gallery .pill,
+#gallery .gallery-meta,
+#gallery .album-sub,
+#gallery .gallery-note {
+  font-weight: 400;
+}
+
+/* Image overlay labels */
+#gallery .pin-label {
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* Bulk bar text */
+#gallery .bulk-count {
+  font-weight: 500;
+}
+
 </style>
 
 </head>
