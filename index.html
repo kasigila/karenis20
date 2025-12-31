@@ -188,7 +188,37 @@ nav a:hover{color:var(--text)}
   content:"\f186"; /* moon */
   left: calc(100% - 21px);
 }
+/* Theme icon button (matches booking.html style) */
+.theme-btn{
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+}
 
+.theme-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.theme-btn:active{
+  transform: translateY(0px);
+}
+
+.theme-glyph{
+  width:20px;
+  height:20px;
+  display:block;
+}
+  
 /* ===================== HERO (APPLE STORYTELLING) ===================== */
 main{padding-top:var(--header-h)}
 .hero{
@@ -1359,7 +1389,24 @@ footer{
           <path fill="currentColor" d="M4 7h16a1 1 0 0 0 0-2H4a1 1 0 0 0 0 2zm16 4H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2zm0 6H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2z"/>
         </svg>
       </button>
-      <div class="toggle" id="themeToggle" role="switch" aria-label="Toggle theme" aria-checked="false" title="Toggle light/dark"></div>
+      <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
+  <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
+    <!-- outer ring -->
+    <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
+    <!-- inner circle -->
+    <circle cx="12" cy="12" r="6" fill="currentColor" />
+    <!-- right half cutout (shows background color) -->
+    <defs>
+      <clipPath id="themeHalfClip">
+        <circle cx="12" cy="12" r="6" />
+      </clipPath>
+    </defs>
+    <g clip-path="url(#themeHalfClip)">
+      <rect x="12" y="6" width="6" height="12" style="fill: var(--bg-elev);" />
+    </g>
+  </svg>
+</button>
+      
       <a class="mini" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
     </div>
   </div>
@@ -1989,7 +2036,10 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   function applyTheme(theme) {
     if (theme === "dark") root.setAttribute("data-theme","dark");
     else root.setAttribute("data-theme","light");
-    if (toggle) toggle.setAttribute("aria-checked", theme === "dark" ? "true" : "false");
+    if (toggle){
+  toggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+  toggle.title = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+}
   }
 
   if (stored) {
