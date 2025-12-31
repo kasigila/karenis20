@@ -1812,7 +1812,68 @@ footer{
   transform: translateY(-2px);
   box-shadow: var(--shadow-soft);
 }
+/* ===============================
+   MEMORY GALLERY — visual cleanup
+   =============================== */
 
+/* Remove heavy bolding on album titles */
+#gallery .album-title {
+  font-weight: 500 !important;
+  letter-spacing: -0.02em;
+  font-family: inherit;
+}
+
+/* Remove random bold from sublabels */
+#gallery .album-sub,
+#gallery .album-meta,
+#gallery .album-count {
+  font-weight: 400 !important;
+  opacity: 0.85;
+  color: var(--text, #333);
+}
+
+/* Make album preview images fill entire card */
+#gallery .album-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 !important; /* Removes rounded edges */
+  display: block;
+}
+
+/* Adjust card containers so previews fill properly */
+#gallery .album-card {
+  overflow: hidden;
+  border-radius: 0 !important; /* Flat edge aesthetic */
+  border: none;
+  background: var(--surface, #fff);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#gallery .album-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* Ensure text is readable in dark mode */
+html.dark #gallery,
+body.dark #gallery {
+  --text: #f4f4f4;
+  --surface: #1b1b1b;
+}
+
+html.dark #gallery .album-sub,
+html.dark #gallery .album-count {
+  color: rgba(255,255,255,0.75);
+}
+
+/* Fix button spacing in bulk action pop-up */
+#gallery .bulk-actions {
+  display: flex;
+  gap: 12px !important;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 </head>
 
