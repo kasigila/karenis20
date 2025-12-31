@@ -1812,69 +1812,107 @@ footer{
   transform: translateY(-2px);
   box-shadow: var(--shadow-soft);
 }
-/* ===============================
-   MEMORY GALLERY — visual cleanup
-   =============================== */
+/* ============================= */
+/* MEMORY GALLERY UI REFINEMENT  */
+/* ============================= */
 
-/* Remove heavy bolding on album titles */
-#gallery .album-title {
-  font-weight: 500 !important;
-  letter-spacing: -0.02em;
-  font-family: inherit;
+/* Album Grid */
+.memory-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.6rem;
+  margin-top: 2rem;
 }
 
-/* Remove random bold from sublabels */
-#gallery .album-sub,
-#gallery .album-meta,
-#gallery .album-count {
-  font-weight: 400 !important;
-  opacity: 0.85;
-  color: var(--text, #333);
+/* Each Album Card */
+.album-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0; /* Remove rounded edges */
+  background: var(--surface, #fff);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* Make album preview images fill entire card */
-#gallery .album-preview img {
+.album-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+/* Album Image fills box fully */
+.album-card img {
   width: 100%;
-  height: 100%;
+  height: 220px;
   object-fit: cover;
-  border-radius: 0 !important; /* Removes rounded edges */
   display: block;
 }
 
-/* Adjust card containers so previews fill properly */
-#gallery .album-card {
-  overflow: hidden;
-  border-radius: 0 !important; /* Flat edge aesthetic */
-  border: none;
-  background: var(--surface, #fff);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Album Info */
+.album-info {
+  padding: 1rem 1.2rem;
+  color: var(--text, #222);
 }
 
-#gallery .album-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+.album-info h3 {
+  margin: 0 0 0.3rem 0;
+  font-weight: 500; /* Softer look */
+  font-size: 1rem;
 }
 
-/* Ensure text is readable in dark mode */
-html.dark #gallery,
-body.dark #gallery {
-  --text: #f4f4f4;
-  --surface: #1b1b1b;
+.album-info span {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #666);
 }
 
-html.dark #gallery .album-sub,
-html.dark #gallery .album-count {
-  color: rgba(255,255,255,0.75);
+/* Fix Dark Mode Text */
+body.dark .album-info,
+html.dark .album-info {
+  color: #f0f0f0;
 }
 
-/* Fix button spacing in bulk action pop-up */
-#gallery .bulk-actions {
+body.dark .album-info span,
+html.dark .album-info span {
+  color: #aaa;
+}
+
+/* ============================= */
+/* POPUP BUTTONS SPACING FIX     */
+/* ============================= */
+
+.gallery-actions {
   display: flex;
-  gap: 12px !important;
+  flex-wrap: wrap;
+  gap: 0.75rem; /* Add breathing space between buttons */
   justify-content: center;
-  align-items: center;
+  padding: 1rem 0.8rem;
+}
+
+.gallery-actions button {
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 500;
+  background: var(--button-bg, #111);
+  color: var(--button-text, #fff);
+  border: none;
+  transition: background 0.25s;
+}
+
+.gallery-actions button:hover {
+  background: var(--button-hover, #333);
+}
+
+/* Ensure popup fits on iPhone */
+@media (max-width: 480px) {
+  .gallery-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  .gallery-actions button {
+    width: 100%;
+  }
 }
 </style>
+
 </head>
 
 <body>
