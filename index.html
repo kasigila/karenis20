@@ -745,22 +745,53 @@ section{padding: 92px 0}
   align-items:stretch;
 }
 
-  /* ===================== MEMORY GALLERY (albums + search + select) ===================== */
-.gallery-ui{ margin-top: 14px; }
+/* =========================================================
+   MEMORY GALLERY V2 (Pinterest boards + lazy album load + hide/show)
+========================================================= */
 
+.gallery-toggle{
+  margin-top:14px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 16px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  font-weight:900;
+  cursor:pointer;
+  box-shadow: var(--shadow-soft);
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.gallery-toggle:hover{ transform: translateY(-2px); box-shadow: var(--shadow); }
+.gallery-toggle i{ font-size:18px; }
+.gallery-hint{
+  margin-top:10px;
+  color:var(--sub);
+  font-size:13px;
+}
+
+.gallery-shell{
+  margin-top: 14px;
+}
+
+/* Tabs */
 .gallery-tabs{
   display:flex;
   gap:10px;
   align-items:center;
   flex-wrap:wrap;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+
+  border:1px solid var(--border);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
+  padding: 12px;
+  box-shadow: var(--shadow-soft);
 }
 
-/* ✅ Event tabs with album cover thumbnails */
 .tab{
-  position:relative;
   padding:10px 14px;
-  padding-left:46px;
   border-radius: 999px;
   border:1px solid var(--border);
   background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
@@ -771,27 +802,10 @@ section{padding: 92px 0}
   transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
   color: var(--text);
 }
-.tab::before{
-  content:"";
-  position:absolute;
-  left:12px;
-  top:50%;
-  transform: translateY(-50%);
-  width:24px;
-  height:24px;
-  border-radius:10px;
-  background: var(--tab-cover, color-mix(in srgb, var(--bg-alt) 70%, transparent));
-  background-size:cover;
-  background-position:center;
-  border:1px solid color-mix(in srgb, var(--border) 70%, transparent);
-  box-shadow: 0 10px 24px rgba(0,0,0,.12);
-}
 .tab:hover{ transform: translateY(-1px); box-shadow: var(--shadow-soft); }
-
 .tab.active{
   background: color-mix(in srgb, var(--accent) 12%, var(--bg-elev));
   border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
-  box-shadow: var(--shadow-soft);
 }
 [data-theme="dark"] .tab.active{
   background: var(--accent);
@@ -805,68 +819,100 @@ section{padding: 92px 0}
   font-size: 13px;
 }
 
-/* Album chips row */
-.album-row{
-  margin-bottom: 12px;
-  border:1px solid var(--border);
-  border-radius: 22px;
-  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
-  padding: 10px;
+/* ===== Pinterest-style boards grid ===== */
+.board-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
-.album-chips{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+@media (max-width: 980px){
+  .board-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px){
+  .board-grid{ grid-template-columns: 1fr; }
 }
 
-.chip{
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
-  font-weight: 900;
-  font-size: 13px;
-  letter-spacing: -.2px;
-  cursor:pointer;
-  transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-}
-.chip:hover{ transform: translateY(-1px); box-shadow: var(--shadow-soft); }
-.chip .mini-badge{
-  padding:6px 10px;
-  border-radius:999px;
+.board{
+  border-radius: var(--radius-lg);
   border:1px solid var(--border);
   background: var(--bg-elev);
-  font-size: 11px;
-  color: var(--sub);
-  font-weight: 900;
+  box-shadow: var(--shadow-soft);
+  overflow:hidden;
+  cursor:pointer;
+  text-align:left;
+  padding:0;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
 }
-.chip.active{
-  background: color-mix(in srgb, var(--accent) 12%, var(--bg-elev));
-  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+.board:hover{ transform: translateY(-4px); box-shadow: var(--shadow); }
+
+.board-collage{
+  display:grid;
+  grid-template-columns: 1.2fr .8fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
 }
-[data-theme="dark"] .chip.active{
-  background: var(--accent);
-  color: var(--bg);
-  border-color: transparent;
+.board-collage .big{
+  grid-row: span 2;
+  border-radius: 18px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:#111;
+  aspect-ratio: 4/5;
 }
-[data-theme="dark"] .chip.active .mini-badge{
-  background: rgba(255,255,255,.08);
-  border-color: rgba(255,255,255,.14);
-  color: rgba(255,255,255,.8);
+.board-collage .small{
+  border-radius: 18px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:#111;
+  aspect-ratio: 4/3;
+}
+.board-collage img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 
-/* Controls */
-.gallery-controls{
+.board-meta{
+  padding: 12px 14px 14px;
+}
+.board-title{
+  font-weight: 950;
+  letter-spacing: -.3px;
+  font-size: 15px;
+}
+.board-sub{
+  margin-top:10px;
   display:flex;
-  gap:12px;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+  font-size:12px;
+  font-weight:900;
+  color: var(--sub);
+}
+.pill strong{ color: var(--text); }
+
+/* ===== Album view ===== */
+.album-view{ margin-top: 14px; }
+
+.album-top{
+  display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:12px;
   flex-wrap:wrap;
-  margin-bottom: 14px;
 
   border:1px solid var(--border);
   border-radius: 22px;
@@ -875,51 +921,252 @@ section{padding: 92px 0}
   box-shadow: var(--shadow-soft);
 }
 
-.search-wrap{
-  flex: 1;
-  min-width: 240px;
+.album-title-wrap{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width: 220px;
+}
+.album-title{
+  font-weight: 950;
+  letter-spacing:-.5px;
+  font-size: 16px;
+}
+.album-sub{
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.album-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+/* Masonry */
+.masonry{ column-count: 4; column-gap: 16px; margin-top: 14px; }
+@media (max-width: 1100px){ .masonry{ column-count: 3; } }
+@media (max-width: 820px){  .masonry{ column-count: 2; } }
+@media (max-width: 520px){  .masonry{ column-count: 1; } }
+
+.pin{
+  break-inside: avoid;
+  margin: 0 0 16px;
+  border-radius: var(--radius-lg);
+  overflow:hidden;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  cursor:pointer;
+  position:relative;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.pin:hover{ transform: translateY(-3px); box-shadow: var(--shadow); }
+.pin img{ width:100%; height:auto; display:block; }
+
+/* hover overlay */
+.pin .pin-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  padding:12px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.72));
+  opacity:0;
+  transition: opacity .2s var(--ease);
+}
+.pin:hover .pin-overlay{ opacity:1; }
+
+/* ✅ No tacky filenames — just album label */
+.pin .pin-label{
+  color:#fff;
+  font-weight: 950;
+  font-size: 12px;
+  letter-spacing: -.2px;
+  text-transform: uppercase;
+}
+
+.pin .pin-download{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 10px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.12);
+  color:#fff;
+  font-size: 12px;
+  font-weight: 950;
+  text-decoration:none;
+}
+
+.pin .pin-check{
+  position:absolute;
+  top:10px;
+  left:10px;
+  width:40px;height:40px;
+  border-radius: 16px;
+  border:1px solid rgba(255,255,255,.22);
+  background: rgba(0,0,0,.30);
+  backdrop-filter: blur(10px);
+  display:grid;
+  place-items:center;
+  opacity:0;
+  transform: translateY(-6px);
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+.pin.selectable .pin-check{ opacity:1; transform: translateY(0); }
+.pin.selected{
+  outline: 3px solid color-mix(in srgb, #25D366 55%, transparent);
+  box-shadow: 0 18px 60px rgba(0,0,0,.12);
+}
+.pin.selected .pin-check{
+  background: rgba(37,211,102,.22);
+  border-color: rgba(37,211,102,.45);
+}
+
+.gallery-note{ margin-top: 10px; color: var(--sub); font-size: 13px; }
+
+/* Bulk bar */
+.bulkbar{
+  position: sticky;
+  bottom: 14px;
+  margin-top: 14px;
+  border-radius: 22px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow);
+  padding: 12px 14px;
+
   display:flex;
   align-items:center;
-  gap:10px;
-  border:1px solid var(--border);
-  background: color-mix(in srgb, var(--bg-alt) 65%, transparent);
-  border-radius: 18px;
-  padding: 10px 12px;
+  justify-content:space-between;
+  gap:12px;
+}
+.bulk-left{ display:flex; flex-direction:column; gap:2px; }
+.bulk-count{ font-weight: 950; letter-spacing:-.3px; }
+.bulk-sub{ color: var(--sub); font-size: 13px; }
+#bulkbar[aria-hidden="true"]{ display:none; }
+
+/* Lightbox */
+.lightbox{ position: fixed; inset: 0; z-index: 2000; display:none; }
+.lightbox.show{ display:block; }
+.lb-backdrop{ position:absolute; inset:0; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); }
+
+.lb-panel{
+  position: relative;
+  width: min(980px, calc(100% - 26px));
+  margin: 40px auto;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: color-mix(in srgb, #0b0b0c 80%, transparent);
+  box-shadow: 0 22px 80px rgba(0,0,0,.45);
+  overflow:hidden;
 }
 
-.search-wrap i{ color: var(--sub); }
-
-.search-wrap input{
-  width:100%;
-  border:none;
-  outline:none;
-  background: transparent;
-  color: var(--text);
-  font-weight:700;
-  font-size: 14px;
-}
-
-.clear-search{
-  width:36px;height:36px;
+.lb-close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width: 44px;
+  height: 44px;
   border-radius: 14px;
-  border:1px solid var(--border);
-  background: var(--bg-elev);
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  font-weight: 950;
   cursor:pointer;
-  color: var(--sub);
-  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+  z-index: 5;
 }
-.clear-search:hover{ transform: translateY(-1px); box-shadow: var(--shadow-soft); }
 
-.control-right{ display:flex; gap:10px; align-items:center; }
-
-.select{
-  height:44px;
+.lb-nav{
+  position:absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
   border-radius: 18px;
-  border:1px solid var(--border);
-  background: var(--bg-elev);
-  color: var(--text);
-  padding: 0 12px;
-  font-weight: 800;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  color:#fff;
+  font-weight: 950;
+  font-size: 28px;
+  cursor:pointer;
+  z-index: 5;
+}
+.lb-nav.prev{ left: 12px; }
+.lb-nav.next{ right: 12px; }
+
+.lb-media{ background:#000; }
+.lb-media img{
+  width:100%;
+  height:auto;
+  max-height: 72vh;
+  object-fit: contain;
+  display:block;
+}
+
+.lb-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding: 14px;
+  background: rgba(255,255,255,.04);
+  flex-wrap:wrap;
+}
+
+.lb-filename{
+  color: rgba(255,255,255,.88);
+  font-weight: 950;
+  font-size: 13px;
+  letter-spacing:-.2px;
+  opacity:.95;
+}
+
+.lb-actions{ display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; }
+
+.lb-download, .lb-copy{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.10);
+  color:#fff;
+  font-weight: 950;
+  font-size: 13px;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+/* Toast */
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 5000;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.70);
+  backdrop-filter: blur(14px);
+  color:#fff;
+  font-weight: 950;
+  font-size: 13px;
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+.toast.show{
+  opacity:1;
+  transform: translateX(-50%) translateY(-2px);
 }
 
 /* Masonry */
@@ -2041,104 +2288,130 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     </div>
   </section>
 
+
   <!-- GALLERY -->
-  <section id="gallery">
-    <div class="container">
-      <div class="section-title reveal">
-        <h2>Memory Gallery</h2>
-        <p>Did the photographer catch you lacking? Download your pictures here!</p>
-      </div>
-      
-      <div class="gallery-ui stagger reveal" aria-label="Event photo gallery">
-  <!-- Top row: Event tabs + meta -->
-  <div class="gallery-tabs" role="tablist" aria-label="Choose event gallery">
-    <button class="tab active" type="button" role="tab" aria-selected="true" data-event="groove">Groove</button>
-    <button class="tab" type="button" role="tab" aria-selected="false" data-event="tempo">Tempo</button>
+<section id="gallery">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Memory Gallery</h2>
+      <p>Did the photographer catch you lacking? Download your pictures here!</p>
 
-    <div class="gallery-meta" aria-live="polite">
-      <span id="photoCount">0</span> photos
-      <span style="margin:0 10px; opacity:.45;">•</span>
-      <span id="albumCount">0</span> albums
-    </div>
-  </div>
-
-  <!-- Second row: Album chips (auto-filled from your folders) -->
-  <div class="album-row" aria-label="Choose album date">
-    <div class="album-chips" id="albumChips"></div>
-  </div>
-
-  <!-- Control row: search / sort / select -->
-  <div class="gallery-controls" aria-label="Gallery controls">
-    <div class="search-wrap">
-      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-      <input id="gallerySearch" type="search" placeholder="Search filename… (FYRM, 692A, etc)" autocomplete="off" />
-      <button class="clear-search" id="clearSearchBtn" type="button" aria-label="Clear search">✕</button>
-    </div>
-
-    <div class="control-right">
-      <select id="gallerySort" class="select" aria-label="Sort photos">
-        <option value="new">Newest first</option>
-        <option value="old">Oldest first</option>
-        <option value="rand">Shuffle</option>
-      </select>
-
-      <button class="btn ghost" id="selectModeBtn" type="button" aria-pressed="false">
-        <i class="fa-regular fa-circle-check"></i>
-        Select
+      <!-- ✅ Hide/Show (mobile-friendly) -->
+      <button class="gallery-toggle" id="galleryToggleBtn" type="button" aria-expanded="false">
+        <i class="fa-regular fa-images" aria-hidden="true"></i>
+        <span class="gt-text">Show Gallery</span>
       </button>
-    </div>
-  </div>
 
-  <!-- Masonry -->
-  <div class="masonry" id="masonry" aria-label="Photos"></div>
-
-  <p class="gallery-note">Tap a photo to preview. Hover to download. Use <b>Select</b> to download multiple.</p>
-
-  <!-- Bottom action bar (only shows in Select mode) -->
-  <div class="bulkbar" id="bulkbar" aria-hidden="true">
-    <div class="bulk-left">
-      <span class="bulk-count"><span id="selectedCount">0</span> selected</span>
-      <span class="bulk-sub" id="selectedHint">Tap photos to select</span>
+      <div class="gallery-hint">Tip: Keep this closed if you’re just here to book.</div>
     </div>
 
-    <div class="bulk-actions">
-      <button class="btn" id="bulkClear" type="button">Clear</button>
-      <button class="btn" id="bulkCopy" type="button"><i class="fa-regular fa-copy"></i> Copy links</button>
-      <button class="btn primary" id="bulkDownload" type="button"><i class="fa-solid fa-download"></i> Download selected</button>
-    </div>
-  </div>
-</div>
+    <!-- ✅ Starts collapsed (especially on phone) -->
+    <div class="gallery-shell byz-hidden" id="galleryContent" aria-hidden="true">
+      <!-- Event tabs -->
+      <div class="gallery-tabs" role="tablist" aria-label="Choose event gallery">
+        <button class="tab active" type="button" role="tab" aria-selected="true" data-event="groove">
+          Groove
+        </button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-event="tempo">
+          Tempo
+        </button>
 
-<!-- Lightbox / Preview Modal -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <div class="lb-backdrop" data-lb-close></div>
-
-  <div class="lb-panel" role="dialog" aria-modal="true" aria-label="Photo preview">
-    <button class="lb-close" type="button" aria-label="Close" data-lb-close>✕</button>
-
-    <!-- arrows -->
-    <button class="lb-nav prev" id="lbPrev" type="button" aria-label="Previous photo">‹</button>
-    <button class="lb-nav next" id="lbNext" type="button" aria-label="Next photo">›</button>
-
-    <div class="lb-media">
-      <img id="lbImg" alt="Preview" />
-    </div>
-
-    <div class="lb-footer">
-      <div class="lb-filename" id="lbName">—</div>
-
-      <div class="lb-actions">
-        <a class="lb-download" id="lbDownload" href="#" download><i class="fa-solid fa-download"></i> Download</a>
-        <button class="lb-copy" id="lbCopy" type="button"><i class="fa-regular fa-copy"></i> Copy link</button>
+        <div class="gallery-meta" aria-live="polite">
+          <span id="albumCount">0</span> albums • <span id="photoCount">0</span> photos
+        </div>
       </div>
+
+      <!-- ✅ Pinterest-style boards live here -->
+      <div class="board-grid" id="boardGrid" aria-label="Albums"></div>
+
+      <!-- ✅ Album view (hidden until you tap a board) -->
+      <div class="album-view byz-hidden" id="albumView" aria-hidden="true">
+        <div class="album-top">
+          <button class="btn ghost" id="backToBoards" type="button">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            Albums
+          </button>
+
+          <div class="album-title-wrap">
+            <div class="album-title" id="albumTitle">—</div>
+            <div class="album-sub" id="albumSub">—</div>
+          </div>
+
+          <div class="album-actions">
+            <select id="gallerySort" class="select" aria-label="Sort photos">
+              <option value="new">Newest first</option>
+              <option value="old">Oldest first</option>
+              <option value="rand">Shuffle</option>
+            </select>
+
+            <button class="btn ghost" id="selectModeBtn" type="button" aria-pressed="false">
+              <i class="fa-regular fa-circle-check" aria-hidden="true"></i>
+              Select
+            </button>
+          </div>
+        </div>
+
+        <!-- Photos -->
+        <div class="masonry" id="masonry" aria-label="Photos"></div>
+
+        <p class="gallery-note">
+          Tap a photo to preview. Hover to download. Use <b>Select</b> to download multiple.
+        </p>
+
+        <!-- Bulk bar -->
+        <div class="bulkbar" id="bulkbar" aria-hidden="true">
+          <div class="bulk-left">
+            <span class="bulk-count"><span id="selectedCount">0</span> selected</span>
+            <span class="bulk-sub" id="selectedHint">Tap photos to select</span>
+          </div>
+
+          <div class="bulk-actions">
+            <button class="btn" id="bulkClear" type="button">Clear</button>
+            <button class="btn" id="bulkCopy" type="button">
+              <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy links
+            </button>
+            <button class="btn primary" id="bulkDownload" type="button">
+              <i class="fa-solid fa-download" aria-hidden="true"></i> Download selected
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lightbox / Preview Modal -->
+      <div class="lightbox" id="lightbox" aria-hidden="true">
+        <div class="lb-backdrop" data-lb-close></div>
+
+        <div class="lb-panel" role="dialog" aria-modal="true" aria-label="Photo preview">
+          <button class="lb-close" type="button" aria-label="Close" data-lb-close>✕</button>
+
+          <button class="lb-nav prev" id="lbPrev" type="button" aria-label="Previous photo">‹</button>
+          <button class="lb-nav next" id="lbNext" type="button" aria-label="Next photo">›</button>
+
+          <div class="lb-media">
+            <img id="lbImg" alt="Preview" />
+          </div>
+
+          <div class="lb-footer">
+            <!-- ✅ No file names -->
+            <div class="lb-filename" id="lbName">—</div>
+
+            <div class="lb-actions">
+              <a class="lb-download" id="lbDownload" href="#" download>
+                <i class="fa-solid fa-download" aria-hidden="true"></i> Download
+              </a>
+              <button class="lb-copy" id="lbCopy" type="button">
+                <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy link
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast -->
+      <div class="toast" id="toast" aria-hidden="true"></div>
     </div>
   </div>
-</div>
-
-<!-- Toast -->
-<div class="toast" id="toast" aria-hidden="true"></div>
-    
-  </section>
+</section>
 
   <!-- CONNECT -->
   <section id="connect">
@@ -2485,19 +2758,21 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
 })();
 
 /* =========================================================
-   MEMORY GALLERY (albums + search + select + lightbox)
-   ✅ FIXED for folders at repo root:
-   - /groove-memory-gallery/
-   - /tempo-memory-gallery/
+   MEMORY GALLERY V2
+   - Starts collapsed on mobile
+   - Pinterest boards per album
+   - Only loads photos AFTER user opens an album (fast scrolling)
+   - No filenames shown
+   - Keeps: select mode, bulk download, lightbox nav, toast
 ========================================================= */
 (() => {
-  // ✅ IMPORTANT: your folders are at repo root (same level as index.html)
+  // ✅ If your folders differ, change ONLY these two lines:
   const BASE = {
-    groove: new URL("groove-memory-gallery/", window.location.href).toString(),
-    tempo:  new URL("tempo-memory-gallery/", window.location.href).toString(),
+    groove: "assets/assets/memory/groove-memory-gallery/",
+    tempo:  "assets/assets/memory/tempo-memory-gallery/",
   };
 
-  // ✅ Your real albums + filenames
+  // ✅ Your real albums + filenames (no renaming needed)
   const PHOTOS = {
     groove: {
       "december-26-2025": [
@@ -2519,7 +2794,6 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
         "FYRM1284.jpg","FYRM1318.jpg"
       ]
     },
-
     tempo: {
       "april-4-2025": ["692A0582.jpg","692A0817.jpg","692A1059.jpg"],
       "july-11-2025": [
@@ -2544,14 +2818,21 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     }
   };
 
+  // Elements
+  const toggleBtn = document.getElementById("galleryToggleBtn");
+  const toggleText = toggleBtn?.querySelector(".gt-text");
+  const content = document.getElementById("galleryContent");
+
+  const boardGrid = document.getElementById("boardGrid");
+  const albumView = document.getElementById("albumView");
+  const backBtn = document.getElementById("backToBoards");
+
   const masonry = document.getElementById("masonry");
   const eventTabs = document.querySelectorAll(".gallery-tabs .tab");
-  const chipsEl = document.getElementById("albumChips");
+
   const countEl = document.getElementById("photoCount");
   const albumCountEl = document.getElementById("albumCount");
 
-  const searchEl = document.getElementById("gallerySearch");
-  const clearSearchBtn = document.getElementById("clearSearchBtn");
   const sortEl = document.getElementById("gallerySort");
   const selectModeBtn = document.getElementById("selectModeBtn");
 
@@ -2569,17 +2850,26 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   const lbNext = document.getElementById("lbNext");
   const lbName = document.getElementById("lbName");
 
+  const albumTitleEl = document.getElementById("albumTitle");
+  const albumSubEl = document.getElementById("albumSub");
+
   const toast = document.getElementById("toast");
 
-  if(!masonry || !chipsEl || !countEl || !albumCountEl || !eventTabs.length || !lightbox) return;
+  if(!toggleBtn || !content || !boardGrid || !albumView || !masonry || !eventTabs.length) return;
 
+  // State
   let currentEvent = "groove";
-  let currentAlbum = "all";
+  let currentAlbum = null; // null = boards view
   let currentList = [];
+  let currentAlbumLabel = "";
   let lightboxIndex = 0;
 
   let selectMode = false;
   const selected = new Set();
+
+  const monthIndex = {
+    january:0,february:1,march:2,april:3,may:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11
+  };
 
   function showToast(msg){
     if(!toast) return;
@@ -2598,62 +2888,39 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     return `${month} ${Number(d)}, ${y}`;
   }
 
+  function parseAlbumKey(key){
+    const [m, d, y] = key.split("-");
+    const mi = monthIndex[m.toLowerCase()];
+    if(mi === undefined) return new Date(0);
+    return new Date(Number(y), mi, Number(d));
+  }
+
   function getAlbums(evt){
-    return Object.keys(PHOTOS[evt] || {});
+    const keys = Object.keys(PHOTOS[evt] || {});
+    // ✅ always newest first
+    keys.sort((a,b) => parseAlbumKey(b) - parseAlbumKey(a));
+    return keys;
   }
 
-  function buildAlbumChips(evt){
+  function countPhotos(evt){
     const albums = getAlbums(evt);
+    return albums.reduce((sum,a)=> sum + ((PHOTOS[evt][a] || []).length), 0);
+  }
+
+  function updateMetaBoards(){
+    const albums = getAlbums(currentEvent);
     albumCountEl.textContent = String(albums.length);
-
-    const total = albums.reduce((sum, a) => sum + (PHOTOS[evt][a]?.length || 0), 0);
-
-    chipsEl.innerHTML = `
-      <button class="chip ${currentAlbum==="all" ? "active":""}" type="button" data-album="all">
-        All Photos <span class="mini-badge">${total}</span>
-      </button>
-      ${albums.map(a => {
-        const n = (PHOTOS[evt][a] || []).length;
-        return `
-          <button class="chip ${currentAlbum===a ? "active":""}" type="button" data-album="${a}">
-            ${titleizeAlbum(a)} <span class="mini-badge">${n}</span>
-          </button>
-        `;
-      }).join("")}
-    `;
-
-    chipsEl.querySelectorAll(".chip").forEach(btn => {
-      btn.addEventListener("click", () => {
-        chipsEl.querySelectorAll(".chip").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentAlbum = btn.dataset.album;
-        render();
-      });
-    });
+    countEl.textContent = String(countPhotos(currentEvent));
   }
 
-  function flattenPhotos(evt, album){
-    const albums = getAlbums(evt);
-    const base = BASE[evt] || "";
-    let files = [];
-
-    if(album === "all"){
-      albums.forEach(a => {
-        (PHOTOS[evt][a] || []).forEach(f => files.push({ album:a, file:f }));
-      });
-    } else {
-      (PHOTOS[evt][album] || []).forEach(f => files.push({ album, file:f }));
-    }
-
-    return files.map(x => ({
-      src: `${base}${x.album}/${x.file}`,
-      file: x.file,
-      album: x.album
-    }));
+  function updateMetaAlbum(total){
+    // In album view: photoCount is album total, albumCount stays overall albums
+    countEl.textContent = String(total);
   }
 
   function applySort(list){
     const mode = sortEl ? sortEl.value : "new";
+
     if(mode === "rand"){
       const a = [...list];
       for(let i=a.length-1;i>0;i--){
@@ -2666,35 +2933,135 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     return list;
   }
 
-  function applySearch(list){
-    const q = (searchEl?.value || "").trim().toLowerCase();
-    if(!q) return list;
-    return list.filter(x => x.file.toLowerCase().includes(q));
-  }
-
   function updateBulkUI(){
     if(!bulkbar || !selectedCountEl) return;
     selectedCountEl.textContent = String(selected.size);
     bulkbar.setAttribute("aria-hidden", (!selectMode ? "true" : "false"));
   }
 
-  function render(){
+  function fullSrc(evt, albumKey, file){
+    return `${(BASE[evt] || "")}${albumKey}/${file}`;
+  }
+
+  // ===== Boards view =====
+  function pickBoardThumbs(evt, albumKey){
+    const albums = getAlbums(evt);
+    const pickFrom = (a) => (PHOTOS[evt][a] || []).slice(0, 3).map(f => fullSrc(evt, a, f));
+
+    if(albumKey === "all"){
+      // first 3 albums, grab a couple images from each
+      const sources = [];
+      albums.slice(0, 3).forEach(a => {
+        (PHOTOS[evt][a] || []).slice(0, 2).forEach(f => sources.push(fullSrc(evt, a, f)));
+      });
+      return sources.slice(0, 3);
+    }
+
+    return pickFrom(albumKey);
+  }
+
+  function buildBoards(){
+    currentAlbum = null;
+    selectMode = false;
     selected.clear();
     updateBulkUI();
 
-    const raw = flattenPhotos(currentEvent, currentAlbum);
-    const searched = applySearch(raw);
-    const sorted = applySort(searched);
+    albumView.classList.add("byz-hidden");
+    albumView.setAttribute("aria-hidden","true");
+    boardGrid.classList.remove("byz-hidden");
+    boardGrid.setAttribute("aria-hidden","false");
+
+    updateMetaBoards();
+
+    const albums = getAlbums(currentEvent);
+    const total = countPhotos(currentEvent);
+
+    // “All photos” board first, then each album
+    const boardItems = [
+      { key:"all", title:"All Photos", count: total },
+      ...albums.map(a => ({ key:a, title:titleizeAlbum(a), count:(PHOTOS[currentEvent][a] || []).length }))
+    ];
+
+    boardGrid.innerHTML = boardItems.map(item => {
+      const thumbs = pickBoardThumbs(currentEvent, item.key);
+      const t0 = thumbs[0] || "";
+      const t1 = thumbs[1] || t0;
+      const t2 = thumbs[2] || t1;
+
+      return `
+        <button class="board" type="button" data-album="${item.key}" aria-label="Open album ${item.title}">
+          <div class="board-collage">
+            <div class="big">
+              ${t0 ? `<img src="${t0}" loading="lazy" decoding="async" alt="" />` : ``}
+            </div>
+            <div class="small">
+              ${t1 ? `<img src="${t1}" loading="lazy" decoding="async" alt="" />` : ``}
+            </div>
+            <div class="small">
+              ${t2 ? `<img src="${t2}" loading="lazy" decoding="async" alt="" />` : ``}
+            </div>
+          </div>
+
+          <div class="board-meta">
+            <div class="board-title">${item.title}</div>
+            <div class="board-sub">
+              <span class="pill"><strong>${item.count}</strong>&nbsp;photos</span>
+              <span class="pill">${currentEvent.toUpperCase()}</span>
+            </div>
+          </div>
+        </button>
+      `;
+    }).join("");
+
+    boardGrid.querySelectorAll(".board").forEach(btn => {
+      btn.addEventListener("click", () => openAlbum(btn.dataset.album));
+    });
+  }
+
+  // ===== Album view =====
+  function flattenPhotos(evt, albumKey){
+    const albums = getAlbums(evt);
+    let files = [];
+
+    if(albumKey === "all"){
+      albums.forEach(a => {
+        (PHOTOS[evt][a] || []).forEach(f => files.push({ album:a, file:f }));
+      });
+      currentAlbumLabel = `${evt.toUpperCase()} • All Photos`;
+    } else {
+      (PHOTOS[evt][albumKey] || []).forEach(f => files.push({ album: albumKey, file:f }));
+      currentAlbumLabel = `${evt.toUpperCase()} • ${titleizeAlbum(albumKey)}`;
+    }
+
+    return files.map(x => ({
+      src: fullSrc(evt, x.album, x.file),
+      album: x.album
+    }));
+  }
+
+  function renderAlbum(albumKey){
+    selected.clear();
+    updateBulkUI();
+
+    const raw = flattenPhotos(currentEvent, albumKey);
+    const sorted = applySort(raw);
 
     currentList = sorted.map(x => x.src);
-    countEl.textContent = String(currentList.length);
+    updateMetaAlbum(currentList.length);
+
+    // Titles
+    const title = (albumKey === "all") ? `${currentEvent.toUpperCase()} — All Photos` : `${currentEvent.toUpperCase()} — ${titleizeAlbum(albumKey)}`;
+    const sub = `${currentList.length} photos`;
+
+    if(albumTitleEl) albumTitleEl.textContent = title;
+    if(albumSubEl) albumSubEl.textContent = sub;
 
     masonry.innerHTML = sorted.map((x) => {
-      const label = (currentAlbum === "all") ? titleizeAlbum(x.album) : currentEvent;
+      const label = (albumKey === "all") ? titleizeAlbum(x.album) : titleizeAlbum(albumKey);
       return `
-        <div class="pin ${selectMode ? "selectable":""}" data-src="${x.src}" data-name="${x.file}" tabindex="0" role="button" aria-label="Open photo preview">
+        <div class="pin ${selectMode ? "selectable":""}" data-src="${x.src}" data-label="${label}" tabindex="0" role="button" aria-label="Open photo preview">
           <div class="pin-check"><i class="fa-solid fa-check"></i></div>
-          <img src="${x.src}" alt="${currentEvent} photo" loading="lazy" />
+          <img src="${x.src}" alt="${currentEvent} photo" loading="lazy" decoding="async" />
           <div class="pin-overlay">
             <div class="pin-label">${label}</div>
             <a class="pin-download" href="${x.src}" download onclick="event.stopPropagation()">
@@ -2706,19 +3073,54 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     }).join("");
   }
 
+  function openAlbum(albumKey){
+    currentAlbum = albumKey;
+
+    // Switch views
+    boardGrid.classList.add("byz-hidden");
+    boardGrid.setAttribute("aria-hidden","true");
+
+    albumView.classList.remove("byz-hidden");
+    albumView.setAttribute("aria-hidden","false");
+
+    // Render (photos load now — not before)
+    renderAlbum(albumKey);
+
+    // Small UX: scroll gallery top into view
+    document.getElementById("gallery")?.scrollIntoView({ behavior:"smooth", block:"start" });
+    showToast("Album opened");
+  }
+
+  function backToBoards(){
+    currentAlbum = null;
+    selectMode = false;
+    selected.clear();
+    updateBulkUI();
+
+    albumView.classList.add("byz-hidden");
+    albumView.setAttribute("aria-hidden","true");
+
+    boardGrid.classList.remove("byz-hidden");
+    boardGrid.setAttribute("aria-hidden","false");
+
+    masonry.innerHTML = "";
+    updateMetaBoards();
+    showToast("Back to albums");
+  }
+
+  // ===== Lightbox =====
   function openLightboxByIndex(i){
     lightboxIndex = Math.max(0, Math.min(i, currentList.length - 1));
     const src = currentList[lightboxIndex];
     if(!src) return;
 
     if(lbImg) lbImg.src = src;
-    if(lbDownload){
-      lbDownload.href = src;
-      lbDownload.setAttribute("download", "");
-    }
+    if(lbDownload) lbDownload.href = src;
+    if(lbDownload) lbDownload.setAttribute("download", "");
 
+    // ✅ No filenames: show album + index
     if(lbName){
-      lbName.textContent = (src.split("/").pop() || "—");
+      lbName.textContent = `${currentAlbumLabel} • ${lightboxIndex + 1}/${currentList.length}`;
     }
 
     lightbox.classList.add("show");
@@ -2736,135 +3138,61 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   function next(){ openLightboxByIndex(lightboxIndex + 1); }
   function prev(){ openLightboxByIndex(lightboxIndex - 1); }
 
-  // ✅ Album-cover thumbnails on event tabs (uses first album + first photo)
-  eventTabs.forEach(btn => {
-    const key = btn.dataset.event;
-    const albums = Object.keys(PHOTOS[key] || {});
-    const firstAlbum = albums[0];
-    const firstFile = firstAlbum ? (PHOTOS[key][firstAlbum] || [])[0] : null;
-    if(firstAlbum && firstFile){
-      btn.style.setProperty("--tab-cover", `url('${BASE[key]}${firstAlbum}/${firstFile}')`);
-    }
-  });
+  // ===== Click behavior (pins) =====
+  function bindMasonryEvents(){
+    masonry.addEventListener("click", (e) => {
+      const pin = e.target.closest(".pin");
+      if(!pin) return;
 
-  // Event tabs click
-  eventTabs.forEach(btn => {
-    btn.addEventListener("click", () => {
-      eventTabs.forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected","false"); });
-      btn.classList.add("active");
-      btn.setAttribute("aria-selected","true");
+      const src = pin.dataset.src;
+      if(!src) return;
 
-      currentEvent = btn.dataset.event;
-      currentAlbum = "all";
-      if(searchEl) searchEl.value = "";
-      buildAlbumChips(currentEvent);
-      render();
+      if(selectMode){
+        if(selected.has(src)){
+          selected.delete(src);
+          pin.classList.remove("selected");
+          showToast("Removed");
+        }else{
+          selected.add(src);
+          pin.classList.add("selected");
+          showToast("Selected");
+        }
+        updateBulkUI();
+        return;
+      }
+
+      const idx = currentList.indexOf(src);
+      openLightboxByIndex(idx >= 0 ? idx : 0);
     });
-  });
 
-  // Search
-  if(searchEl) searchEl.addEventListener("input", () => render());
-  if(clearSearchBtn){
-    clearSearchBtn.addEventListener("click", () => {
-      if(searchEl) searchEl.value = "";
-      render();
-      showToast("Search cleared");
+    masonry.addEventListener("keydown", (e) => {
+      if(e.key !== "Enter") return;
+      const pin = e.target.closest(".pin");
+      if(!pin) return;
+
+      const src = pin.dataset.src;
+      if(!src) return;
+
+      if(selectMode){
+        if(selected.has(src)){
+          selected.delete(src);
+          pin.classList.remove("selected");
+          showToast("Removed");
+        }else{
+          selected.add(src);
+          pin.classList.add("selected");
+          showToast("Selected");
+        }
+        updateBulkUI();
+        return;
+      }
+
+      const idx = currentList.indexOf(src);
+      openLightboxByIndex(idx >= 0 ? idx : 0);
     });
   }
 
-  // Sort
-  if(sortEl) sortEl.addEventListener("change", () => render());
-
-  // Select mode
-  if(selectModeBtn){
-    selectModeBtn.addEventListener("click", () => {
-      selectMode = !selectMode;
-      selectModeBtn.setAttribute("aria-pressed", selectMode ? "true":"false");
-      selected.clear();
-      updateBulkUI();
-      render();
-      showToast(selectMode ? "Select mode on" : "Select mode off");
-    });
-  }
-
-  // Masonry click
-  masonry.addEventListener("click", (e) => {
-    const pin = e.target.closest(".pin");
-    if(!pin) return;
-
-    const src = pin.dataset.src;
-    if(!src) return;
-
-    if(selectMode){
-      if(selected.has(src)){
-        selected.delete(src);
-        pin.classList.remove("selected");
-      }else{
-        selected.add(src);
-        pin.classList.add("selected");
-      }
-      updateBulkUI();
-      return;
-    }
-
-    const idx = currentList.indexOf(src);
-    openLightboxByIndex(idx >= 0 ? idx : 0);
-  });
-
-  // Keyboard open/select
-  masonry.addEventListener("keydown", (e) => {
-    if(e.key !== "Enter") return;
-    const pin = e.target.closest(".pin");
-    if(!pin) return;
-
-    const src = pin.dataset.src;
-    if(!src) return;
-
-    if(selectMode){
-      if(selected.has(src)){
-        selected.delete(src);
-        pin.classList.remove("selected");
-      }else{
-        selected.add(src);
-        pin.classList.add("selected");
-      }
-      updateBulkUI();
-      return;
-    }
-
-    const idx = currentList.indexOf(src);
-    openLightboxByIndex(idx >= 0 ? idx : 0);
-  });
-
-  // Lightbox close + keys
-  lightbox.addEventListener("click", (e) => {
-    if(e.target.matches("[data-lb-close]")) closeLightbox();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if(lightbox.classList.contains("show")){
-      if(e.key === "Escape") closeLightbox();
-      if(e.key === "ArrowRight") next();
-      if(e.key === "ArrowLeft") prev();
-    }
-  });
-
-  if(lbPrev) lbPrev.addEventListener("click", prev);
-  if(lbNext) lbNext.addEventListener("click", next);
-
-  // Copy single link
-  if(lbCopy){
-    lbCopy.addEventListener("click", async () => {
-      try{
-        await navigator.clipboard.writeText(lbDownload.href);
-        showToast("Copied link");
-      }catch{
-        showToast("Copy failed");
-      }
-    });
-  }
-
-  // Bulk actions
+  // ===== Bulk actions =====
   if(bulkClear){
     bulkClear.addEventListener("click", () => {
       selected.clear();
@@ -2908,9 +3236,104 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     });
   }
 
-  // Init
-  buildAlbumChips(currentEvent);
-  render();
+  // Lightbox close + keys
+  lightbox?.addEventListener("click", (e) => {
+    if(e.target.matches("[data-lb-close]")) closeLightbox();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if(lightbox?.classList.contains("show")){
+      if(e.key === "Escape") closeLightbox();
+      if(e.key === "ArrowRight") next();
+      if(e.key === "ArrowLeft") prev();
+    }
+  });
+
+  lbPrev?.addEventListener("click", prev);
+  lbNext?.addEventListener("click", next);
+
+  if(lbCopy){
+    lbCopy.addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(lbDownload.href);
+        showToast("Copied link");
+      }catch{
+        showToast("Copy failed");
+      }
+    });
+  }
+
+  // ===== Tabs =====
+  eventTabs.forEach(btn => {
+    btn.addEventListener("click", () => {
+      eventTabs.forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected","false"); });
+      btn.classList.add("active");
+      btn.setAttribute("aria-selected","true");
+
+      currentEvent = btn.dataset.event;
+      currentAlbum = null;
+      buildBoards();
+      showToast(`${currentEvent.toUpperCase()} albums`);
+    });
+  });
+
+  // ===== Sort / Select =====
+  if(sortEl){
+    sortEl.addEventListener("change", () => {
+      if(currentAlbum) renderAlbum(currentAlbum);
+    });
+  }
+
+  if(selectModeBtn){
+    selectModeBtn.addEventListener("click", () => {
+      selectMode = !selectMode;
+      selectModeBtn.setAttribute("aria-pressed", selectMode ? "true":"false");
+      selected.clear();
+      updateBulkUI();
+      if(currentAlbum) renderAlbum(currentAlbum);
+      showToast(selectMode ? "Select mode on" : "Select mode off");
+    });
+  }
+
+  // Back
+  backBtn?.addEventListener("click", backToBoards);
+
+  // ===== Hide/Show Gallery (fast scroll on mobile) =====
+  function setGalleryOpen(open){
+    if(open){
+      content.classList.remove("byz-hidden");
+      content.setAttribute("aria-hidden","false");
+      toggleBtn.setAttribute("aria-expanded","true");
+      if(toggleText) toggleText.textContent = "Hide Gallery";
+
+      // Build boards on first open (prevents loading images before user asks)
+      if(!boardGrid.dataset.ready){
+        buildBoards();
+        boardGrid.dataset.ready = "1";
+        bindMasonryEvents();
+      }
+
+    }else{
+      content.classList.add("byz-hidden");
+      content.setAttribute("aria-hidden","true");
+      toggleBtn.setAttribute("aria-expanded","false");
+      if(toggleText) toggleText.textContent = "Show Gallery";
+    }
+    localStorage.setItem("byz_gallery_open", open ? "1" : "0");
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    const open = toggleBtn.getAttribute("aria-expanded") === "true";
+    setGalleryOpen(!open);
+  });
+
+  // Default closed on phone, open on desktop (but remembers last choice)
+  const saved = localStorage.getItem("byz_gallery_open");
+  const isMobile = window.matchMedia && window.matchMedia("(max-width: 820px)").matches;
+
+  if(saved === "1") setGalleryOpen(true);
+  else if(saved === "0") setGalleryOpen(false);
+  else setGalleryOpen(!isMobile);
 })();
   
 /* =========================================================
