@@ -575,12 +575,46 @@ section{padding: 92px 0}
   flex-wrap:wrap;
   align-items:center;
 }
-.yt-subscribe{
-  width: 180px;
-  height: 32px;
-  border: 0;
-  overflow: hidden;
-  border-radius: 10px;
+.subscribe{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  height:36px;
+  padding:0 16px;
+  border-radius:999px;
+
+  background:#ff0000;
+  color:#fff;
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:.2px;
+  text-decoration:none;
+  border:0;
+
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease), filter .2s var(--ease);
+}
+
+.subscribe i{
+  font-size:18px;
+  line-height:1;
+  color:#fff;
+}
+
+.subscribe span{
+  line-height:1;
+}
+
+.subscribe:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+  filter: brightness(.96);
+}
+
+.subscribe:active{
+  transform: translateY(0);
+  filter: brightness(.9);
 }
   
 .channel-link{
@@ -1694,13 +1728,10 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
             <p id="featuredDesc">Test your knowledge in this hilarious challenge with forfeits.</p>
 
             <div class="youtube-actions">
-  <iframe
-    class="yt-subscribe"
-    src="https://www.youtube.com/subscribe_embed?usegapi=1&channelid=UCYkRnLh4_hIGgHg5PgqoUKw&layout=default&count=default"
-    title="Subscribe to BYZ on YouTube"
-    scrolling="no"
-    frameborder="0">
-  </iframe>
+  <a class="subscribe" href="https://www.youtube.com/@byzinthehood?sub_confirmation=1" target="_blank" rel="noopener" aria-label="Subscribe on YouTube">
+    <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+    <span>Subscribe</span>
+  </a>
 
   <a class="channel-link" href="https://www.youtube.com/@byzinthehood" target="_blank" rel="noopener">Visit Channel</a>
 </div>
