@@ -1942,6 +1942,107 @@ html[data-theme="dark"] #gallery .gallery-note {
     justify-content: center;
   }
 }
+/* =====================================================
+   MEMORY GALLERY — APPLE ALBUM PREVIEW (UI ONLY)
+===================================================== */
+
+#gallery {
+  --mg-radius: 22px;
+  --mg-fade: 420ms;
+}
+
+/* ---------- TYPOGRAPHY FIX ---------- */
+/* Match rest of site: confident, not bold, not thin */
+
+#gallery * {
+  font-weight: 450;
+}
+
+#gallery .tab {
+  font-weight: 500;
+}
+
+#gallery .tab.active {
+  font-weight: 600;
+}
+
+#gallery .gallery-meta,
+#gallery .gallery-note {
+  font-weight: 400;
+}
+
+/* ---------- ALBUM CARD ---------- */
+
+#gallery .album-card {
+  position: relative;
+  border-radius: var(--mg-radius);
+  overflow: hidden;
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Image fills card fully */
+#gallery .album-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+#gallery .album-preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--mg-fade) ease;
+}
+
+/* Active image */
+#gallery .album-preview img.active {
+  opacity: 1;
+}
+
+/* ---------- ALBUM TEXT ---------- */
+
+#gallery .album-info {
+  padding: 12px 14px;
+}
+
+#gallery .album-title {
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+#gallery .album-count {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--sub);
+  font-weight: 400;
+}
+
+/* ---------- BULK BAR SPACING FIX ---------- */
+
+#gallery .bulk-actions {
+  display: flex;
+  gap: 14px;
+}
+
+@media (max-width: 520px) {
+  #gallery .bulk-actions {
+    flex-direction: column;
+  }
+
+  #gallery .bulk-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  #gallery .bulkbar {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
 </style>
 
 </head>
@@ -3502,7 +3603,29 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     if(e.key === "Escape" && !backdrop.classList.contains("byz-hidden")) closeModal();
   });
 })();
- 
+ /* =====================================================
+   APPLE ALBUM PREVIEW — AUTO CROSSFADE (UI ONLY)
+===================================================== */
+
+(function () {
+  const INTERVAL = 1400;
+
+  function startAlbumPreview(card) {
+    const images = card.querySelectorAll(".album-preview img");
+    if (images.length <= 1) return;
+
+    let i = 0;
+    images[i].classList.add("active");
+
+    setInterval(() => {
+      images[i].classList.remove("active");
+      i = (i + 1) % images.length;
+      images[i].classList.add("active");
+    }, INTERVAL);
+  }
+
+  document.querySelectorAll("#gallery .album-card").forEach(startAlbumPreview);
+})();
 </script>
 </body>
 </html>
