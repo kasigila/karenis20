@@ -493,7 +493,14 @@ section{padding: 92px 0}
   gap:10px;
   z-index: 900;
 }
-
+  .social-dock.dock-stop {
+  position: absolute;
+  bottom: auto;
+}
+/* Lift floating icons when select popup is visible */
+.social-dock.dock-raised {
+  bottom: 120px; /* lifts icons above popup */
+}
 .soc{
   width:52px;height:52px;border-radius:18px;
   border:1px solid var(--border);
@@ -758,7 +765,7 @@ section{padding: 92px 0}
   border-radius:999px;
   border:1px solid var(--border);
   background: var(--bg-elev);
-  font-weight:900;
+  font-weight:600;
   cursor:pointer;
   box-shadow: var(--shadow-soft);
   transition: transform .2s var(--ease), box-shadow .2s var(--ease);
@@ -1028,7 +1035,11 @@ section{padding: 92px 0}
 }
 
 .gallery-note{ margin-top: 10px; color: var(--sub); font-size: 13px; }
-
+  
+.select-toggle[aria-pressed="true"]{
+  background: color-mix(in srgb, #25D366 18%, var(--bg-elev));
+  border-color: color-mix(in srgb, #25D366 45%, var(--border));
+}
 /* Bulk bar */
 .bulkbar{
   position: sticky;
@@ -1169,89 +1180,6 @@ section{padding: 92px 0}
   transform: translateX(-50%) translateY(-2px);
 }
 
-/* Masonry */
-.masonry{ column-count: 4; column-gap: 16px; }
-@media (max-width: 1100px){ .masonry{ column-count: 3; } }
-@media (max-width: 820px){  .masonry{ column-count: 2; } }
-@media (max-width: 520px){  .masonry{ column-count: 1; } }
-
-.pin{
-  break-inside: avoid;
-  margin: 0 0 16px;
-  border-radius: var(--radius-lg);
-  overflow:hidden;
-  border:1px solid var(--border);
-  background: var(--bg-elev);
-  box-shadow: var(--shadow-soft);
-  cursor:pointer;
-  position:relative;
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
-}
-.pin:hover{ transform: translateY(-3px); box-shadow: var(--shadow); }
-
-.pin img{ width:100%; height:auto; display:block; }
-
-.pin .pin-overlay{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  padding:12px;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.72));
-  opacity:0;
-  transition: opacity .2s var(--ease);
-}
-.pin:hover .pin-overlay{ opacity:1; }
-
-.pin .pin-label{
-  color:#fff;
-  font-weight: 900;
-  font-size: 12px;
-  letter-spacing: -.2px;
-  text-transform: uppercase;
-}
-
-.pin .pin-download{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:8px 10px;
-  border-radius: 999px;
-  border:1px solid rgba(255,255,255,.25);
-  background: rgba(255,255,255,.12);
-  color:#fff;
-  font-size: 12px;
-  font-weight: 900;
-  text-decoration:none;
-}
-
-.pin .pin-check{
-  position:absolute;
-  top:10px;
-  left:10px;
-  width:40px;height:40px;
-  border-radius: 16px;
-  border:1px solid rgba(255,255,255,.22);
-  background: rgba(0,0,0,.30);
-  backdrop-filter: blur(10px);
-  display:grid;
-  place-items:center;
-  opacity:0;
-  transform: translateY(-6px);
-  transition: opacity .2s var(--ease), transform .2s var(--ease);
-}
-.pin.selectable .pin-check{ opacity:1; transform: translateY(0); }
-.pin.selected{
-  outline: 3px solid color-mix(in srgb, #25D366 55%, transparent);
-  box-shadow: 0 18px 60px rgba(0,0,0,.12);
-}
-.pin.selected .pin-check{
-  background: rgba(37,211,102,.22);
-  border-color: rgba(37,211,102,.45);
-}
-
-.gallery-note{ margin-top: 10px; color: var(--sub); font-size: 13px; }
 
 /* Bulk bar */
 .bulkbar{
@@ -1263,7 +1191,7 @@ section{padding: 92px 0}
   background: color-mix(in srgb, var(--bg) 86%, transparent);
   backdrop-filter: blur(16px);
   box-shadow: var(--shadow);
-  padding: 12px 14px;
+  padding: 16px 16px 20px;
 
   display:flex;
   align-items:center;
@@ -1813,73 +1741,86 @@ footer{
   box-shadow: var(--shadow-soft);
 }
 
-/* ============================= */
-/* MEMORY GALLERY — UI REFINEMENT */
-/* Apple-like, clean, premium     */
-/* ============================= */
+/* =========================================================
+   MEMORY GALLERY — CLEAN APPLE-LIKE TYPO + SPACING
+   (replaces your multiple "refinement" blocks)
+========================================================= */
 
-#gallery {
+#gallery{
   --mg-radius: 22px;
   --mg-radius-sm: 14px;
-}
-
-/* ---------- TYPOGRAPHY (MATCH SITE FLOW) ---------- */
-
-#gallery {
+  --mg-fade: 420ms;
   font-family: inherit;
+  color: var(--text);
 }
 
-#gallery .tab {
+/* ---- no random bold ---- */
+#gallery h2 {
+  font-weight: 700;
+  letter-spacing: -0.6px;
+}
+
+/* Tabs */
+#gallery .tab{
   font-weight: 500;
   font-size: 13px;
+  letter-spacing: -.2px;
 }
-
-#gallery .tab.active {
-  font-weight: 600;
-}
+#gallery .tab.active{ font-weight: 600; }
 
 /* Album / board titles */
-#gallery .board-title {
-  font-weight: 800;
-  letter-spacing: -0.4px;
+#gallery .board-title{
+  font-weight: 600;
+  letter-spacing: -.3px;
+  font-size: 15px;
 }
 
 /* Meta text */
 #gallery .gallery-meta,
 #gallery .gallery-note,
-#gallery .album-sub {
+#gallery .album-sub{
   font-weight: 400;
   font-size: 13px;
   color: var(--sub);
 }
 
-/* Overlay labels */
-#gallery .pin-label {
+/* Overlay labels (no uppercase shouty look) */
+#gallery .pin-label{
   font-weight: 500;
   font-size: 12px;
   text-transform: none;
+  letter-spacing: -.1px;
 }
 
-/* ---------- BOARD / PIN CARDS ---------- */
+/* Pills */
+#gallery .pill{
+  font-weight: 500;
+  color: var(--sub);
+}
+#gallery .pill strong{
+  font-weight: 600;
+  color: var(--text);
+}
+
 /* Board cards */
-#gallery .board {
+#gallery .board{
   border-radius: var(--mg-radius);
-  overflow: visible;              /* IMPORTANT: don't clip the preview corners */
   background: var(--bg-elev);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
-/* ===== LIVE ALBUM PREVIEW (slightly rounded corners) ===== */
+/* Live preview area */
 #gallery .board-preview{
   position:relative;
   width:100%;
   aspect-ratio: 4 / 5;
   overflow:hidden;
-  border-radius: var(--mg-radius-sm);  /* subtle rounding */
+  border-radius: var(--mg-radius-sm);
+  margin: 12px;
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
 }
-
-/* Ensure images respect the rounding */
 #gallery .board-preview img{
   position:absolute;
   inset:0;
@@ -1888,62 +1829,98 @@ footer{
   object-fit:cover;
   opacity:0;
   transition: opacity var(--mg-fade) ease;
-  will-change: opacity;
 }
+#gallery .board-preview img.active{ opacity:1; }
 
-#gallery .board-preview img.active{
-  opacity:1;
-}
-/* ===== MOBILE: SHOW MORE ALBUMS ON SCREEN (SIZE ONLY) ===== */
-@media (max-width: 520px) {
+/* Board meta spacing */
+#gallery .board-meta{ padding: 0 14px 14px; }
 
-  /* Force albums into 2 columns on phones (covers common grid wrappers) */
-  #gallery .boards,
-  #gallery .board-grid,
-  #gallery .boards-grid,
-  #gallery .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px; /* smaller gap so more fits */
-  }
-
-  /* Make each album preview less tall */
-  #gallery .board-preview {
-    aspect-ratio: 1 / 1;  /* was 4/5 (taller). 1/1 shows more albums */
-  }
-}
-/* ---------- DARK MODE FIX (TEXT VISIBILITY) ---------- */
-
-html[data-theme="dark"] #gallery,
-body.dark #gallery {
+/* Select dropdown (you use class="select" but never styled it) */
+#gallery .select{
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
   color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+}
+/* ===== Album preview overlays ===== */
+
+#gallery .album-overlay{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  padding:8px 12px;
+  border-radius:999px;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(10px);
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:-.2px;
 }
 
-html[data-theme="dark"] #gallery .gallery-meta,
-html[data-theme="dark"] #gallery .gallery-note {
-  color: var(--sub);
+/* Top-right circular icon */
+#gallery .album-badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:36px;
+  height:36px;
+  border-radius:999px;
+  overflow:hidden;
+  background:#000;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
 }
 
-/* ---------- BULK BAR SPACING (NO OVERFLOW) ---------- */
-
-#gallery .bulk-actions {
-  display: flex;
-  gap: 14px;
+#gallery .album-badge img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+/* Bulk bar spacing (fix "buttons touching") */
+#gallery .bulk-actions{
+  display:flex;
+  gap: 12px;          /* ✅ real spacing */
   flex-wrap: wrap;
+  align-items:center;
+}
+#gallery .bulk-actions .btn{
+  margin: 0;          /* ✅ prevent weird default spacing */
+}
+@media (max-width: 520px){
+  #gallery .bulk-actions{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #gallery .bulk-actions .btn{
+    width:100%;
+    justify-content:center;
+  }
+  #gallery .bulk-actions {
+  gap: 14px;
 }
 
-@media (max-width: 480px) {
+#gallery .bulkbar {
+  padding: 16px 18px 20px;
+}
+  @media (max-width: 480px){
   #gallery .bulkbar {
-    padding-bottom: env(safe-area-inset-bottom);
+    left: 12px;
+    right: 12px;
+    border-radius: 18px;
   }
-
-  #gallery .bulk-actions {
-    flex-direction: column;
+}
+  #gallery .board-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
-
-  #gallery .bulk-actions .btn {
-    width: 100%;
-    justify-content: center;
+  #gallery .board-preview{
+    aspect-ratio: 1 / 1; /* show more albums */
   }
 }
 /* =====================================================
@@ -2581,10 +2558,10 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
               <option value="rand">Shuffle</option>
             </select>
 
-            <button class="btn ghost" id="selectModeBtn" type="button" aria-pressed="false">
-              <i class="fa-regular fa-circle-check" aria-hidden="true"></i>
-              Select
-            </button>
+            <button class="btn ghost select-toggle" id="selectModeBtn" aria-pressed="false">
+  <i class="fa-regular fa-circle-check"></i>
+  <span>Select</span>
+</button>
           </div>
         </div>
 
@@ -3093,7 +3070,21 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   const toast = document.getElementById("toast");
 
   if(!toggleBtn || !content || !boardGrid || !albumView || !masonry || !eventTabs.length) return;
+// ===== Show/Hide Gallery =====
+toggleBtn.addEventListener("click", () => {
+  const isHidden = content.classList.contains("byz-hidden");
+  content.classList.toggle("byz-hidden");
+  content.setAttribute("aria-hidden", isHidden ? "false" : "true");
+  toggleBtn.setAttribute("aria-expanded", isHidden ? "true" : "false");
+  if(toggleText) toggleText.textContent = isHidden ? "Hide Gallery" : "Show Gallery";
 
+  // build boards the first time it opens
+  if(isHidden && !boardGrid.dataset.built){
+    buildBoards();
+    boardGrid.dataset.built = "1";
+  }
+});
+  
   // State
   let currentEvent = "groove";
   let currentAlbum = null; // null = boards view
@@ -3229,41 +3220,78 @@ function initBoardPreviews(){
 
   document.querySelectorAll("#gallery .board").forEach(b => obs.observe(b));
 }
+  
+function formatAlbumDate(key){
+  return key
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+  
+  function buildBoards(type){
+  const grid = document.querySelector("#gallery .boards");
+  if (!grid) return;
 
-  function buildBoards(){
-  currentAlbum = null;
-  selectMode = false;
-  selected.clear();
-  updateBulkUI();
+  const items = albums[type] || [];
+  grid.innerHTML = "";
 
-  albumView.classList.add("byz-hidden");
-  albumView.setAttribute("aria-hidden","true");
-  boardGrid.classList.remove("byz-hidden");
-  boardGrid.setAttribute("aria-hidden","false");
+  items.forEach(item => {
+    const images = shuffle([...item.images]).slice(0, 5);
 
-  updateMetaBoards();
+    const imgs = images.map((src, i) =>
+      `<img src="${src}" class="${i === 0 ? "active" : ""}" />`
+    ).join("");
 
-  const albums = getAlbums(currentEvent);
-  const total = countPhotos(currentEvent);
+    const icon = type === "groove"
+      ? "assets/assets/events/groove.jpg"
+      : "assets/assets/events/tempo.JPG";
 
-  // “All photos” board first, then each album
-  const boardItems = [
-    { key:"all", title:"All Photos", count: total },
-    ...albums.map(a => ({ key:a, title:titleizeAlbum(a), count:(PHOTOS[currentEvent][a] || []).length }))
-  ];
+    const el = document.createElement("button");
+    el.className = "board";
+    el.dataset.album = item.key;
+
+    el.innerHTML = `
+      <div class="board-preview">
+        ${imgs}
+
+        <div class="album-overlay">
+          ${formatAlbumDate(item.key)} • ${item.images.length} photos
+        </div>
+
+        <img class="album-badge" src="${icon}" alt="">
+      </div>
+    `;
+
+    grid.appendChild(el);
+    startPreviewLoop(el.querySelectorAll("img"));
+  });
+}
 
   function pickPreviewSources(evt, albumKey){
-  const albums = getAlbums(evt);
-
-  // shuffle helper (Fisher–Yates)
   function shuffle(arr){
     const a = arr.slice();
-    for(let i = a.length - 1; i > 0; i--){
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
     }
     return a;
   }
+
+  const N = 5;
+
+  if(albumKey === "all"){
+    let all = [];
+    Object.keys(PHOTOS[evt]).forEach(a=>{
+      PHOTOS[evt][a].forEach(f=>{
+        all.push(fullSrc(evt,a,f));
+      });
+    });
+    return shuffle(all).slice(0,N);
+  }
+
+  return shuffle(
+    PHOTOS[evt][albumKey].map(f=>fullSrc(evt,albumKey,f))
+  ).slice(0,N);
+}
 
   // pick N unique items from an array (random)
   function pickN(arr, n){
@@ -3300,13 +3328,28 @@ function initBoardPreviews(){
           ${imgs}
         </div>
 
-        <div class="board-meta">
-          <div class="board-title">${item.title}</div>
-          <div class="board-sub">
-            <span class="pill"><strong>${item.count}</strong>&nbsp;photos</span>
-            <span class="pill">${currentEvent.toUpperCase()}</span>
-          </div>
-        </div>
+        return `
+  <button class="board" type="button" data-album="${item.key}">
+    <div class="board-preview">
+      ${imgs}
+
+      <!-- Bottom-left overlay -->
+      <div class="album-overlay">
+        ${formatAlbumDate(item.key)} • ${item.count} photos
+      </div>
+
+      <!-- Top-right badge -->
+      <div class="album-badge">
+        <img src="${
+          currentEvent === "groove"
+            ? "assets/assets/events/groove.jpg"
+            : "assets/assets/events/tempo.JPG"
+        }" alt="" />
+      </div>
+    </div>
+  </button>
+`;
+        
       </button>
     `;
   }).join("");
@@ -3516,26 +3559,30 @@ function initBoardPreviews(){
   }
 
   if(bulkDownload){
-    bulkDownload.addEventListener("click", async () => {
-      const items = Array.from(selected);
-      if(!items.length){
-        showToast("No photos selected");
-        return;
-      }
+  bulkDownload.addEventListener("click", async () => {
+    const items = Array.from(selected);
+    if(!items.length){
+      showToast("No photos selected");
+      return;
+    }
 
-      showToast(`Downloading ${items.length}…`);
+    showToast(`Downloading ${items.length}…`);
 
-      for(let i=0;i<items.length;i++){
-        const a = document.createElement("a");
-        a.href = items[i];
-        a.download = "";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        await new Promise(r => setTimeout(r, 250));
-      }
-    });
-  }
+    for(let i = 0; i < items.length; i++){
+      const a = document.createElement("a");
+      a.href = items[i];
+      a.setAttribute("download", "");
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      // small delay so browsers don't block all downloads
+      await new Promise(r => setTimeout(r, 250));
+    }
+
+    showToast("Downloads started");
+  });
+}
 
   // Lightbox close + keys
   lightbox?.addEventListener("click", (e) => {
@@ -3585,16 +3632,19 @@ function initBoardPreviews(){
     });
   }
 
-  if(selectModeBtn){
-    selectModeBtn.addEventListener("click", () => {
-      selectMode = !selectMode;
-      selectModeBtn.setAttribute("aria-pressed", selectMode ? "true":"false");
-      selected.clear();
-      updateBulkUI();
-      if(currentAlbum) renderAlbum(currentAlbum);
-      showToast(selectMode ? "Select mode on" : "Select mode off");
-    });
-  }
+  if (selectModeBtn) {
+  selectModeBtn.addEventListener("click", () => {
+    selectMode = !selectMode;
+
+    selectModeBtn.setAttribute("aria-pressed", selectMode);
+    document.body.classList.toggle("select-mode", selectMode);
+
+    // 🔥 THIS WAS MISSING
+    if (typeof setSocialDockRaised === "function") {
+      setSocialDockRaised(selectMode);
+    }
+  });
+}
 
   // Back
   backBtn?.addEventListener("click", backToBoards);
@@ -3673,7 +3723,37 @@ function initBoardPreviews(){
     if(e.key === "Escape" && !backdrop.classList.contains("byz-hidden")) closeModal();
   });
 })();
+  
+function setSocialDockRaised(raised){
+  const dock = document.querySelector(".social-dock");
+  if (!dock) return;
+  dock.classList.toggle("dock-raised", raised);
+}
+  
+</script>
+  <script>
+/* =========================================
+   FLOATING SOCIAL DOCK — STOP ABOVE FOOTER
+========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const dock = document.querySelector(".social-dock");
+  const footer = document.querySelector("footer");
 
+  if (!dock || !footer) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        dock.classList.add("dock-stop");
+      } else {
+        dock.classList.remove("dock-stop");
+      }
+    },
+    { threshold: 0 }
+  );
+
+  observer.observe(footer);
+});
 </script>
 </body>
 </html>
