@@ -2002,14 +2002,16 @@ html[data-theme="dark"] #gallery .gallery-note {
   box-shadow: var(--shadow-soft);
 }
 
-/* Image fills card fully */
+/* Image fills card fully + slight rounded corners */
 #gallery .album-preview {
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
+  border-radius: 10px; /* <- subtle rounding (try 8–12px) */
 }
 
+/* Fill preview */
 #gallery .album-preview img {
   position: absolute;
   inset: 0;
