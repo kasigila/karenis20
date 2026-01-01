@@ -2184,6 +2184,39 @@ html[data-theme="dark"] #gallery .gallery-note {
 body.bulkbar-active .social-dock{
   --dock-bulk-offset: 120px;
 }
+/* === Album badge top-right (match ref image) === */
+#gallery .board-preview{
+  position: relative;
+}
+
+#gallery .board-preview img{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+#gallery .board-preview::after{
+  z-index: 1; /* gradient overlay */
+}
+
+#gallery .board-info{
+  z-index: 2;
+}
+
+#gallery .board-badge{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  z-index: 3;
+  display: block;
+}
 
 </style>
 
