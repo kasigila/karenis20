@@ -1894,6 +1894,24 @@ footer{
 #gallery .board-preview img.active{
   opacity:1;
 }
+/* ===== MOBILE: SHOW MORE ALBUMS ON SCREEN (SIZE ONLY) ===== */
+@media (max-width: 520px) {
+
+  /* Force albums into 2 columns on phones (covers common grid wrappers) */
+  #gallery .boards,
+  #gallery .board-grid,
+  #gallery .boards-grid,
+  #gallery .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px; /* smaller gap so more fits */
+  }
+
+  /* Make each album preview less tall */
+  #gallery .board-preview {
+    aspect-ratio: 1 / 1;  /* was 4/5 (taller). 1/1 shows more albums */
+  }
+}
 /* ---------- DARK MODE FIX (TEXT VISIBILITY) ---------- */
 
 html[data-theme="dark"] #gallery,
