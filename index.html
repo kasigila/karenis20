@@ -2126,7 +2126,24 @@ html[data-theme="dark"] #gallery .gallery-note {
     background .18s var(--ease),
     border-color .18s var(--ease);
 }
+/* Keep the pill shape on small screens */
+#gallery .board-info{
+  white-space: nowrap;
+  min-height: 30px;
+  line-height: 1;
+  padding: 8px 14px;
+  max-width: calc(100% - 24px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
+@media (max-width: 560px){
+  #gallery .board-info{
+    min-height: 28px;
+    padding: 7px 12px;
+    font-size: 11px;
+  }
+}
 /* Desktop hover */
 @media (hover: hover) and (pointer: fine){
   #gallery .board:hover .board-info{
