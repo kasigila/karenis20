@@ -3268,22 +3268,24 @@ function initBoardPreviews(){
   ];
 
   function pickPreviewSources(evt, albumKey){
-    const allAlbums = getAlbums(evt);
+  const albums = getAlbums(evt);
 
-    // pull up to 8 preview images so it feels "alive" but not heavy
-    const takeN = (arr, n) => arr.slice(0, Math.min(n, arr.length));
-
-    if(albumKey === "all"){
-      const sources = [];
-      allAlbums.slice(0, 4).forEach(a => {
-        takeN(PHOTOS[evt][a] || [], 2).forEach(f => sources.push(fullSrc(evt, a, f)));
+  // ALL photos for "All Photos"
+  if(albumKey === "all"){
+    const all = [];
+    albums.forEach(a => {
+      (PHOTOS[evt][a] || []).forEach(f => {
+        all.push(fullSrc(evt, a, f));
       });
-      return sources.slice(0, 8);
-    }
-
-    const files = PHOTOS[evt][albumKey] || [];
-    return takeN(files, 8).map(f => fullSrc(evt, albumKey, f));
+    });
+    return all;
   }
+
+  // FULL album loop (no cap)
+  return (PHOTOS[evt][albumKey] || []).map(f =>
+    fullSrc(evt, albumKey, f)
+  );
+}
 
   boardGrid.innerHTML = boardItems.map(item => {
     const sources = pickPreviewSources(currentEvent, item.key);
