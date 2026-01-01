@@ -1452,6 +1452,105 @@ section{padding: 92px 0}
   display:block;
   object-fit:cover;
 }
+/* ===== TEAM SPOTLIGHT (APPLE GLASS) ===== */
+.team-spotlight{
+  border-radius: 28px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  box-shadow: var(--shadow-soft);
+  padding: 14px;
+}
+
+.team-photo-card{
+  position:relative;
+  overflow:hidden;
+}
+.team-photo-card::before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background: conic-gradient(
+    from 180deg,
+    rgba(255,255,255,.0),
+    rgba(255,255,255,.25),
+    rgba(255,255,255,.0)
+  );
+  opacity:.45;
+  filter: blur(18px);
+  animation: teamShimmer 9s linear infinite;
+  pointer-events:none;
+}
+@keyframes teamShimmer{
+  to{ transform: rotate(360deg); }
+}
+
+.team-photo-card img{
+  transition: transform .6s var(--ease);
+}
+.team-photo-card:hover img{
+  transform: scale(1.04) translateY(-4px);
+}
+
+.team-photo-overlay{
+  position:absolute;
+  left:14px;
+  bottom:14px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  z-index:2;
+}
+
+.team-photo-caption{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.45);
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(10px);
+  color:#fff;
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.02em;
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+}
+
+.team-photo-sub{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.35);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(8px);
+  color:#fff;
+  font-size:12px;
+}
+
+.team-chip-row{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.team-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+  font-size:12px;
+  font-weight:700;
+  color:var(--sub);
+  box-shadow: var(--shadow-soft);
+}
+.team-chip strong{ color: var(--text); }
 
 .team-rotator{
   border-radius: 26px;
@@ -2910,7 +3009,8 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
         <p>Keep up with us on our socials. </p>
       </div>
 
-      <div class="team-wrap reveal">
+      <div class="team-wrap reveal team-spotlight">
+
         <div class="team-head">
           <div>
             <div style="font-weight:800;letter-spacing:-.3px"> </div>
@@ -2922,8 +3022,15 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
         <div class="team-split">
   <!-- Fixed group photo -->
   <div class="team-photo-card">
-    <img src="assets/assets/team-photo/team-photo.jpg" alt="BYZ Team" />
+  <img src="assets/assets/team-photo/team-photo.jpg" alt="BYZ Team" />
+  <div class="team-photo-overlay">
+    <div class="team-photo-caption">
+      <i class="fa-solid fa-sparkles" aria-hidden="true"></i> BYZ Core Crew
+    </div>
+    <div class="team-photo-sub">Dar es Salaam • Since 2018</div>
   </div>
+</div>
+
 
   <!-- Rotating name/title/IG -->
   <div class="team-rotator" aria-label="Team details carousel">
@@ -2943,6 +3050,15 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
       <div class="rotator-dots" id="teamDots" aria-label="Carousel position"></div>
     </div>
   </div>
+          <div class="team-chip-row">
+  <span class="team-chip"><strong>Founder</strong> & CEO</span>
+  <span class="team-chip"><strong>Marketing</strong> & Social</span>
+  <span class="team-chip"><strong>Creative</strong> & Partnerships</span>
+  <span class="team-chip"><strong>Finance</strong> & Payments</span>
+  <span class="team-chip"><strong>Logistics</strong> & Venue</span>
+  <span class="team-chip"><strong>Brand</strong> Partnerships</span>
+</div>
+
 </div>
 
         
