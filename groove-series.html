@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Groove Series</title>
+
+<style>
+/* ===================== APPLE-LIKE DESIGN TOKENS ===================== */
+:root{
+  --bg:#ffffff;
+  --bg-alt:#f5f5f7;
+  --bg-elev:#ffffff;
+  --text:#1d1d1f;
+  --sub:#6e6e73;
+  --border:#d2d2d7;
+  --accent:#000000;
+
+  --radius: 22px;
+  --radius-lg: 28px;
+  --shadow: 0 18px 60px rgba(0,0,0,.08);
+  --shadow-soft: 0 10px 30px rgba(0,0,0,.08);
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --max: 1100px;
+}
+
+/* ===================== BASE ===================== */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.55;
+}
+a{text-decoration:none;color:inherit}
+.container{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+/* ===================== HEADER ===================== */
+header{
+  padding: 22px 0 10px;
+}
+.header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  font-weight:700;letter-spacing:-.4px;
+}
+.brand-logo{
+  width:40px;height:40px;object-fit:contain;
+}
+
+/* ===================== HERO ===================== */
+.hero{
+  padding: 40px 0 26px;
+  background:
+    radial-gradient(900px 380px at 50% -10%, color-mix(in srgb, var(--border) 35%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-alt) 70%, transparent), transparent 52%);
+}
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 14px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-elev) 90%, transparent);
+  border-radius:999px;
+  color:var(--sub);
+  font-size:13px;
+}
+.hero h1{
+  margin-top:16px;
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  letter-spacing:-1px;
+}
+.hero p{
+  margin-top:10px;
+  color:var(--sub);
+  max-width: 55ch;
+}
+
+/* ===================== BUTTONS ===================== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:10px;
+  padding:12px 18px;border-radius:999px;
+  font-size:14px;font-weight:600;
+  border:1px solid var(--border);
+  background:var(--bg-elev);
+  color:var(--text);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
+}
+.btn:hover{transform: translateY(-2px); box-shadow: var(--shadow-soft)}
+.btn.primary{
+  background:var(--accent);
+  border-color:transparent;
+  color:var(--bg);
+}
+
+/* ===================== CARDS ===================== */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:16px;
+  margin-top:24px;
+}
+.card{
+  border-radius: var(--radius);
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  overflow:hidden;
+  position:relative;
+}
+.card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  display:block;
+}
+.card-body{
+  padding:14px 16px 16px;
+}
+.card-title{
+  font-weight:800;
+  letter-spacing:-.2px;
+}
+.card-sub{
+  margin-top:6px;
+  color:var(--sub);
+  font-size:13px;
+}
+
+/* Coming Soon overlay */
+.coming{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,.55);
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-weight:800;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  backdrop-filter: blur(2px);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 980px){
+  .grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width: 640px){
+  .grid{grid-template-columns:1fr;}
+  .card img{height:190px;}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="container header-inner">
+    <a class="brand" href="indexx.html">
+      <img class="brand-logo" src="assets/byz-logo-black.png" alt="BYZ" />
+      <span>BYZ</span>
+    </a>
+    <a class="btn" href="indexx.html">Back Home</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <span class="kicker">GROOVE SERIES</span>
+    <h1>All Groove Experiences</h1>
+    <p>One series, multiple moods. Explore every Groove theme—R&B, Afrobeats, Caribbean, and more.</p>
+    <div style="margin-top:14px;">
+      <a class="btn primary" href="indexx.html#gallery">View Memories</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="grid">
+      <div class="card">
+        <img src="assets/assets/events/groove.jpg" alt="Groove RnB" />
+        <div class="card-body">
+          <div class="card-title">Groove RnB</div>
+          <div class="card-sub">Smooth vocals, slow grooves, late‑night energy.</div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/assets/events/groove.jpg" alt="Groove Afrobeats" />
+        <div class="card-body">
+          <div class="card-title">Groove Afrobeats</div>
+          <div class="card-sub">Afro‑fusion, amapiano, and nonstop movement.</div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/assets/events/groove.jpg" alt="Groove Caribbean" />
+        <div class="card-body">
+          <div class="card-title">Groove Caribbean</div>
+          <div class="card-sub">Dancehall, reggae, tropical vibes all night.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="assets/assets/events/groove.jpg" alt="Groove House" />
+        <div class="card-body">
+          <div class="card-title">Groove House</div>
+          <div class="card-sub">Deep house & late‑night energy.</div>
+        </div>
+        <div class="coming">Coming Soon</div>
+      </div>
+      <div class="card">
+        <img src="assets/assets/events/groove.jpg" alt="Groove Ladies Night" />
+        <div class="card-body">
+          <div class="card-title">Groove Ladies Night</div>
+          <div class="card-sub">Curated elegance + VIP moments.</div>
+        </div>
+        <div class="coming">Coming Soon</div>
+      </div>
+      <div class="card">
+        <img src="assets/assets/events/groove.jpg" alt="Groove Sunset" />
+        <div class="card-body">
+          <div class="card-title">Groove Sunset</div>
+          <div class="card-sub">Golden hour vibes, rooftop energy.</div>
+        </div>
+        <div class="coming">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
