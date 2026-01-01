@@ -2049,6 +2049,142 @@ html[data-theme="dark"] #gallery .gallery-note {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+  /* ============================= */
+/* MEMORY GALLERY — REQUIRED OVERRIDES */
+/* ============================= */
+#gallery{
+  font-weight: 400;
+}
+#gallery *{
+  font-weight: inherit;
+}
+#gallery .section-title h2{
+  font-weight: 700;
+}
+#gallery .section-title p{
+  font-weight: 400;
+}
+#gallery .gallery-toggle,
+#gallery .tab,
+#gallery .btn,
+#gallery .album-title,
+#gallery .bulk-count{
+  font-weight: 600;
+}
+#gallery .gallery-meta,
+#gallery .gallery-note,
+#gallery .album-sub,
+#gallery .bulk-sub{
+  font-weight: 400;
+}
+
+#gallery .board{
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+#gallery .board-meta{
+  display:none;
+}
+
+#gallery .board-preview{
+  aspect-ratio: 4 / 5;
+  border-radius: 16px;
+  overflow:hidden;
+  box-shadow: var(--shadow-soft);
+  position:relative;
+}
+#gallery .board-preview::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 52%, rgba(0,0,0,.58) 100%);
+  pointer-events:none;
+  z-index:1;
+}
+#gallery .board-preview img{
+  border-radius: 0;
+}
+
+#gallery .board-info{
+  position:absolute;
+  left:12px;
+  bottom:10px;
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.01em;
+  z-index:2;
+  text-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+
+#gallery .board-badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#fff;
+  border:1px solid rgba(255,255,255,.65);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  z-index:2;
+}
+
+#gallery .bulkbar{
+  padding: 16px 18px;
+  gap: 16px;
+  z-index: 950;
+}
+#gallery .bulk-actions{
+  gap: 12px;
+}
+#gallery .bulk-actions .btn{
+  padding: 12px 18px;
+}
+
+/* Select ON state */
+#gallery #selectModeBtn[aria-pressed="true"]{
+  background: color-mix(in srgb, #25D366 18%, var(--bg-elev));
+  border-color: color-mix(in srgb, #25D366 45%, var(--border));
+  box-shadow: var(--shadow-soft);
+}
+#gallery #selectModeBtn[aria-pressed="true"] i{
+  color:#25D366;
+}
+#gallery #selectModeBtn[aria-pressed="true"]::after{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  display:inline-block;
+  margin-left:6px;
+  background:#25D366;
+  box-shadow: 0 0 0 3px rgba(37,211,102,.18);
+}
+
+/* Smaller previews on phones */
+@media (max-width: 560px){
+  #gallery .board-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #gallery .board-preview{
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* Social dock moves up when bulk bar is visible */
+.social-dock{
+  bottom: calc(16px + var(--dock-offset, 0px) + var(--dock-bulk-offset, 0px));
+  transition: bottom .2s var(--ease), transform .2s var(--ease);
+}
+body.bulkbar-active .social-dock{
+  --dock-bulk-offset: 120px;
+}
+
 </style>
 
 </head>
@@ -3101,6 +3237,14 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   const monthIndex = {
     january:0,february:1,march:2,april:3,may:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11
   };
+  const monthShort = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function formatAlbumDateShort(key){
+  const [m, d, y] = key.split("-");
+  const mi = monthIndex[m?.toLowerCase()];
+  if(mi === undefined) return "—";
+  return `${monthShort[mi]} ${Number(d)} ${y}`;
+}
 
   function showToast(msg){
     if(!toast) return;
@@ -3259,9 +3403,16 @@ function initBoardPreviews(){
     return a;
   }
 
-  // pick N unique items from an array (random)
+  // pick N items from an array (random), repeat if needed
   function pickN(arr, n){
-    return shuffle(arr).slice(0, Math.min(n, arr.length));
+    const shuffled = shuffle(arr);
+    if(shuffled.length >= n) return shuffled.slice(0, n);
+
+    const picks = shuffled.slice();
+    while(picks.length < n && shuffled.length){
+      picks.push(shuffled[picks.length % shuffled.length]);
+    }
+    return picks;
   }
 
   const N = 5;
@@ -3274,36 +3425,38 @@ function initBoardPreviews(){
         all.push(fullSrc(evt, a, f));
       });
     });
-    return pickN(all, N); // already randomized order
+    return pickN(all, N);
   }
 
   // Normal album preview: pick 5 from THIS album, then loop those 5
   const sources = (PHOTOS[evt][albumKey] || []).map(f => fullSrc(evt, albumKey, f));
-  return pickN(sources, N); // already randomized order
+  return pickN(sources, N);
 }
 
-  boardGrid.innerHTML = boardItems.map(item => {
-    const sources = pickPreviewSources(currentEvent, item.key);
-    const imgs = sources.map((src, i) =>
-      `<img src="${src}" loading="lazy" decoding="async" alt="" class="${i === 0 ? "active" : ""}">`
-    ).join("");
+  const badgeSrc = currentEvent === "tempo"
+  ? "assets/assets/events/tempo.JPG"
+  : "assets/assets/events/groove.jpg";
 
-    return `
-      <button class="board" type="button" data-album="${item.key}" aria-label="Open album ${item.title}">
-        <div class="board-preview">
-          ${imgs}
-        </div>
+boardGrid.innerHTML = boardItems.map(item => {
+  const sources = pickPreviewSources(currentEvent, item.key);
+  const imgs = sources.map((src, i) =>
+    `<img src="${src}" loading="lazy" decoding="async" alt="" class="${i === 0 ? "active" : ""}">`
+  ).join("");
 
-        <div class="board-meta">
-          <div class="board-title">${item.title}</div>
-          <div class="board-sub">
-            <span class="pill"><strong>${item.count}</strong>&nbsp;photos</span>
-            <span class="pill">${currentEvent.toUpperCase()}</span>
-          </div>
-        </div>
-      </button>
-    `;
-  }).join("");
+  const dateKey = item.key === "all" ? albums[0] : item.key;
+  const dateLabel = dateKey ? formatAlbumDateShort(dateKey) : "—";
+
+  return `
+    <button class="board" type="button" data-album="${item.key}" aria-label="Open album ${item.title}">
+      <div class="board-preview">
+        ${imgs}
+        <div class="board-info">${dateLabel} • ${item.count} photos</div>
+        <img class="board-badge" src="${badgeSrc}" alt="" aria-hidden="true" loading="lazy">
+      </div>
+    </button>
+  `;
+}).join("");
+
 
   boardGrid.querySelectorAll(".board").forEach(btn => {
     btn.addEventListener("click", () => openAlbum(btn.dataset.album));
@@ -3630,7 +3783,35 @@ function initBoardPreviews(){
   else if(saved === "0") setGalleryOpen(false);
   else setGalleryOpen(!isMobile);
 })();
-  
+  /* =========================================================
+   FLOATING SOCIAL DOCK POSITIONING
+========================================================= */
+(function(){
+  const dock = document.querySelector(".social-dock");
+  const footer = document.querySelector("footer");
+  const root = document.documentElement;
+  if(!dock || !footer) return;
+
+  let ticking = false;
+
+  function update(){
+    const footerRect = footer.getBoundingClientRect();
+    const overlap = Math.max(0, window.innerHeight - footerRect.top + 24);
+    root.style.setProperty("--dock-offset", `${overlap}px`);
+    ticking = false;
+  }
+
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }
+
+  update();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+})();
+
 /* =========================================================
    DEV CONTACT MODAL (Footer "Contact Developer")
 ========================================================= */
