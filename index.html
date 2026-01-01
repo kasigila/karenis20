@@ -362,7 +362,15 @@ section{padding: 92px 0}
   display:grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+  padding: 0 8px; /* keeps cards away from screen edges */
 }
+@media (max-width: 980px){
+  .cards{ padding: 0 6px; }
+}
+@media (max-width: 560px){
+  .cards{ padding: 0 4px; }
+}
+
 .card{
   border-radius: var(--radius);
   border: 1px solid var(--border);
