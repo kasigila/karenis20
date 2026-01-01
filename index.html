@@ -1812,6 +1812,124 @@ footer{
   transform: translateY(-2px);
   box-shadow: var(--shadow-soft);
 }
+/* ===================== TEMPO SCHEDULE MODAL ===================== */
+.tempo-modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index: 4200;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(12px);
+  display:grid;
+  place-items:center;
+  padding: 20px;
+}
+.tempo-modal{
+  width: min(560px, 100%);
+  border-radius: 26px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.tempo-modal-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 16px 0 16px;
+}
+.tempo-modal-title{
+  font-weight:900;
+  letter-spacing:-.6px;
+  font-size:18px;
+}
+.tempo-modal-sub{
+  margin-top:4px;
+  font-size:13px;
+  color:var(--sub);
+}
+.tempo-modal-x{
+  width:42px;
+  height:42px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  box-shadow: var(--shadow-soft);
+  cursor:pointer;
+}
+
+.tempo-modal-body{ padding:16px; }
+.tempo-calendar{
+  border-radius:22px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  padding:14px;
+}
+.tempo-month{
+  font-weight:900;
+  letter-spacing:-.4px;
+  margin-bottom:10px;
+}
+.tempo-grid{
+  display:grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap:8px;
+}
+.tempo-day{
+  font-size:11px;
+  color:var(--sub);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  text-align:center;
+}
+.tempo-date,
+.tempo-blank{
+  height:38px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+  text-align:center;
+  font-weight:800;
+  position:relative;
+}
+.tempo-blank{ border-color: transparent; background: transparent; }
+.tempo-date{
+  display:grid;
+  place-items:center;
+}
+.tempo-date.event::after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border-radius:999px;
+  border:2px solid rgba(255,59,48,.55);
+  background: rgba(255,59,48,.18); /* opacity so date is visible */
+}
+.tempo-date span{
+  position:relative;
+  z-index:1;
+}
+
+.tempo-list{
+  margin-top:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  font-size:13px;
+  color:var(--sub);
+}
+.tempo-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+  font-weight:700;
+  width:fit-content;
+}
 
 /* ============================= */
 /* MEMORY GALLERY — UI REFINEMENT */
@@ -2503,50 +2621,46 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   </section>
 
   <!-- WE HOST -->
-  <section id="events">
-    <div class="container">
-      <div class="section-title reveal">
-        <h2>We Host Legendary Events</h2>
-        <p>Three signature experiences that define Dar nightlife (and more coming).</p>
+  
+  <div class="cards stagger reveal">
+  <div class="card">
+    <div class="card-top groove" aria-hidden="true"></div>
+    <div class="card-body">
+      <h3>Groove Series</h3>
+      <p>The heartbeat of Dar nightlife. Weekly Afro-house sessions.</p>
+      <div class="card-actions">
+        <a class="btn primary" href="groove-series.html">
+          <i class="fa-solid fa-circle-info" aria-hidden="true"></i> See Series
+        </a>
       </div>
+    </div>
+  </div>
 
-      <div class="cards stagger reveal">
-        <div class="card">
-          <div class="card-top groove" aria-hidden="true"></div>
-          <div class="card-body">
-            <h3>Groove Series</h3>
-            <p>The heartbeat of Dar nightlife. Weekly Afro-house sessions.</p>
-            <div class="card-actions">
-              <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Table</a>
-              <a class="btn" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-top apt" aria-hidden="true"></div>
-          <div class="card-body">
-            <h3>APT. Session</h3>
-            <p>Invite-only apartment sessions with premium vibes.</p>
-            <div class="card-actions">
-              <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Request Invite</a>
-              <a class="btn" href="https://kasigila.github.io/byzmock/booking.html">Reserve</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-top tempo" aria-hidden="true"></div>
-          <div class="card-body">
-            <h3>Tempo</h3>
-            <p>Seasonal events with evolving themes.</p>
-            <div class="card-actions">
-              <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book</a>
-              <a class="btn" href="https://kasigila.github.io/byzmock/booking.html">View Schedule</a>
-            </div>
-          </div>
-        </div>
+  <div class="card">
+    <div class="card-top apt" aria-hidden="true"></div>
+    <div class="card-body">
+      <h3>APT. Session</h3>
+      <p>Invite-only apartment sessions with premium vibes.</p>
+      <div class="card-actions">
+        <a class="btn primary" href="apt-request.html">Request Invite</a>
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-top tempo" aria-hidden="true"></div>
+    <div class="card-body">
+      <h3>Tempo</h3>
+      <p>Seasonal events with evolving themes.</p>
+      <div class="card-actions">
+        <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Table / Ticket</a>
+        <button class="btn" id="tempoScheduleBtn" type="button">
+          <i class="fa-regular fa-calendar" aria-hidden="true"></i> View Schedule
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- Extra Apple-style “info strip” -->
       <div class="reveal" style="margin-top:18px;border:1px solid var(--border);border-radius:22px;background:color-mix(in srgb, var(--bg-alt) 70%, transparent);padding:16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
@@ -3074,6 +3188,30 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     </div>
   </div>
 </div>
+  <!-- Tempo Schedule Modal -->
+<div id="tempoScheduleModal" class="tempo-modal-backdrop byz-hidden" aria-hidden="true">
+  <div class="tempo-modal" role="dialog" aria-modal="true" aria-labelledby="tempoScheduleTitle">
+    <div class="tempo-modal-head">
+      <div>
+        <div id="tempoScheduleTitle" class="tempo-modal-title">Tempo Schedule</div>
+        <div class="tempo-modal-sub">Red rings mark Tempo nights.</div>
+      </div>
+      <button class="tempo-modal-x" id="tempoScheduleClose" type="button" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="tempo-modal-body">
+      <div class="tempo-calendar">
+        <div class="tempo-month" id="tempoMonthLabel">Month</div>
+        <div class="tempo-grid" id="tempoCalendarGrid"></div>
+      </div>
+
+      <div class="tempo-list" id="tempoDateList"></div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -3993,6 +4131,98 @@ boardGrid.innerHTML = boardItems.map(item => {
 
   document.addEventListener("keydown", (e) => {
     if(e.key === "Escape" && !backdrop.classList.contains("byz-hidden")) closeModal();
+  });
+})();
+/* =========================================================
+   TEMPO SCHEDULE MODAL
+========================================================= */
+(function(){
+  const openBtn = document.getElementById("tempoScheduleBtn");
+  const modal = document.getElementById("tempoScheduleModal");
+  const closeBtn = document.getElementById("tempoScheduleClose");
+  const monthLabel = document.getElementById("tempoMonthLabel");
+  const grid = document.getElementById("tempoCalendarGrid");
+  const list = document.getElementById("tempoDateList");
+
+  if(!openBtn || !modal || !grid || !monthLabel) return;
+
+  // ✅ Sample dates (edit anytime)
+  const TEMPO_DATES = [
+    "2025-10-04",
+    "2025-10-11",
+    "2025-10-18",
+    "2025-10-25"
+  ];
+
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  // Month displayed on calendar (Oct 2025)
+  const calendarMonth = new Date(2025, 9, 1);
+
+  function renderCalendar(){
+    grid.innerHTML = "";
+    list.innerHTML = "";
+
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    monthLabel.textContent = `${MONTHS[month]} ${year}`;
+
+    const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    days.forEach(d => {
+      const cell = document.createElement("div");
+      cell.className = "tempo-day";
+      cell.textContent = d;
+      grid.appendChild(cell);
+    });
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for(let i = 0; i < firstDay; i++){
+      const blank = document.createElement("div");
+      blank.className = "tempo-blank";
+      grid.appendChild(blank);
+    }
+
+    for(let d = 1; d <= daysInMonth; d++){
+      const dateStr = `${year}-${String(month + 1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+      const cell = document.createElement("div");
+      cell.className = "tempo-date";
+      if(TEMPO_DATES.includes(dateStr)) cell.classList.add("event");
+      cell.innerHTML = `<span>${d}</span>`;
+      grid.appendChild(cell);
+    }
+
+    TEMPO_DATES.forEach(ds => {
+      const item = document.createElement("div");
+      item.className = "tempo-pill";
+      item.textContent = ds;
+      list.appendChild(item);
+    });
+  }
+
+  function openModal(){
+    renderCalendar();
+    modal.classList.remove("byz-hidden");
+    modal.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal(){
+    modal.classList.add("byz-hidden");
+    modal.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+  }
+
+  openBtn.addEventListener("click", openModal);
+  closeBtn.addEventListener("click", closeModal);
+
+  modal.addEventListener("click", (e) => {
+    if(e.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && !modal.classList.contains("byz-hidden")) closeModal();
   });
 })();
 
