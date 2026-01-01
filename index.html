@@ -1907,7 +1907,28 @@ footer{
   transform: translateY(-2px);
   box-shadow: var(--shadow);
 }
+/* ===== LIVE ALBUM PREVIEW (ONE IMAGE, AUTO CROSSFADE) ===== */
+#gallery .board-preview{
+  position:relative;
+  width:100%;
+  aspect-ratio: 4 / 5;
+  overflow:hidden;
+}
 
+#gallery .board-preview img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition: opacity var(--mg-fade) ease;
+  will-change: opacity;
+}
+
+#gallery .board-preview img.active{
+  opacity:1;
+}
 /* ---------- DARK MODE FIX (TEXT VISIBILITY) ---------- */
 
 html[data-theme="dark"] #gallery,
@@ -3190,64 +3211,110 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
 
     return pickFrom(albumKey);
   }
+function initBoardPreviews(){
+  const INTERVAL = 1000; // ✅ change every second
+
+  // start only once per board
+  function start(board){
+    if(board.dataset.previewStarted === "1") return;
+
+    const imgs = board.querySelectorAll(".board-preview img");
+    if(imgs.length <= 1) return;
+
+    board.dataset.previewStarted = "1";
+
+    let i = 0;
+    imgs[i].classList.add("active");
+
+    setInterval(() => {
+      imgs[i].classList.remove("active");
+      i = (i + 1) % imgs.length;
+      imgs[i].classList.add("active");
+    }, INTERVAL);
+  }
+
+  // perf-friendly: only start when boards appear on screen
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        start(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll("#gallery .board").forEach(b => obs.observe(b));
+}
 
   function buildBoards(){
-    currentAlbum = null;
-    selectMode = false;
-    selected.clear();
-    updateBulkUI();
+  currentAlbum = null;
+  selectMode = false;
+  selected.clear();
+  updateBulkUI();
 
-    albumView.classList.add("byz-hidden");
-    albumView.setAttribute("aria-hidden","true");
-    boardGrid.classList.remove("byz-hidden");
-    boardGrid.setAttribute("aria-hidden","false");
+  albumView.classList.add("byz-hidden");
+  albumView.setAttribute("aria-hidden","true");
+  boardGrid.classList.remove("byz-hidden");
+  boardGrid.setAttribute("aria-hidden","false");
 
-    updateMetaBoards();
+  updateMetaBoards();
 
-    const albums = getAlbums(currentEvent);
-    const total = countPhotos(currentEvent);
+  const albums = getAlbums(currentEvent);
+  const total = countPhotos(currentEvent);
 
-    // “All photos” board first, then each album
-    const boardItems = [
-      { key:"all", title:"All Photos", count: total },
-      ...albums.map(a => ({ key:a, title:titleizeAlbum(a), count:(PHOTOS[currentEvent][a] || []).length }))
-    ];
+  // “All photos” board first, then each album
+  const boardItems = [
+    { key:"all", title:"All Photos", count: total },
+    ...albums.map(a => ({ key:a, title:titleizeAlbum(a), count:(PHOTOS[currentEvent][a] || []).length }))
+  ];
 
-    boardGrid.innerHTML = boardItems.map(item => {
-      const thumbs = pickBoardThumbs(currentEvent, item.key);
-      const t0 = thumbs[0] || "";
-      const t1 = thumbs[1] || t0;
-      const t2 = thumbs[2] || t1;
+  function pickPreviewSources(evt, albumKey){
+    const allAlbums = getAlbums(evt);
 
-      return `
-        <button class="board" type="button" data-album="${item.key}" aria-label="Open album ${item.title}">
-          <div class="board-collage">
-            <div class="big">
-              ${t0 ? `<img src="${t0}" loading="lazy" decoding="async" alt="" />` : ``}
-            </div>
-            <div class="small">
-              ${t1 ? `<img src="${t1}" loading="lazy" decoding="async" alt="" />` : ``}
-            </div>
-            <div class="small">
-              ${t2 ? `<img src="${t2}" loading="lazy" decoding="async" alt="" />` : ``}
-            </div>
-          </div>
+    // pull up to 8 preview images so it feels "alive" but not heavy
+    const takeN = (arr, n) => arr.slice(0, Math.min(n, arr.length));
 
-          <div class="board-meta">
-            <div class="board-title">${item.title}</div>
-            <div class="board-sub">
-              <span class="pill"><strong>${item.count}</strong>&nbsp;photos</span>
-              <span class="pill">${currentEvent.toUpperCase()}</span>
-            </div>
-          </div>
-        </button>
-      `;
-    }).join("");
+    if(albumKey === "all"){
+      const sources = [];
+      allAlbums.slice(0, 4).forEach(a => {
+        takeN(PHOTOS[evt][a] || [], 2).forEach(f => sources.push(fullSrc(evt, a, f)));
+      });
+      return sources.slice(0, 8);
+    }
 
-    boardGrid.querySelectorAll(".board").forEach(btn => {
-      btn.addEventListener("click", () => openAlbum(btn.dataset.album));
-    });
+    const files = PHOTOS[evt][albumKey] || [];
+    return takeN(files, 8).map(f => fullSrc(evt, albumKey, f));
   }
+
+  boardGrid.innerHTML = boardItems.map(item => {
+    const sources = pickPreviewSources(currentEvent, item.key);
+    const imgs = sources.map((src, i) =>
+      `<img src="${src}" loading="lazy" decoding="async" alt="" class="${i === 0 ? "active" : ""}">`
+    ).join("");
+
+    return `
+      <button class="board" type="button" data-album="${item.key}" aria-label="Open album ${item.title}">
+        <div class="board-preview">
+          ${imgs}
+        </div>
+
+        <div class="board-meta">
+          <div class="board-title">${item.title}</div>
+          <div class="board-sub">
+            <span class="pill"><strong>${item.count}</strong>&nbsp;photos</span>
+            <span class="pill">${currentEvent.toUpperCase()}</span>
+          </div>
+        </div>
+      </button>
+    `;
+  }).join("");
+
+  boardGrid.querySelectorAll(".board").forEach(btn => {
+    btn.addEventListener("click", () => openAlbum(btn.dataset.album));
+  });
+
+  // ✅ make previews "live"
+  initBoardPreviews();
+}
 
   // ===== Album view =====
   function flattenPhotos(evt, albumKey){
@@ -3603,29 +3670,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     if(e.key === "Escape" && !backdrop.classList.contains("byz-hidden")) closeModal();
   });
 })();
- /* =====================================================
-   APPLE ALBUM PREVIEW — AUTO CROSSFADE (UI ONLY)
-===================================================== */
 
-(function () {
-  const INTERVAL = 1400;
-
-  function startAlbumPreview(card) {
-    const images = card.querySelectorAll(".album-preview img");
-    if (images.length <= 1) return;
-
-    let i = 0;
-    images[i].classList.add("active");
-
-    setInterval(() => {
-      images[i].classList.remove("active");
-      i = (i + 1) % images.length;
-      images[i].classList.add("active");
-    }, INTERVAL);
-  }
-
-  document.querySelectorAll("#gallery .album-card").forEach(startAlbumPreview);
-})();
 </script>
 </body>
 </html>
