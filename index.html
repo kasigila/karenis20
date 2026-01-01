@@ -3270,7 +3270,24 @@ function initBoardPreviews(){
   function pickPreviewSources(evt, albumKey){
   const albums = getAlbums(evt);
 
-  // ALL photos for "All Photos"
+  // shuffle helper (Fisher–Yates)
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // pick N unique items from an array (random)
+  function pickN(arr, n){
+    return shuffle(arr).slice(0, Math.min(n, arr.length));
+  }
+
+  const N = 5;
+
+  // "All Photos" album preview: pick 5 from ALL photos, then loop those 5
   if(albumKey === "all"){
     const all = [];
     albums.forEach(a => {
@@ -3278,13 +3295,12 @@ function initBoardPreviews(){
         all.push(fullSrc(evt, a, f));
       });
     });
-    return all;
+    return pickN(all, N); // already randomized order
   }
 
-  // FULL album loop (no cap)
-  return (PHOTOS[evt][albumKey] || []).map(f =>
-    fullSrc(evt, albumKey, f)
-  );
+  // Normal album preview: pick 5 from THIS album, then loop those 5
+  const sources = (PHOTOS[evt][albumKey] || []).map(f => fullSrc(evt, albumKey, f));
+  return pickN(sources, N); // already randomized order
 }
 
   boardGrid.innerHTML = boardItems.map(item => {
