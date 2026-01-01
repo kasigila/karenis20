@@ -1814,81 +1814,70 @@ footer{
 }
 
 /* ============================= */
-/* MEMORY GALLERY — VISUAL FIX  */
-/* (TYPOGRAPHY + EDGE-TO-EDGE) */
+/* MEMORY GALLERY — UI REFINEMENT */
+/* Apple-like, clean, premium     */
 /* ============================= */
 
 #gallery {
-  --mg-title: 600;
-  --mg-body: 450;
-  --mg-meta: 400;
+  --mg-radius: 22px;
+  --mg-radius-sm: 14px;
 }
 
-/* ---------- TYPOGRAPHY ---------- */
+/* ---------- TYPOGRAPHY (MATCH SITE FLOW) ---------- */
 
-/* Reset aggressive weights */
-#gallery * {
-  font-weight: var(--mg-body);
+#gallery {
+  font-family: inherit;
 }
 
-/* Tabs */
 #gallery .tab {
   font-weight: 500;
+  font-size: 13px;
 }
 
 #gallery .tab.active {
   font-weight: 600;
 }
 
-/* Board titles */
+/* Album / board titles */
 #gallery .board-title {
   font-weight: 600;
   letter-spacing: -0.3px;
 }
 
-/* Pills + meta */
-#gallery .pill,
+/* Meta text */
 #gallery .gallery-meta,
-#gallery .album-sub,
-#gallery .gallery-note {
-  font-weight: var(--mg-meta);
-}
-
-/* Bulk bar count */
-#gallery .bulk-count {
-  font-weight: 600;
+#gallery .gallery-note,
+#gallery .album-sub {
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--sub);
 }
 
 /* Overlay labels */
 #gallery .pin-label {
   font-weight: 500;
+  font-size: 12px;
   text-transform: none;
 }
 
-/* ---------- BOARD PREVIEW LAYOUT ---------- */
+/* ---------- BOARD / PIN CARDS ---------- */
 
-/* Make boards feel like Pinterest */
+/* Board cards (Pinterest-style but Apple-soft) */
 #gallery .board {
-  border-radius: 0;
-  overflow: hidden;
-  box-shadow: none;
+  border-radius: var(--mg-radius);
+  overflow: hidden;              /* makes images touch edges */
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
 }
 
-/* Remove inner padding */
+/* Collage grid */
 #gallery .board-collage {
   padding: 0;
   gap: 0;
-  background: none;
 }
 
-/* Images fill completely */
-#gallery .board-collage .big,
-#gallery .board-collage .small {
-  border-radius: 0;
-  border: none;
-}
-
-/* Ensure images truly touch edges */
+/* Images fill fully */
 #gallery .board-collage img {
   width: 100%;
   height: 100%;
@@ -1896,18 +1885,46 @@ footer{
   display: block;
 }
 
-/* ---------- ALBUM GRID ---------- */
-
-/* Pins also edge-to-edge */
+/* Individual photos (pins) */
 #gallery .pin {
-  border-radius: 0;
+  border-radius: var(--mg-radius);
+  overflow: hidden;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
 }
 
-/* ---------- BULK BAR MOBILE FIX ---------- */
+/* Pin images */
+#gallery .pin img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Subtle Apple hover */
+#gallery .pin:hover,
+#gallery .board:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- DARK MODE FIX (TEXT VISIBILITY) ---------- */
+
+html[data-theme="dark"] #gallery,
+body.dark #gallery {
+  color: var(--text);
+}
+
+html[data-theme="dark"] #gallery .gallery-meta,
+html[data-theme="dark"] #gallery .gallery-note {
+  color: var(--sub);
+}
+
+/* ---------- BULK BAR SPACING (NO OVERFLOW) ---------- */
 
 #gallery .bulk-actions {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
@@ -1925,7 +1942,6 @@ footer{
     justify-content: center;
   }
 }
-
 </style>
 
 </head>
