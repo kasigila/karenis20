@@ -2117,6 +2117,41 @@ html[data-theme="dark"] #gallery .gallery-note {
   z-index:2;
   text-shadow: 0 2px 8px rgba(0,0,0,.35);
 }
+/* Make the date/count pill feel clickable */
+#gallery .board-info{
+  cursor: pointer;
+  transition:
+    transform .18s var(--ease),
+    box-shadow .18s var(--ease),
+    background .18s var(--ease),
+    border-color .18s var(--ease);
+}
+
+/* Desktop hover */
+@media (hover: hover) and (pointer: fine){
+  #gallery .board:hover .board-info{
+    transform: translateX(-50%) translateY(-2px);
+    background: rgba(0,0,0,.70);
+    border-color: rgba(255,255,255,.6);
+    box-shadow: 0 12px 26px rgba(0,0,0,.45);
+  }
+}
+
+/* Keyboard focus (optional but nice) */
+#gallery .board:focus-visible .board-info{
+  outline: 2px solid rgba(255,255,255,.7);
+  outline-offset: 2px;
+}
+
+/* iPhone / touch “pressed” feel */
+@media (hover: none) and (pointer: coarse){
+  #gallery .board:active .board-info{
+    transform: translateX(-50%) scale(0.98);
+    background: rgba(0,0,0,.78);
+    border-color: rgba(255,255,255,.8);
+    box-shadow: 0 6px 18px rgba(0,0,0,.4);
+  }
+}
 
 #gallery .board-badge{
   position:absolute;
