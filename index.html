@@ -3573,8 +3573,9 @@ boardGrid.innerHTML = boardItems.map(item => {
 ).join("");
 
 
-  const dateKey = item.key === "all" ? albums[0] : item.key;
-  const dateLabel = dateKey ? formatAlbumDateShort(dateKey) : "—";
+  const dateLabel = item.key === "all"
+  ? "All Photos"
+  : formatAlbumDateShort(item.key);
 
   return `
     <button class="board" type="button" data-album="${item.key}" aria-label="Open album ${item.title}">
