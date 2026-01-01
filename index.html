@@ -1879,8 +1879,7 @@ footer{
   border-radius: var(--mg-radius-sm);  /* subtle rounding */
 }
 
-/* Ensure images respect the rounding */
-#gallery .board-preview img{
+#gallery .board-preview .preview-img{
   position:absolute;
   inset:0;
   width:100%;
@@ -1890,10 +1889,10 @@ footer{
   transition: opacity var(--mg-fade) ease;
   will-change: opacity;
 }
-
-#gallery .board-preview img.active{
+#gallery .board-preview .preview-img.active{
   opacity:1;
 }
+
 /* ===== MOBILE: SHOW MORE ALBUMS ON SCREEN (SIZE ONLY) ===== */
 @media (max-width: 520px) {
 
@@ -3374,7 +3373,7 @@ function initBoardPreviews(){
   function start(board){
     if(board.dataset.previewStarted === "1") return;
 
-    const imgs = board.querySelectorAll(".board-preview img");
+    const imgs = board.querySelectorAll(".board-preview .preview-img");
     if(imgs.length <= 1) return;
 
     board.dataset.previewStarted = "1";
@@ -3473,8 +3472,9 @@ function initBoardPreviews(){
 boardGrid.innerHTML = boardItems.map(item => {
   const sources = pickPreviewSources(currentEvent, item.key);
   const imgs = sources.map((src, i) =>
-    `<img src="${src}" loading="lazy" decoding="async" alt="" class="${i === 0 ? "active" : ""}">`
-  ).join("");
+  `<img src="${src}" loading="lazy" decoding="async" alt="" class="preview-img ${i === 0 ? "active" : ""}">`
+).join("");
+
 
   const dateKey = item.key === "all" ? albums[0] : item.key;
   const dateLabel = dateKey ? formatAlbumDateShort(dateKey) : "—";
