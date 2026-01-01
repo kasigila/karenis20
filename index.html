@@ -1892,17 +1892,18 @@ footer{
 #gallery .bulk-actions .btn{
   margin: 0;          /* ✅ prevent weird default spacing */
 }
+  
 @media (max-width: 520px){
   #gallery .bulk-actions{
     flex-direction: column;
     align-items: stretch;
+    gap: 14px;
   }
+
   #gallery .bulk-actions .btn{
     width:100%;
     justify-content:center;
   }
-  #gallery .bulk-actions {
-  gap: 14px;
 }
 
 #gallery .bulkbar {
@@ -1923,22 +1924,7 @@ footer{
     aspect-ratio: 1 / 1; /* show more albums */
   }
 }
-/* =====================================================
-   MEMORY GALLERY — APPLE ALBUM PREVIEW (UI ONLY)
-===================================================== */
-
-#gallery {
-  --mg-radius: 22px;
-  --mg-fade: 420ms;
-}
-
-/* ---------- TYPOGRAPHY FIX ---------- */
-/* Match rest of site: confident, not bold, not thin */
-
-#gallery * {
-  font-weight: 450;
-}
-
+  
 #gallery .tab {
   font-weight: 500;
 }
@@ -2024,6 +2010,124 @@ footer{
 
   #gallery .bulkbar {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+  /* ============================= */
+/* MEMORY GALLERY — FINAL UI     */
+/* ============================= */
+
+#gallery {
+  --mg-radius: 20px;
+  --mg-radius-sm: 14px;
+  --mg-fade: 900ms;
+}
+
+/* ---------- SECTION TITLE ---------- */
+#gallery h2 {
+  font-weight: 700;                 /* match other homepage sections */
+  letter-spacing: -0.4px;
+}
+
+/* ---------- TABS ---------- */
+#gallery .tab {
+  font-weight: 600;
+}
+
+#gallery .tab.active {
+  font-weight: 700;
+}
+
+/* ---------- BOARD CARD ---------- */
+#gallery .board {
+  position: relative;
+  border-radius: var(--mg-radius);
+  overflow: hidden;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+/* ---------- LIVE PREVIEW ---------- */
+#gallery .board-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--mg-radius-sm);
+}
+
+/* Preview images */
+#gallery .board-preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--mg-fade) ease;
+}
+
+#gallery .board-preview img.active {
+  opacity: 1;
+}
+
+/* ---------- OVERLAY INFO ---------- */
+#gallery .board-overlay {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+  z-index: 3;
+  text-shadow: 0 6px 18px rgba(0,0,0,.45);
+}
+
+/* ---------- TOP-RIGHT BADGE ---------- */
+#gallery .board-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(8px);
+  z-index: 3;
+}
+
+#gallery .board-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- MOBILE SIZE FIX ---------- */
+@media (max-width: 520px) {
+  #gallery .board-preview {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+/* ---------- BULK POPUP SPACING ---------- */
+#gallery .bulk-actions {
+  display: flex;
+  gap: 14px;
+}
+
+@media (max-width: 480px) {
+  #gallery .bulk-actions {
+    flex-direction: column;
+  }
+
+  #gallery .bulk-actions .btn {
+    width: 100%;
+    margin: 0;
+  }
+
+  #gallery .bulkbar {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
   }
 }
 </style>
@@ -3171,22 +3275,6 @@ toggleBtn.addEventListener("click", () => {
     return `${(BASE[evt] || "")}${albumKey}/${file}`;
   }
 
-  // ===== Boards view =====
-  function pickBoardThumbs(evt, albumKey){
-    const albums = getAlbums(evt);
-    const pickFrom = (a) => (PHOTOS[evt][a] || []).slice(0, 3).map(f => fullSrc(evt, a, f));
-
-    if(albumKey === "all"){
-      // first 3 albums, grab a couple images from each
-      const sources = [];
-      albums.slice(0, 3).forEach(a => {
-        (PHOTOS[evt][a] || []).slice(0, 2).forEach(f => sources.push(fullSrc(evt, a, f)));
-      });
-      return sources.slice(0, 3);
-    }
-
-    return pickFrom(albumKey);
-  }
 function initBoardPreviews(){
   const INTERVAL = 1000; // ✅ change every second
 
@@ -3226,21 +3314,6 @@ function formatAlbumDate(key){
     .replace(/-/g, " ")
     .replace(/\b\w/g, c => c.toUpperCase());
 }
-  
-  function buildBoards(type){
-  const grid = document.querySelector("#gallery .boards");
-  if (!grid) return;
-
-  const items = albums[type] || [];
-  grid.innerHTML = "";
-
-  items.forEach(item => {
-    const images = shuffle([...item.images]).slice(0, 5);
-
-    const imgs = images.map((src, i) =>
-      `<img src="${src}" class="${i === 0 ? "active" : ""}" />`
-    ).join("");
-
     const icon = type === "groove"
       ? "assets/assets/events/groove.jpg"
       : "assets/assets/events/tempo.JPG";
@@ -3754,6 +3827,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
   observer.observe(footer);
 });
+</script>
+  <script>
+/* ======================================================
+   MEMORY GALLERY — FINAL ENGINE (SAFE)
+====================================================== */
+
+(function () {
+
+  function shuffle(arr) {
+    return [...arr].sort(() => Math.random() - 0.5);
+  }
+
+  function initBoardPreviews() {
+    document.querySelectorAll("#gallery .board").forEach(board => {
+      const images = [...board.querySelectorAll(".board-preview img")];
+      if (images.length === 0) return;
+
+      const chosen = shuffle(images).slice(0, 5);
+      images.forEach(img => img.classList.remove("active"));
+
+      let index = 0;
+      chosen[index].classList.add("active");
+
+      setInterval(() => {
+        chosen[index].classList.remove("active");
+        index = (index + 1) % chosen.length;
+        chosen[index].classList.add("active");
+      }, 2000);
+    });
+  }
+
+  function initSelectToggle() {
+    const selectBtn = document.getElementById("selectToggle");
+    if (!selectBtn) return;
+
+    selectBtn.addEventListener("click", () => {
+      selectBtn.classList.toggle("active");
+      selectBtn.setAttribute(
+        "aria-pressed",
+        selectBtn.classList.contains("active")
+      );
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    initBoardPreviews();
+    initSelectToggle();
+  });
+
+})();
 </script>
 </body>
 </html>
