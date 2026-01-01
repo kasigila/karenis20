@@ -2183,38 +2183,81 @@ html[data-theme="dark"] #gallery .gallery-note {
 body.bulkbar-active .social-dock{
   --dock-bulk-offset: 120px;
 }
-/* === Album badge top-right (match ref image) === */
+/* === Album badge top-right + clickable pill date === */
 #gallery .board-preview{
   position: relative;
 }
 
-#gallery .board-preview img{
+/* Only preview images rotate */
+#gallery .board-preview .preview-img{
   position: absolute;
   inset: 0;
   z-index: 0;
 }
 
+/* Gradient overlay */
 #gallery .board-preview::after{
-  z-index: 1; /* gradient overlay */
+  z-index: 1;
 }
 
+/* Date + count = centered pill */
 #gallery .board-info{
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
   z-index: 2;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: #fff;
+  background: rgba(0,0,0,.55);
+  border: 1px solid rgba(255,255,255,.35);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+  text-align: center;
 }
 
+/* Futuristic badge ring */
 #gallery .board-badge{
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
+  border: 2px solid rgba(255,255,255,.9);
   background: #fff;
-  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  box-shadow: 0 10px 22px rgba(0,0,0,.4);
   z-index: 3;
   display: block;
+}
+
+/* Glow ring */
+#gallery .board-badge::after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  background:
+    conic-gradient(
+      from 180deg,
+      rgba(255,255,255,.65),
+      rgba(0,255,224,.45),
+      rgba(255,45,247,.45),
+      rgba(255,255,255,.65)
+    );
+  filter: blur(6px);
+  z-index:-1;
+}
+@media (max-width: 560px){
+  #gallery .board-info{
+    padding: 7px 12px;
+    font-size: 11px;
+  }
 }
 
 </style>
