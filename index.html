@@ -1814,133 +1814,116 @@ footer{
 }
 
 /* ============================= */
-/* MEMORY GALLERY UI REFINEMENT  */
+/* MEMORY GALLERY — VISUAL FIX  */
+/* (TYPOGRAPHY + EDGE-TO-EDGE) */
 /* ============================= */
 
-/* Album Grid */
-.memory-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.6rem;
-  margin-top: 2rem;
+#gallery {
+  --mg-title: 600;
+  --mg-body: 450;
+  --mg-meta: 400;
 }
 
-/* Each Album Card */
-.album-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 0; /* Remove rounded edges */
-  background: var(--surface, #fff);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
+/* ---------- TYPOGRAPHY ---------- */
 
-.album-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-}
-
-/* Album Image fills box fully */
-.album-card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
-}
-
-/* Album Info */
-.album-info {
-  padding: 1rem 1.2rem;
-  color: var(--text, #222);
-}
-
-.album-info h3 {
-  margin: 0 0 0.3rem 0;
-  font-weight: 500; /* Softer look */
-  font-size: 1rem;
-}
-
-.album-info span {
-  font-size: 0.85rem;
-  color: var(--text-secondary, #666);
-}
-
-/* Fix Dark Mode Text */
-body.dark .album-info,
-html.dark .album-info {
-  color: #f0f0f0;
-}
-
-body.dark .album-info span,
-html.dark .album-info span {
-  color: #aaa;
-}
-
-/* ============================= */
-/* FIX #4: BULK BAR BUTTON SPACING */
-/* ============================= */
-
-.bulk-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;              /* ✅ this is the spacing */
-  justify-content:flex-end;
-  align-items:center;
-}
-
-/* iPhone: stack them nicely */
-@media (max-width: 480px){
-  .bulk-actions{
-    flex-direction:column;
-    align-items:stretch;
-  }
-  .bulk-actions .btn{
-    width:100%;
-    justify-content:center;
-  }
-}
-/* =========================================
-   MEMORY GALLERY — TYPOGRAPHY NORMALIZATION
-   (UI ONLY — NO FUNCTIONALITY CHANGES)
-========================================= */
-
-#gallery,
+/* Reset aggressive weights */
 #gallery * {
-  font-weight: inherit;
+  font-weight: var(--mg-body);
 }
 
 /* Tabs */
 #gallery .tab {
   font-weight: 500;
-  letter-spacing: -0.2px;
 }
 
-/* Active tab */
 #gallery .tab.active {
   font-weight: 600;
 }
 
-/* Board titles (Pinterest-like) */
+/* Board titles */
 #gallery .board-title {
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
-/* Pills + meta text */
+/* Pills + meta */
 #gallery .pill,
 #gallery .gallery-meta,
 #gallery .album-sub,
 #gallery .gallery-note {
-  font-weight: 400;
+  font-weight: var(--mg-meta);
 }
 
-/* Image overlay labels */
+/* Bulk bar count */
+#gallery .bulk-count {
+  font-weight: 600;
+}
+
+/* Overlay labels */
 #gallery .pin-label {
   font-weight: 500;
   text-transform: none;
 }
 
-/* Bulk bar text */
-#gallery .bulk-count {
-  font-weight: 500;
+/* ---------- BOARD PREVIEW LAYOUT ---------- */
+
+/* Make boards feel like Pinterest */
+#gallery .board {
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+/* Remove inner padding */
+#gallery .board-collage {
+  padding: 0;
+  gap: 0;
+  background: none;
+}
+
+/* Images fill completely */
+#gallery .board-collage .big,
+#gallery .board-collage .small {
+  border-radius: 0;
+  border: none;
+}
+
+/* Ensure images truly touch edges */
+#gallery .board-collage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- ALBUM GRID ---------- */
+
+/* Pins also edge-to-edge */
+#gallery .pin {
+  border-radius: 0;
+}
+
+/* ---------- BULK BAR MOBILE FIX ---------- */
+
+#gallery .bulk-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  #gallery .bulkbar {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  #gallery .bulk-actions {
+    flex-direction: column;
+  }
+
+  #gallery .bulk-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 </style>
