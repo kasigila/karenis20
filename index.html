@@ -1840,8 +1840,8 @@ footer{
 
 /* Album / board titles */
 #gallery .board-title {
-  font-weight: 600;
-  letter-spacing: -0.3px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
 }
 
 /* Meta text */
@@ -1861,60 +1861,25 @@ footer{
 }
 
 /* ---------- BOARD / PIN CARDS ---------- */
-
-/* Board cards (Pinterest-style but Apple-soft) */
+/* Board cards */
 #gallery .board {
   border-radius: var(--mg-radius);
-  overflow: hidden;              /* makes images touch edges */
+  overflow: visible;              /* IMPORTANT: don't clip the preview corners */
   background: var(--bg-elev);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
 }
 
-/* Collage grid */
-#gallery .board-collage {
-  padding: 0;
-  gap: 0;
-}
-
-/* Images fill fully */
-#gallery .board-collage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Individual photos (pins) */
-#gallery .pin {
-  border-radius: var(--mg-radius);
-  overflow: hidden;
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-}
-
-/* Pin images */
-#gallery .pin img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-}
-
-/* Subtle Apple hover */
-#gallery .pin:hover,
-#gallery .board:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-/* ===== LIVE ALBUM PREVIEW (ONE IMAGE, AUTO CROSSFADE) ===== */
+/* ===== LIVE ALBUM PREVIEW (slightly rounded corners) ===== */
 #gallery .board-preview{
   position:relative;
   width:100%;
   aspect-ratio: 4 / 5;
   overflow:hidden;
+  border-radius: var(--mg-radius-sm);  /* subtle rounding */
 }
 
+/* Ensure images respect the rounding */
 #gallery .board-preview img{
   position:absolute;
   inset:0;
