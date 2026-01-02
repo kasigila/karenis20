@@ -56,13 +56,15 @@
     .container{max-width:var(--max);margin:0 auto;padding:0 24px}
 
     header{
-      position:fixed;top:0;left:0;right:0;
-      height:var(--header-h);
-      background: color-mix(in srgb, var(--bg) 86%, transparent);
-      backdrop-filter: blur(18px);
-      border-bottom:1px solid var(--border);
-      z-index:999;
-    }
+  position: sticky;
+  top: 0;
+  height:var(--header-h);
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(18px);
+  border-bottom:1px solid var(--border);
+  z-index:999;
+}
+
     .header-inner{
       height:var(--header-h);
       display:flex;align-items:center;justify-content:space-between;
@@ -107,7 +109,7 @@
     .theme-btn:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
     .theme-btn i{font-size:18px;color:var(--text)}
 
-    main{padding-top: calc(var(--header-h) + 26px); padding-bottom: 90px;}
+    main{padding-top: 26px; padding-bottom: 90px;}
 
     .card{
       border-radius: var(--radius-lg);
@@ -514,7 +516,7 @@
       if(dash){
         dash.scrollIntoView({ behavior: "auto", block: "start" });
       } else {
-        window.scrollTo({ top: 0, behavior: "auto" });
+            window.scrollTo({ top: 0, behavior: "auto" });
       }
     });
 
