@@ -2064,17 +2064,20 @@ footer{
 }
 
 .tempo-calendar{
-  border-radius:22px;
+  border-radius:24px;
   border:1px solid var(--border);
-  background: var(--bg-elev);
-  box-shadow: var(--shadow-soft);
-  padding:14px;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  box-shadow: var(--shadow);
+  padding:16px;
 }
+
 .tempo-month{
   font-weight:900;
   letter-spacing:-.4px;
-  margin-bottom:10px;
+  margin-bottom:12px;
+  font-size:16px;
 }
+
 .tempo-grid{
   display:grid;
   grid-template-columns: repeat(7, 1fr);
@@ -2089,27 +2092,34 @@ footer{
 }
 .tempo-date,
 .tempo-blank{
-  height:38px;
-  border-radius:12px;
+  height:42px;
+  border-radius:14px;
   border:1px solid var(--border);
-  background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+  background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
   text-align:center;
   font-weight:800;
   position:relative;
+  box-shadow: var(--shadow-soft);
 }
+
 .tempo-blank{ border-color: transparent; background: transparent; }
 .tempo-date{
   display:grid;
   place-items:center;
 }
+.tempo-date.event{
+  background: rgba(255,59,48,.18);
+  border-color: rgba(255,59,48,.55);
+  box-shadow: 0 10px 20px rgba(255,59,48,.15);
+}
 .tempo-date.event::after{
   content:"";
   position:absolute;
-  inset:6px;
-  border-radius:999px;
-  border:2px solid rgba(255,59,48,.55);
-  background: rgba(255,59,48,.18); /* opacity so date is visible */
+  inset:0;
+  border-radius:14px;
+  border:2px solid rgba(255,59,48,.85);
 }
+
 .tempo-date span{
   position:relative;
   z-index:1;
