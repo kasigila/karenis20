@@ -169,29 +169,35 @@
 
 <body>
 <header>
-  
-<div class="header-actions">
-  <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
-    <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
-      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
-      <circle cx="12" cy="12" r="6" fill="currentColor" />
-      <defs>
-        <clipPath id="themeHalfClip">
-          <circle cx="12" cy="12" r="6" />
-        </clipPath>
-      </defs>
-      <g clip-path="url(#themeHalfClip)">
-        <rect x="12" y="6" width="6" height="12" style="fill: var(--bg-elev);" />
-      </g>
-    </svg>
-  </button>
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="BYZ Home">
+      <span class="brand-logo-wrap" aria-hidden="true">
+        <img class="brand-logo logo-light" src="assets/byz-logo-black.png" alt="" />
+        <img class="brand-logo logo-dark"  src="assets/byz-logo-white.png" alt="" />
+      </span>
+    </a>
 
-  <a class="btn ghost" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
-</div>
+    <div class="header-actions">
+      <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
+          <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="12" cy="12" r="6" fill="currentColor" />
+          <defs>
+            <clipPath id="themeHalfClip">
+              <circle cx="12" cy="12" r="6" />
+            </clipPath>
+          </defs>
+          <g clip-path="url(#themeHalfClip)">
+            <rect x="12" y="6" width="6" height="12" style="fill: var(--bg-elev);" />
+          </g>
+        </svg>
+      </button>
 
-
-  
+      <a class="btn ghost" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
+  </div>
 </header>
+
 
 <main>
   <section class="hero">
