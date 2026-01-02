@@ -21,7 +21,7 @@
     --shadow: 0 18px 60px rgba(0,0,0,.08);
     --shadow-soft: 0 10px 30px rgba(0,0,0,.08);
     --ease: cubic-bezier(.2,.8,.2,1);
-    --max: 900px;
+    --max: 980px;
     --header-h: 64px;
   }
 
@@ -38,13 +38,44 @@
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
     background:var(--bg);
     color:var(--text);
     line-height:1.55;
     transition: background .35s var(--ease), color .35s var(--ease);
+    overflow-x:hidden;
   }
+
+  body::before,
+  body::after{
+    content:"";
+    position:fixed;
+    inset:auto;
+    width:520px;
+    height:520px;
+    border-radius:50%;
+    filter: blur(80px);
+    opacity:.25;
+    pointer-events:none;
+    z-index:-1;
+  }
+  body::before{
+    background: radial-gradient(circle, rgba(0,0,0,.12), transparent 60%);
+    top:-120px; right:-160px;
+  }
+  body::after{
+    background: radial-gradient(circle, rgba(0,0,0,.08), transparent 60%);
+    bottom:-180px; left:-160px;
+  }
+  [data-theme="dark"] body::before{
+    background: radial-gradient(circle, rgba(255,255,255,.08), transparent 60%);
+  }
+  [data-theme="dark"] body::after{
+    background: radial-gradient(circle, rgba(255,255,255,.06), transparent 60%);
+  }
+
   a{color:inherit;text-decoration:none}
   .container{max-width:var(--max);margin:0 auto;padding:0 24px}
 
@@ -73,6 +104,12 @@
   [data-theme="dark"] .logo-light{display:none;}
   [data-theme="dark"] .logo-dark{display:block;}
 
+  .header-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
   .btn{
     display:inline-flex;align-items:center;justify-content:center;
     gap:10px;padding:12px 18px;border-radius:999px;
@@ -84,56 +121,125 @@
   }
   .btn:hover{transform: translateY(-2px); box-shadow: var(--shadow-soft)}
   .btn.primary{background:var(--accent);color:var(--bg);border-color:transparent}
-/* Theme toggle button */
-.theme-btn{
-  width:44px;
-  height:44px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background: var(--bg-elev);
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
-  box-shadow: var(--shadow-soft);
-  color: var(--text);
-}
-.theme-btn:hover{
-  transform: translateY(-1px);
-  box-shadow: var(--shadow);
-}
-.theme-glyph{
-  width:20px;
-  height:20px;
-  display:block;
-}
+  .btn.ghost{background:transparent}
 
-  main{padding-top:var(--header-h)}
-  .hero{
-    padding: 72px 0 24px;
+  .theme-btn{
+    width:44px;
+    height:44px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background: var(--bg-elev);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+    box-shadow: var(--shadow-soft);
+    color: var(--text);
   }
-  .hero h1{
-    font-size: clamp(2.2rem, 5vw, 3.2rem);
+  .theme-btn:hover{
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+  .theme-glyph{
+    width:20px;
+    height:20px;
+    display:block;
+  }
+
+  main{padding-top:calc(var(--header-h) + 22px)}
+
+  .hero{
+    padding: 24px 0 16px;
+  }
+  .hero-card{
+    border-radius: var(--radius-lg);
+    border:1px solid var(--border);
+    background:
+      radial-gradient(800px 300px at 20% 0%, color-mix(in srgb, var(--bg-alt) 70%, transparent), transparent 70%),
+      color-mix(in srgb, var(--bg-elev) 95%, transparent);
+    box-shadow: var(--shadow);
+    padding: 22px;
+  }
+  .hero-title{
+    font-size: clamp(2.1rem, 5vw, 3.2rem);
     letter-spacing:-1px;
   }
-  .hero p{
-    margin-top:10px;color:var(--sub);max-width:60ch;
+  .hero-sub{
+    margin-top:8px;color:var(--sub);max-width:60ch;
+  }
+  .hero-row{
+    margin-top:14px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .hero-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+    font-size:12px;
+    font-weight:700;
+    color:var(--sub);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:16px;
+    margin-top:16px;
   }
 
   .form-card{
-    margin-top:18px;
     border-radius: var(--radius-lg);
     border:1px solid var(--border);
     background: var(--bg-elev);
     box-shadow: var(--shadow);
     padding: 18px;
   }
+  .form-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .form-title{
+    font-weight:900;
+    letter-spacing:-.4px;
+    font-size:18px;
+  }
+  .form-sub{
+    color:var(--sub);
+    font-size:13px;
+  }
+
+  .divider{
+    height:1px;
+    background: var(--border);
+    opacity:.6;
+    margin:12px 0;
+  }
+
+  .form-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:12px;
+  }
+  @media (max-width: 720px){
+    .form-grid{ grid-template-columns: 1fr; }
+  }
+
   .field{
     display:flex;
     flex-direction:column;
     gap:8px;
-    margin-bottom:12px;
   }
   label{font-size:13px;color:var(--sub)}
   input, select, textarea{
@@ -148,12 +254,24 @@
     box-shadow: var(--shadow-soft);
   }
   textarea{min-height:120px;resize:vertical}
+
+  .form-actions{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-top:14px;
+  }
+  .note{
+    font-size:12px;
+    color:var(--sub);
+  }
+
   </style>
 </head>
 
 <body>
 <header>
-  
   <div class="container header-inner">
     <a class="brand" href="index.html" aria-label="BYZ Home">
       <span class="brand-logo-wrap" aria-hidden="true">
@@ -162,72 +280,92 @@
       </span>
     </a>
 
-    <div style="display:flex;gap:10px;align-items:center">
-  <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
-    <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
-      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
-      <circle cx="12" cy="12" r="6" fill="currentColor" />
-      <defs>
-        <clipPath id="themeHalfClip">
-          <circle cx="12" cy="12" r="6" />
-        </clipPath>
-      </defs>
-      <g clip-path="url(#themeHalfClip)">
-        <rect x="12" y="6" width="6" height="12" style="fill: var(--bg-elev);" />
-      </g>
-    </svg>
-  </button>
+    <div class="header-actions">
+      <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
+          <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="12" cy="12" r="6" fill="currentColor" />
+          <defs>
+            <clipPath id="themeHalfClip">
+              <circle cx="12" cy="12" r="6" />
+            </clipPath>
+          </defs>
+          <g clip-path="url(#themeHalfClip)">
+            <rect x="12" y="6" width="6" height="12" style="fill: var(--bg-elev);" />
+          </g>
+        </svg>
+      </button>
 
-  <a class="btn" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
-</div>
-
-  
+      <a class="btn ghost" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
+  </div>
 </header>
 
 <main>
   <section class="hero">
-    <div class="container">
-      <h1>APT Session Invite Request</h1>
-      <p>Private, invite-only. Drop your details and we’ll confirm availability.</p>
+    <div class="container hero-card">
+      <div class="hero-title">APT Session Invite Request</div>
+      <p class="hero-sub">Private, invite‑only. Submit your details and we’ll confirm availability with you directly.</p>
+
+      <div class="hero-row">
+        <span class="hero-pill"><i class="fa-solid fa-lock"></i> Invite‑Only Access</span>
+        <span class="hero-pill"><i class="fa-solid fa-location-dot"></i> Dar es Salaam</span>
+        <span class="hero-pill"><i class="fa-brands fa-whatsapp"></i> WhatsApp Reply</span>
+      </div>
     </div>
   </section>
 
-  <section>
+  <section class="layout">
     <div class="container form-card">
+      <div class="form-head">
+        <div>
+          <div class="form-title">Request Form</div>
+          <div class="form-sub">We respond within 24 hours.</div>
+        </div>
+        <span class="hero-pill"><i class="fa-solid fa-shield-halved"></i> Secure</span>
+      </div>
+
+      <div class="divider"></div>
+
       <form id="aptForm">
-        <div class="field">
-          <label for="aptName">Full Name</label>
-          <input id="aptName" required />
-        </div>
-        <div class="field">
-          <label for="aptPhone">WhatsApp Number</label>
-          <input id="aptPhone" required />
-        </div>
-        <div class="field">
-          <label for="aptIg">Instagram Handle</label>
-          <input id="aptIg" placeholder="@handle" />
-        </div>
-        <div class="field">
-          <label for="aptSize">Group Size</label>
-          <select id="aptSize">
-            <option>2–4</option>
-            <option>5–8</option>
-            <option>9–12</option>
-            <option>13+</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="aptDate">Preferred Date</label>
-          <input id="aptDate" type="date" />
-        </div>
-        <div class="field">
-          <label for="aptNotes">Notes</label>
-          <textarea id="aptNotes" placeholder="Any preferences or special requests"></textarea>
+        <div class="form-grid">
+          <div class="field">
+            <label for="aptName">Full Name</label>
+            <input id="aptName" required />
+          </div>
+          <div class="field">
+            <label for="aptPhone">WhatsApp Number</label>
+            <input id="aptPhone" required />
+          </div>
+          <div class="field">
+            <label for="aptIg">Instagram Handle</label>
+            <input id="aptIg" placeholder="@handle" />
+          </div>
+          <div class="field">
+            <label for="aptSize">Group Size</label>
+            <select id="aptSize">
+              <option>2–4</option>
+              <option>5–8</option>
+              <option>9–12</option>
+              <option>13+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="aptDate">Preferred Date</label>
+            <input id="aptDate" type="date" />
+          </div>
+          <div class="field">
+            <label for="aptNotes">Notes</label>
+            <textarea id="aptNotes" placeholder="Any preferences or special requests"></textarea>
+          </div>
         </div>
 
-        <button class="btn primary" type="submit">
-          <i class="fa-solid fa-paper-plane"></i> Request Invite
-        </button>
+        <div class="form-actions">
+          <button class="btn primary" type="submit">
+            <i class="fa-solid fa-paper-plane"></i> Request Invite
+          </button>
+          <span class="note">Submitting opens WhatsApp with your details.</span>
+        </div>
       </form>
     </div>
   </section>
@@ -264,7 +402,8 @@ Notes: ${notes || "-"}`;
   });
 })();
 </script>
-  <script>
+
+<script>
 /* =========================================================
    APPLE-STYLE DARK MODE (MATCH INDEX)
 ========================================================= */
