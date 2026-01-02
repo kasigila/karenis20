@@ -86,6 +86,31 @@
   .btn.primary{background:var(--accent);color:var(--bg);border-color:transparent}
   .btn.ghost{background:transparent}
 
+    /* Theme toggle button */
+.theme-btn{
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+}
+.theme-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.theme-glyph{
+  width:20px;
+  height:20px;
+  display:block;
+}
+
   main{padding-top:var(--header-h)}
   .hero{
     padding: 72px 0 40px;
@@ -137,18 +162,27 @@
 
 <body>
 <header>
-  <div class="container header-inner">
-    <a class="brand" href="index.html" aria-label="BYZ Home">
-      <span class="brand-logo-wrap" aria-hidden="true">
-        <img class="brand-logo logo-light" src="assets/byz-logo-black.png" alt="" />
-        <img class="brand-logo logo-dark"  src="assets/byz-logo-white.png" alt="" />
-      </span>
-    </a>
+  
+  <div style="display:flex;gap:10px;align-items:center">
+  <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
+    <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
+      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
+      <circle cx="12" cy="12" r="6" fill="currentColor" />
+      <defs>
+        <clipPath id="themeHalfClip">
+          <circle cx="12" cy="12" r="6" />
+        </clipPath>
+      </defs>
+      <g clip-path="url(#themeHalfClip)">
+        <rect x="12" y="6" width="6" height="12" style="fill: var(--bg-elev);" />
+      </g>
+    </svg>
+  </button>
 
-    <div style="display:flex;gap:10px;align-items:center">
-      <a class="btn ghost" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
-    </div>
-  </div>
+  <a class="btn ghost" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+</div>
+
+  
 </header>
 
 <main>
@@ -164,7 +198,7 @@
       <div class="card">
         <div class="card-media" style="background:linear-gradient(135deg,#1a1a1a,#2f2f2f)"></div>
         <div class="card-body">
-          <h3>Groove RnB</h3>
+          <h3>RnB Groove </h3>
           <p>Slow-burn RnB nights with velvet sound and candlelit energy.</p>
           <div class="card-actions">
             <a class="btn primary" href="booking.html">Book</a>
@@ -175,7 +209,7 @@
       <div class="card">
         <div class="card-media" style="background:linear-gradient(135deg,#0b0b0c,#3b2b1f)"></div>
         <div class="card-body">
-          <h3>Groove Afrobeats</h3>
+          <h3>Afrobeats Groove</h3>
           <p>High‑energy Afrobeats selections, dancefloor-first.</p>
           <div class="card-actions">
             <a class="btn primary" href="booking.html">Book</a>
@@ -186,7 +220,7 @@
       <div class="card">
         <div class="card-media" style="background:linear-gradient(135deg,#1c0f1a,#3b1a2a)"></div>
         <div class="card-body">
-          <h3>Groove Caribbean</h3>
+          <h3>Caribbean Groove </h3>
           <p>Dancehall, reggae, and island heat all night.</p>
           <div class="card-actions">
             <a class="btn primary" href="booking.html">Book</a>
@@ -223,5 +257,41 @@
     </div>
   </section>
 </main>
+  <script>
+/* =========================================================
+   APPLE-STYLE DARK MODE (MATCH INDEX)
+========================================================= */
+(function() {
+  const root = document.documentElement;
+  const toggle = document.getElementById("themeToggle");
+  const stored = localStorage.getItem("theme");
+
+  function applyTheme(theme) {
+    if (theme === "dark") root.setAttribute("data-theme","dark");
+    else root.setAttribute("data-theme","light");
+    if (toggle){
+      toggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+      toggle.title = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+    }
+  }
+
+  if (stored) {
+    applyTheme(stored);
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(prefersDark ? "dark" : "light");
+  }
+
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      const isDark = root.getAttribute("data-theme") === "dark";
+      const next = isDark ? "light" : "dark";
+      applyTheme(next);
+      localStorage.setItem("theme", next);
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
