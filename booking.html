@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BYZ Booking</title>
+  <title>BYZ Groove Booking</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
   <style>
-    /* ===================== APPLE-LIKE DESIGN TOKENS (MATCH INDEX) ===================== */
     :root{
       --bg:#ffffff;
       --bg-alt:#f5f5f7;
@@ -44,36 +43,29 @@
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
     html{scroll-behavior:smooth; scroll-padding-top: calc(var(--header-h) + 24px);}
     body{
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.55;
-  transition: background .35s var(--ease), color .35s var(--ease);
-  overflow-x:hidden;
-
-  /* FIX: always push page content below the fixed header */
-  padding-top: calc(var(--header-h) + env(safe-area-inset-top));
-}
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.55;
+      transition: background .35s var(--ease), color .35s var(--ease);
+      overflow-x:hidden;
+      padding-top: calc(var(--header-h) + env(safe-area-inset-top));
+    }
     a{color:inherit;text-decoration:none}
     .container{max-width:var(--max);margin:0 auto;padding:0 24px}
 
-    /* ===================== HEADER ===================== */
     header{
-  position:fixed;
-  top:0;left:0;right:0;
-
-  /* FIX: account for iPhone notch + Safari */
-  padding-top: env(safe-area-inset-top);
-  height: calc(var(--header-h) + env(safe-area-inset-top));
-
-  background: color-mix(in srgb, var(--bg) 86%, transparent);
-  backdrop-filter: blur(18px);
-  border-bottom:1px solid var(--border);
-  z-index:999;
-}
+      position:fixed;
+      top:0;left:0;right:0;
+      padding-top: env(safe-area-inset-top);
+      height: calc(var(--header-h) + env(safe-area-inset-top));
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(18px);
+      border-bottom:1px solid var(--border);
+      z-index:999;
+    }
     .header-inner{
       height:var(--header-h);
       display:flex;align-items:center;justify-content:space-between;
@@ -119,11 +111,10 @@
     .theme-btn:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
     .theme-btn i{font-size:18px;color:var(--text)}
 
-    /* ===================== PAGE ===================== */
     main{
-  padding-top: 28px;
-  padding-bottom: 90px;
-}
+      padding-top: 28px;
+      padding-bottom: 90px;
+    }
     .hero{
       margin-top: 8px;
       border-radius: var(--radius-lg);
@@ -192,7 +183,6 @@
       transition: width .35s var(--ease);
     }
 
-    /* ===================== CARD SECTIONS ===================== */
     .grid{
       display:grid;
       grid-template-columns: 1.05fr .95fr;
@@ -225,7 +215,6 @@
       padding: 18px;
     }
 
-    /* ===================== CHOICES ===================== */
     .choice-grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -265,11 +254,9 @@
     }
     .choice .icon i{color:var(--text)}
 
-    /* ===================== STEPS ===================== */
     .step{display:none}
     .step.active{display:block}
 
-    /* Ticket Selector */
     .selector{
       margin-top: 12px;
       border-radius: 22px;
@@ -329,7 +316,6 @@
       white-space:nowrap;
     }
 
-    /* Packages */
     .packages{
       margin-top: 12px;
       display:grid;
@@ -381,7 +367,6 @@
     .package li{font-size:13px;color:var(--sub)}
     .package li i{margin-right:8px;color:var(--text)}
 
-    /* Payment */
     .paybox{
       margin-top: 12px;
       border-radius: var(--radius-lg);
@@ -435,7 +420,6 @@
       flex:0 0 auto;
     }
 
-    /* Form */
     .form{
       margin-top: 12px;
       display:flex;
@@ -462,8 +446,6 @@
       color: var(--sub);
       font-size: 13px;
     }
-
-    /* Small footer */
     .foot{
       margin-top: 16px;
       color: var(--sub);
@@ -471,13 +453,12 @@
       text-align:center;
     }
 
-    /* Mobile padding */
     @media (max-width: 520px){
       .hero-inner{padding: 22px 16px}
       .card-head{padding: 16px 16px 0}
       .card-body{padding: 16px}
     }
-    /* ===================== TOAST (BOOKING SUBMITTED) ===================== */
+
 .toast{
   position: fixed;
   left: 50%;
@@ -489,13 +470,11 @@
   transition: opacity .25s var(--ease), transform .25s var(--ease);
   width: min(520px, calc(100% - 24px));
 }
-
 .toast.show{
   opacity: 1;
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
 }
-
 .toast-card{
   border-radius: 22px;
   border: 1px solid var(--border);
@@ -507,27 +486,23 @@
   gap: 12px;
   align-items: flex-start;
 }
-
 .toast-body{
   flex: 1;
   color: var(--text);
   font-size: 14px;
   line-height: 1.35;
 }
-
 .toast-sub{
   margin-top: 6px;
   color: var(--sub);
   font-size: 13px;
 }
-
 .toast-actions{
   margin-top: 10px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
-
 .toast-link{
   display: inline-flex;
   align-items: center;
@@ -542,7 +517,6 @@
   text-decoration: none;
   box-shadow: var(--shadow-soft);
 }
-
 .toast-close{
   width: 36px;
   height: 36px;
@@ -555,9 +529,7 @@
   place-items: center;
   flex: 0 0 auto;
 }
-
 .toast-close i{ font-size: 14px; }
-    
   </style>
 </head>
 
@@ -566,9 +538,9 @@
     <div class="container header-inner">
       <a class="brand" href="./index.html" aria-label="BYZ Home">
         <span class="brand-logo-wrap" aria-hidden="true">
-    <img class="brand-logo logo-light" src="assets/byz-logo-black.png" alt="" />
-    <img class="brand-logo logo-dark"  src="assets/byz-logo-white.png" alt="" />
-  </span>
+          <img class="brand-logo logo-light" src="assets/byz-logo-black.png" alt="" />
+          <img class="brand-logo logo-dark"  src="assets/byz-logo-white.png" alt="" />
+        </span>
       </a>
 
       <div class="top-actions">
@@ -587,7 +559,7 @@
     <section class="hero">
       <div class="hero-inner">
         <div>
-          <h1>Book your BYZ experience</h1>
+          <h1>Book your Groove experience</h1>
           <p>
             Choose tickets or a VIP table, complete M-Pesa payment, then submit your details.
             WhatsApp will open for verification... just press <b>SEND</b>.
@@ -605,14 +577,25 @@
     </section>
 
     <div class="grid">
-      <!-- LEFT: selection + steps -->
+      <!-- LEFT -->
       <section class="card">
         <div class="card-head">
-          <h2>1) Choose booking type</h2>
-          <p>Tickets for individuals & VIP tables for groups.</p>
+          <h2>1) Choose Groove Series</h2>
+          <p>Select which Groove experience you’re booking.</p>
         </div>
 
         <div class="card-body">
+          <div class="selector">
+            <h3 style="letter-spacing:-.3px;">Groove Type</h3>
+            <div class="controls">
+              <select id="grooveType">
+                <option value="rnb">RnB Groove</option>
+                <option value="afrobeats">Afrobeats Groove</option>
+                <option value="caribbean">Caribbean Groove</option>
+              </select>
+            </div>
+          </div>
+
           <div class="choice-grid">
             <div class="choice" onclick="selectType('TICKET', this)" role="button" tabindex="0">
               <div class="row">
@@ -635,13 +618,11 @@
             </div>
           </div>
 
-          <!-- TICKET SELECTOR -->
           <div class="step" id="ticketStep">
             <div class="selector">
               <h3 style="letter-spacing:-.3px;">Select number of tickets</h3>
               <div class="controls">
                 <button class="btn ghost" type="button" onclick="stepTicket(-1)"><i class="fa-solid fa-minus"></i></button>
-
                 <select id="ticketQty" onchange="updateTicketPrice()">
                   <option value="1">1 Ticket</option>
                   <option value="2">2 Tickets</option>
@@ -654,15 +635,12 @@
                   <option value="9">9 Tickets</option>
                   <option value="10">10 Tickets</option>
                 </select>
-
                 <button class="btn ghost" type="button" onclick="stepTicket(1)"><i class="fa-solid fa-plus"></i></button>
-
                 <div class="price-display" id="ticketTotal">30,000 TZS</div>
               </div>
             </div>
           </div>
 
-          <!-- TABLES -->
           <div class="step" id="tablesStep">
             <h3 style="letter-spacing:-.3px;margin-top:14px;">Choose your VIP package</h3>
             <p class="muted">Each tier has limited availability.</p>
@@ -671,7 +649,7 @@
         </div>
       </section>
 
-      <!-- RIGHT: payment + form -->
+      <!-- RIGHT -->
       <section class="card">
         <div class="card-head">
           <h2>2) Pay + submit details</h2>
@@ -679,7 +657,6 @@
         </div>
 
         <div class="card-body">
-          <!-- PAYMENT -->
           <div class="step" id="paymentStep">
             <div class="paybox">
               <div class="paygrid">
@@ -716,7 +693,6 @@
             </div>
           </div>
 
-          <!-- FORM -->
           <div class="step" id="formStep">
             <div class="form">
               <input id="fullName" placeholder="Full Name" autocomplete="name">
@@ -740,14 +716,14 @@
   </main>
 
   <script>
-    /* ===================== UNCHANGED BACKEND CONSTANTS ===================== */
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
     const BYZ_WHATSAPP = "255768464367";
     const TICKET_PRICE = 30000;
+    const EVENT_KEY = "groove";
 
     let bookingType="", tier="", ticketQty=1, availability=[];
+    let grooveType = "rnb";
 
-    /* ===================== THEME (MATCH INDEX) ===================== */
     (function initTheme(){
       const saved = localStorage.getItem("byz_theme");
       if(saved === "dark"){ document.body.setAttribute("data-theme","dark"); }
@@ -759,17 +735,14 @@
       localStorage.setItem("byz_theme", isDark ? "light" : "dark");
     }
 
-    /* ===================== PROGRESS ===================== */
     function setProgress(pct){
       const bar = document.getElementById("progressBar");
       bar.style.width = pct + "%";
     }
     setProgress(25);
 
-    /* ===================== COPY MPESA ===================== */
     function copyMpesa(){
       const number = document.getElementById("mpesaNumber").innerText.trim();
-
       if (navigator.clipboard) {
         navigator.clipboard.writeText(number);
       } else {
@@ -780,14 +753,11 @@
         document.execCommand("copy");
         document.body.removeChild(temp);
       }
-
       alert("Lipa number copied. Open M-Pesa to complete payment.");
     }
 
-    /* ===================== TYPE SELECT ===================== */
     function selectType(type, el){
       bookingType = type;
-
       document.querySelectorAll(".choice").forEach(c => c.classList.remove("active"));
       el.classList.add("active");
 
@@ -806,7 +776,6 @@
       setProgress(66);
     }
 
-    /* ===================== TICKET PRICE ===================== */
     function updateTicketPrice(){
       const qtyEl = document.getElementById("ticketQty");
       ticketQty = Number(qtyEl.value || 1);
@@ -822,17 +791,14 @@
       qtyEl.value = String(next);
       updateTicketPrice();
     }
-
     updateTicketPrice();
 
-    /* ===================== TABLES AVAILABILITY ===================== */
     function safeArrayBookings(d){
-      // expect { bookings: [...] }
       if(d && Array.isArray(d.bookings)) return d.bookings;
       return [];
     }
 
-    fetch(SCRIPT_URL)
+    fetch(SCRIPT_URL + "?event=" + EVENT_KEY)
       .then(r => r.json())
       .then(d => {
         availability = safeArrayBookings(d);
@@ -845,10 +811,10 @@
 
     function renderTables(){
       const tiers = [
-  {id:"700K", label:"Umlando", price:700000, features:["2 × Cognac VS","Mixers/Chasers","Shisha","10 Pax (People)"]},
-  {id:"1.2M", label:"Yebo", price:1200000, features:["3 × Cognac VS","Mixers/Chasers","2 × Shisha","15 Pax (People)"]},
-  {id:"1.8M", label:"Adiwele", price:1800000, features:["4 × Cognac VS","Mixers/Chasers","2 × Shisha","20 Pax (People)"]}
-];
+        {id:"700K", label:"Umlando", price:700000, features:["2 × Cognac VS","Mixers/Chasers","Shisha","10 Pax (People)"]},
+        {id:"1.2M", label:"Yebo", price:1200000, features:["3 × Cognac VS","Mixers/Chasers","2 × Shisha","15 Pax (People)"]},
+        {id:"1.8M", label:"Adiwele", price:1800000, features:["4 × Cognac VS","Mixers/Chasers","2 × Shisha","20 Pax (People)"]}
+      ];
 
       const container = document.getElementById("packages");
       container.innerHTML = "";
@@ -887,100 +853,99 @@
       });
     }
 
-    /* ===================== SUBMIT (KEEP YOUR INNER WORKINGS) ===================== */
     function getOrderQuantity(){
-  if(bookingType === "TICKET") return ticketQty;
+      if(bookingType === "TICKET") return ticketQty;
+      if(tier === "700K") return 10;
+      if(tier === "1.2M") return 15;
+      if(tier === "1.8M") return 20;
+      return 1;
+    }
 
-  // VIP tables = wristbands for pax count
-  if(tier === "700K") return 10;
-  if(tier === "1.2M") return 15;
-  if(tier === "1.8M") return 20;
+    function getGrooveLabel(){
+      if(grooveType === "afrobeats") return "Afrobeats Groove";
+      if(grooveType === "caribbean") return "Caribbean Groove";
+      return "RnB Groove";
+    }
 
-  return 1;
-}
     let __submittingBooking = false;
 
-async function submitBooking(){
-  // ✅ hard block double taps / lag taps
-  if(__submittingBooking) return;
-  __submittingBooking = true;
+    async function submitBooking(){
+      if(__submittingBooking) return;
+      __submittingBooking = true;
 
-  // ✅ disable the actual button so user can't click twice
-  const btn = document.querySelector('button.btn.primary[onclick="submitBooking()"]');
-  const btnText = btn ? btn.innerHTML : "";
-  if(btn){
-    btn.disabled = true;
-    btn.style.opacity = "0.7";
-    btn.style.pointerEvents = "none";
-    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
-  }
-
-  let amount = 0, desc = "";
-
-  if(bookingType === "TICKET"){
-    amount = ticketQty * TICKET_PRICE;
-    desc = `${ticketQty} Ticket(s)`;
-  } else {
-    if(!tier){
+      const btn = document.querySelector('button.btn.primary[onclick="submitBooking()"]');
+      const btnText = btn ? btn.innerHTML : "";
       if(btn){
-        btn.disabled = false;
-        btn.style.opacity = "";
-        btn.style.pointerEvents = "";
-        btn.innerHTML = btnText;
+        btn.disabled = true;
+        btn.style.opacity = "0.7";
+        btn.style.pointerEvents = "none";
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
       }
-      __submittingBooking = false;
-      return alert("Select a VIP table");
-    }
-    amount = tier === "700K" ? 700000 : tier === "1.2M" ? 1200000 : 1800000;
-    desc = `VIP Table ${tier}`;
-  }
 
-  const quantity = getOrderQuantity();
+      let amount = 0, desc = "";
+      const grooveLabel = getGrooveLabel();
 
-  const data = {
-    bookingType,
-    tier,
-    description: desc,
-    quantity,
-    checkedInCount: 0,
-    amount,
-    name: fullName.value,
-    phone: phone.value,
-    email: email.value,
-    transactionCode: txn.value,
+      if(bookingType === "TICKET"){
+        amount = ticketQty * TICKET_PRICE;
+        desc = `${grooveLabel} • ${ticketQty} Ticket(s)`;
+      } else {
+        if(!tier){
+          if(btn){
+            btn.disabled = false;
+            btn.style.opacity = "";
+            btn.style.pointerEvents = "";
+            btn.innerHTML = btnText;
+          }
+          __submittingBooking = false;
+          return alert("Select a VIP table");
+        }
+        amount = tier === "700K" ? 700000 : tier === "1.2M" ? 1200000 : 1800000;
+        desc = `${grooveLabel} • VIP Table ${tier}`;
+      }
 
-    // ✅ idempotency key (prevents duplicate rows if user taps twice)
-    requestId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2))
-  };
+      const quantity = getOrderQuantity();
 
-  if(!data.name || !data.phone || !data.transactionCode){
-    if(btn){
-      btn.disabled = false;
-      btn.style.opacity = "";
-      btn.style.pointerEvents = "";
-      btn.innerHTML = btnText;
-    }
-    __submittingBooking = false;
-    return alert("Please enter Name, Phone, and Transaction ID.");
-  }
+      const data = {
+        eventKey: EVENT_KEY,
+        grooveType,
+        bookingType,
+        tier,
+        description: desc,
+        quantity,
+        checkedInCount: 0,
+        amount,
+        name: fullName.value,
+        phone: phone.value,
+        email: email.value,
+        transactionCode: txn.value,
+        requestId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2))
+      };
 
-  try{
-    
-    const res = await fetch(SCRIPT_URL, {
-  method: "POST",
-  headers: { "Content-Type": "text/plain;charset=utf-8" },
-  body: JSON.stringify({ action: "addBooking", data }),
-  keepalive: true
-}).then(r => r.json());
+      if(!data.name || !data.phone || !data.transactionCode){
+        if(btn){
+          btn.disabled = false;
+          btn.style.opacity = "";
+          btn.style.pointerEvents = "";
+          btn.innerHTML = btnText;
+        }
+        __submittingBooking = false;
+        return alert("Please enter Name, Phone, and Transaction ID.");
+      }
 
-// tiny buffer so Safari/iPhone doesn’t cut anything off before the redirect
-await new Promise(r => setTimeout(r, 700));
+      try{
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "addBooking", data }),
+          keepalive: true
+        }).then(r => r.json());
 
-    const bookingId = res && res.bookingId ? res.bookingId : "(pending)";
+        await new Promise(r => setTimeout(r, 700));
 
-    // ✅ WhatsApp open (works better than window.open on iPhone Safari)
-    const msg =
-`NEW BYZ BOOKING
+        const bookingId = res && res.bookingId ? res.bookingId : "(pending)";
+
+        const msg =
+`NEW BYZ BOOKING (GROOVE)
 BookingID: ${bookingId}
 Name: ${data.name}
 Phone: ${data.phone}
@@ -989,34 +954,30 @@ Qty: ${quantity}
 Amount: ${amount}
 Txn: ${data.transactionCode}`;
 
-    const waUrl = `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+        const waUrl = `https://wa.me/${BYZ_WHATSAPP}?text=${encodeURIComponent(msg)}`;
 
-// ✅ Save state so when they come back, we can show “Booking submitted”
-sessionStorage.setItem("byz_last_wa", waUrl);
-sessionStorage.setItem("byz_last_ts", String(Date.now()));
-sessionStorage.setItem("byz_last_bookingId", bookingId);
-sessionStorage.setItem("byz_last_status", "submitted");
+        sessionStorage.setItem("byz_last_wa", waUrl);
+        sessionStorage.setItem("byz_last_ts", String(Date.now()));
+        sessionStorage.setItem("byz_last_bookingId", bookingId);
+        sessionStorage.setItem("byz_last_status", "submitted");
 
-setProgress(100);
+        setProgress(100);
+        window.location.href = waUrl;
 
-// Use same-tab navigation to avoid popup blocking
-window.location.href = waUrl;
+      }catch(err){
+        console.error(err);
+        alert("Booking failed. Please try again.");
 
-  }catch(err){
-    console.error(err);
-    alert("Booking failed. Please try again.");
-
-    // re-enable if failed
-    if(btn){
-      btn.disabled = false;
-      btn.style.opacity = "";
-      btn.style.pointerEvents = "";
-      btn.innerHTML = btnText;
+        if(btn){
+          btn.disabled = false;
+          btn.style.opacity = "";
+          btn.style.pointerEvents = "";
+          btn.innerHTML = btnText;
+        }
+        __submittingBooking = false;
+      }
     }
-    __submittingBooking = false;
-  }
-}
-    /* ===================== TOAST HELPERS ===================== */
+
 let __toastTimer = null;
 
 function ensureToast(){
@@ -1074,17 +1035,14 @@ function showBookingSubmittedUI(){
   const bookingId = sessionStorage.getItem("byz_last_bookingId") || "";
   const wa = sessionStorage.getItem("byz_last_wa") || "";
 
-  // update the small text under the button
   const notice = document.querySelector("#formStep .notice");
   if(notice){
     notice.innerHTML = `Booking submitted ✅ WhatsApp opened — press <b>SEND</b> to verify payment.`;
   }
 
-  // optional: clear footer so it doesn’t look cluttered
   const foot = document.querySelector(".foot");
   if(foot){ foot.innerHTML = ""; }
 
-  // ✅ show toast popup
   const toastHtml = `
     <div><b>Booking submitted ✅</b></div>
     ${bookingId ? `<div class="toast-sub">Booking ID: <b>${bookingId}</b></div>` : ``}
@@ -1101,7 +1059,6 @@ function handleReturnFromWhatsApp(){
   const status = sessionStorage.getItem("byz_last_status");
   const ts = Number(sessionStorage.getItem("byz_last_ts") || "0");
 
-  // ✅ only show “Booking submitted” if they came back recently
   if(status === "submitted" && (Date.now() - ts < 10 * 60 * 1000)){
     resetSubmitUI();
     showBookingSubmittedUI();
@@ -1110,16 +1067,27 @@ function handleReturnFromWhatsApp(){
   }
 }
 
-// iOS Safari + back/forward cache
 window.addEventListener("pageshow", handleReturnFromWhatsApp);
-
-// Coming back from WhatsApp often triggers focus/visibility instead of pageshow
 window.addEventListener("focus", handleReturnFromWhatsApp);
 
 document.addEventListener("visibilitychange", () => {
   if(!document.hidden) handleReturnFromWhatsApp();
 });
-    
+
+    (function initGrooveTypeFromURL(){
+      const params = new URLSearchParams(window.location.search);
+      const type = (params.get("type") || "").toLowerCase().trim();
+      if(type === "rnb" || type === "afrobeats" || type === "caribbean"){
+        grooveType = type;
+        const sel = document.getElementById("grooveType");
+        if(sel) sel.value = type;
+      }
+    })();
+
+    document.getElementById("grooveType")?.addEventListener("change", (e) => {
+      grooveType = e.target.value;
+    });
+
   </script>
 </body>
 </html>
