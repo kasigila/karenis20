@@ -84,6 +84,30 @@
   }
   .btn:hover{transform: translateY(-2px); box-shadow: var(--shadow-soft)}
   .btn.primary{background:var(--accent);color:var(--bg);border-color:transparent}
+/* Theme toggle button */
+.theme-btn{
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+}
+.theme-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.theme-glyph{
+  width:20px;
+  height:20px;
+  display:block;
+}
 
   main{padding-top:var(--header-h)}
   .hero{
@@ -129,6 +153,7 @@
 
 <body>
 <header>
+  
   <div class="container header-inner">
     <a class="brand" href="index.html" aria-label="BYZ Home">
       <span class="brand-logo-wrap" aria-hidden="true">
@@ -137,8 +162,26 @@
       </span>
     </a>
 
-    <a class="btn" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
-  </div>
+    <div style="display:flex;gap:10px;align-items:center">
+  <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
+    <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
+      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
+      <circle cx="12" cy="12" r="6" fill="currentColor" />
+      <defs>
+        <clipPath id="themeHalfClip">
+          <circle cx="12" cy="12" r="6" />
+        </clipPath>
+      </defs>
+      <g clip-path="url(#themeHalfClip)">
+        <rect x="12" y="6" width="6" height="12" style="fill: var(--bg-elev);" />
+      </g>
+    </svg>
+  </button>
+
+  <a class="btn" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+</div>
+
+  
 </header>
 
 <main>
@@ -221,5 +264,41 @@ Notes: ${notes || "-"}`;
   });
 })();
 </script>
+  <script>
+/* =========================================================
+   APPLE-STYLE DARK MODE (MATCH INDEX)
+========================================================= */
+(function() {
+  const root = document.documentElement;
+  const toggle = document.getElementById("themeToggle");
+  const stored = localStorage.getItem("theme");
+
+  function applyTheme(theme) {
+    if (theme === "dark") root.setAttribute("data-theme","dark");
+    else root.setAttribute("data-theme","light");
+    if (toggle){
+      toggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+      toggle.title = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+    }
+  }
+
+  if (stored) {
+    applyTheme(stored);
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(prefersDark ? "dark" : "light");
+  }
+
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      const isDark = root.getAttribute("data-theme") === "dark";
+      const next = isDark ? "light" : "dark";
+      applyTheme(next);
+      localStorage.setItem("theme", next);
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
