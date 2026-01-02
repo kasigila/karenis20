@@ -1707,6 +1707,45 @@ section{padding: 92px 0}
   font-size:12px;
 }
 .platform a:hover{box-shadow: var(--shadow-soft)}
+/* === CONNECT: TINTED GLASS CARDS === */
+.platform{
+  position:relative;
+  overflow:hidden;
+}
+
+/* subtle glass glow */
+.platform::before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background: radial-gradient(600px 220px at 20% 20%, rgba(255,255,255,.45), transparent 60%);
+  opacity:.25;
+  pointer-events:none;
+}
+
+/* per-platform tint */
+.platform.instagram{
+  background:
+    linear-gradient(180deg, rgba(225,48,108,.12), rgba(225,48,108,.04));
+}
+.platform.tiktok{
+  background:
+    linear-gradient(180deg, rgba(0,242,234,.12), rgba(0,242,234,.04));
+}
+.platform.whatsapp{
+  background:
+    linear-gradient(180deg, rgba(37,211,102,.12), rgba(37,211,102,.04));
+}
+.platform.youtube{
+  background:
+    linear-gradient(180deg, rgba(255,0,0,.12), rgba(255,0,0,.04));
+}
+
+/* clean Apple-like hover */
+.platform:hover{
+  box-shadow: var(--shadow);
+  transform: translateY(-4px);
+}
 
 /* ===================== FOOTER ===================== */
 footer{
@@ -3192,22 +3231,22 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
       </div>
 
       <div class="connect-grid stagger reveal">
-        <div class="platform">
+        <div class="platform instagram">
           <h3>Instagram</h3>
           <p>Daily updates and behind-the-scenes moments.</p>
           <a href="https://www.instagram.com/byzinthehood" target="_blank" rel="noopener">Open Instagram</a>
         </div>
-        <div class="platform">
+        <div class="platform tiktok">
           <h3>TikTok</h3>
           <p>Viral moments, highlights, and quick event recaps.</p>
           <a href="https://www.tiktok.com/@byzinthehood" target="_blank" rel="noopener">Open TikTok</a>
         </div>
-        <div class="platform">
+        <div class="platform whatsapp">
           <h3>WhatsApp Booking</h3>
           <p>Fastest way to reserve a table or ask a question.</p>
           <a href="https://wa.me/255768464367" target="_blank" rel="noopener">Chat on WhatsApp</a>
         </div>
-        <div class="platform">
+        <div class="platform youtube">
           <h3>YouTube</h3>
           <p>Challenges, and exclusive content.</p>
           <a href="https://www.youtube.com/@byzinthehood" target="_blank" rel="noopener">Open YouTube</a>
