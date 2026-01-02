@@ -346,15 +346,16 @@
             <label for="aptIg">Instagram Handle</label>
             <input id="aptIg" placeholder="@handle" />
           </div>
+          
           <div class="field">
-            <label for="aptSize">Group Size</label>
-            <select id="aptSize">
-              <option>2–4</option>
-              <option>5–8</option>
-              <option>9–12</option>
-              <option>13+</option>
-            </select>
-          </div>
+  <label for="aptBefore">Have you been to APT before?</label>
+  <select id="aptBefore" required>
+    <option value="" selected disabled>Select</option>
+    <option>Yes</option>
+    <option>No</option>
+  </select>
+</div>
+
           
           <div class="field">
             <label for="aptNotes">Notes</label>
@@ -386,18 +387,18 @@
     const name = document.getElementById("aptName").value.trim();
     const phone = document.getElementById("aptPhone").value.trim();
     const ig = document.getElementById("aptIg").value.trim();
-    const size = document.getElementById("aptSize").value;
+    const before = document.getElementById("aptBefore").value;
     const date = document.getElementById("aptDate").value;
     const notes = document.getElementById("aptNotes").value.trim();
 
-    const msg =
+   const msg =
 `APT INVITE REQUEST
 Name: ${name}
 Phone: ${phone}
 Instagram: ${ig || "-"}
-Group size: ${size}
-Preferred date: ${date || "-"}
+Been to APT before: ${before}
 Notes: ${notes || "-"}`;
+
 
     const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
     window.location.href = url;
