@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rate the BYZ Experience</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --bg-alt:#f5f5f7;
+      --bg-elev:#ffffff;
+      --text:#1d1d1f;
+      --sub:#6e6e73;
+      --border:#d2d2d7;
+      --accent:#000000;
+      --ok:#0a7f3f;
+      --warn:#b45309;
+
+      --radius: 22px;
+      --radius-lg: 28px;
+      --shadow: 0 18px 60px rgba(0,0,0,.08);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,.08);
+      --ease: cubic-bezier(.2,.8,.2,1);
+      --max: 980px;
+      --header-h: 64px;
+    }
+
+    [data-theme="dark"]{
+      --bg:#000000;
+      --bg-alt:#1c1c1e;
+      --bg-elev:#0b0b0c;
+      --text:#f5f5f7;
+      --sub:#a1a1a6;
+      --border:#2c2c2e;
+      --accent:#ffffff;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.55;
+      transition: background .35s var(--ease), color .35s var(--ease);
+      overflow-x:hidden;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      inset:auto;
+      width:520px;
+      height:520px;
+      border-radius:50%;
+      filter: blur(80px);
+      opacity:.25;
+      pointer-events:none;
+      z-index:-1;
+    }
+    body::before{
+      background: radial-gradient(circle, rgba(0,0,0,.12), transparent 60%);
+      top:-120px; right:-160px;
+    }
+    body::after{
+      background: radial-gradient(circle, rgba(0,0,0,.08), transparent 60%);
+      bottom:-180px; left:-160px;
+    }
+    [data-theme="dark"] body::before{
+      background: radial-gradient(circle, rgba(255,255,255,.08), transparent 60%);
+    }
+    [data-theme="dark"] body::after{
+      background: radial-gradient(circle, rgba(255,255,255,.06), transparent 60%);
+    }
+
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max);margin:0 auto;padding:0 24px}
+    @media (max-width: 560px){ .container{ padding: 0 32px; } }
+
+    header{
+      position:fixed;top:0;left:0;right:0;
+      height:var(--header-h);
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(18px);
+      border-bottom:1px solid var(--border);
+      z-index:999;
+    }
+    .header-inner{
+      height:var(--header-h);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;
+      font-weight:700;letter-spacing:-.4px;
+    }
+    .brand-logo-wrap{
+      width:52px;height:52px;border-radius:14px;
+      overflow:hidden;display:grid;place-items:center;
+    }
+    .brand-logo{width:100%;height:100%;object-fit:contain;display:block}
+    .logo-dark{display:none;}
+    [data-theme="dark"] .logo-light{display:none;}
+    [data-theme="dark"] .logo-dark{display:block;}
+
+    .header-actions{display:flex;align-items:center;gap:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      gap:10px;padding:12px 18px;border-radius:999px;
+      border:1px solid var(--border);
+      background:var(--bg-elev);
+      font-size:14px;font-weight:700;
+      cursor:pointer;
+      transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+    }
+    .btn:hover{transform: translateY(-2px); box-shadow: var(--shadow-soft)}
+    .btn.primary{background:var(--accent);color:var(--bg);border-color:transparent}
+    .btn.ghost{background:transparent}
+
+    .theme-btn{
+      width:44px;height:44px;border-radius:999px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      display:inline-flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .theme-btn:hover{transform: translateY(-1px); box-shadow: var(--shadow);}
+    .theme-glyph{width:20px;height:20px;display:block}
+
+    main{padding-top:calc(var(--header-h) + 22px); padding-bottom: 90px;}
+
+    .hero{
+      padding: 28px 0 16px;
+    }
+    .hero-card{
+      border-radius: var(--radius-lg);
+      border:1px solid var(--border);
+      background:
+        radial-gradient(800px 300px at 20% 0%, color-mix(in srgb, var(--bg-alt) 70%, transparent), transparent 70%),
+        color-mix(in srgb, var(--bg-elev) 95%, transparent);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .hero-title{
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing:-1px;
+      font-weight:900;
+    }
+    .hero-sub{
+      margin-top:8px;color:var(--sub);max-width:60ch;
+    }
+    .hero-row{
+      margin-top:14px;
+      display:flex;gap:10px;flex-wrap:wrap;
+    }
+    .hero-pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+      font-size:12px;font-weight:700;color:var(--sub);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      margin-top:16px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns: 1fr;} }
+
+    .card{
+      border-radius: var(--radius-lg);
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-head{padding:18px 18px 0;}
+    .card-head h2{font-size:18px;letter-spacing:-.3px;}
+    .card-head p{margin-top:6px;color:var(--sub);font-size:14px;}
+    .card-body{padding:18px;}
+
+    .rating-stack{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .emoji-row{
+      display:flex;gap:10px;flex-wrap:wrap;
+    }
+    .emoji{
+      width:54px;height:54px;border-radius:16px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      display:grid;place-items:center;
+      font-size:24px;cursor:pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+    }
+    .emoji:hover{transform: translateY(-2px); box-shadow: var(--shadow);}
+    .emoji.active{
+      outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+      background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+    }
+
+    .stars{
+      display:flex;gap:8px;align-items:center;
+    }
+    .star{
+      font-size:22px;
+      color:color-mix(in srgb, var(--sub) 60%, var(--text));
+      cursor:pointer;
+      transition: transform .2s var(--ease), color .2s var(--ease);
+    }
+    .star.active{color: #ffb300;}
+    .star:hover{transform: translateY(-2px);}
+
+    .tags{
+      display:flex;gap:8px;flex-wrap:wrap;
+    }
+    .tag-pill{
+      padding:8px 12px;border-radius:999px;border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
+      font-size:12px;font-weight:800;color:var(--sub);
+      cursor:pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .tag-pill.active{
+      background: var(--accent);color: var(--bg);border-color: transparent;
+    }
+
+    input, select, textarea{
+      width:100%;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      font-size:14px;
+      outline:none;
+      box-shadow: var(--shadow-soft);
+    }
+    textarea{min-height:120px;resize:vertical}
+
+    .form-actions{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;
+    }
+    .note{font-size:12px;color:var(--sub)}
+
+    .slider-wrap{
+      border-radius: 18px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      padding:14px;
+      box-shadow: var(--shadow-soft);
+    }
+    .slider-row{
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    }
+    .slider{
+      flex:1;
+      accent-color: var(--accent);
+    }
+    .slider-num{
+      font-weight:900;
+      width:36px;
+      text-align:center;
+    }
+
+    .submit{
+      width:100%;
+      margin-top: 4px;
+    }
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:4000;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(12px);
+      display:grid;
+      place-items:center;
+      padding: 20px;
+    }
+    .modal{
+      width: min(520px, 100%);
+      border-radius: 26px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modal-head{
+      display:flex;align-items:flex-start;justify-content:space-between;
+      gap:12px;padding:16px 16px 0 16px;
+    }
+    .modal-title{font-weight:900;letter-spacing:-.6px;font-size:18px;}
+    .modal-sub{margin-top:4px;font-size:13px;color:var(--sub);}
+    .modal-x{
+      width:42px;height:42px;border-radius:16px;border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      box-shadow: var(--shadow-soft);cursor:pointer;
+    }
+    .modal-body{padding:16px;}
+    .modal-row{
+      margin-top:10px;border-radius:18px;border:1px solid var(--border);
+      background: var(--bg-elev);box-shadow: var(--shadow-soft);padding:12px 14px;
+    }
+    .modal-row .k{color:var(--sub);font-size:12px;}
+    .modal-row .v{margin-top:4px;font-weight:900;}
+
+    .hidden{display:none !important;}
+  </style>
+</head>
+
+<body data-theme="light">
+<header>
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="BYZ Home">
+      <span class="brand-logo-wrap" aria-hidden="true">
+        <img class="brand-logo logo-light" src="assets/byz-logo-black.png" alt="" />
+        <img class="brand-logo logo-dark"  src="assets/byz-logo-white.png" alt="" />
+      </span>
+    </a>
+
+    <div class="header-actions">
+      <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
+          <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="12" cy="12" r="6" fill="currentColor" />
+          <defs>
+            <clipPath id="themeHalfClip">
+              <circle cx="12" cy="12" r="6" />
+            </clipPath>
+          </defs>
+          <g clip-path="url(#themeHalfClip)">
+            <rect x="12" y="6" width="6" height="12" style="fill: var(--bg-elev);" />
+          </g>
+        </svg>
+      </button>
+
+      <a class="btn ghost" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-card">
+      <div class="hero-title">Rate the BYZ Experience</div>
+      <p class="hero-sub">Tell us how it felt. Your feedback shapes the next wave.</p>
+      <div class="hero-row">
+        <span class="hero-pill"><i class="fa-solid fa-sparkles"></i> Quick + meaningful</span>
+        <span class="hero-pill"><i class="fa-solid fa-user-check"></i> Anonymous allowed</span>
+        <span class="hero-pill"><i class="fa-solid fa-heart"></i> BYZ listens</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid container">
+    <section class="card">
+      <div class="card-head">
+        <h2>Your rating</h2>
+        <p>Pick a vibe, then rate the experience.</p>
+      </div>
+      <div class="card-body rating-stack">
+        <div class="emoji-row" id="emojiRow">
+          <button class="emoji" data-score="1" type="button">😶</button>
+          <button class="emoji" data-score="2" type="button">🙂</button>
+          <button class="emoji" data-score="3" type="button">😄</button>
+          <button class="emoji" data-score="4" type="button">🤩</button>
+          <button class="emoji" data-score="5" type="button">🔥</button>
+        </div>
+
+        <div class="stars" id="starRow" aria-label="Star rating">
+          <i class="fa-solid fa-star star" data-star="1"></i>
+          <i class="fa-solid fa-star star" data-star="2"></i>
+          <i class="fa-solid fa-star star" data-star="3"></i>
+          <i class="fa-solid fa-star star" data-star="4"></i>
+          <i class="fa-solid fa-star star" data-star="5"></i>
+        </div>
+
+        <div class="tags" id="tagRow">
+          <button class="tag-pill" type="button">Music</button>
+          <button class="tag-pill" type="button">Vibe</button>
+          <button class="tag-pill" type="button">Drinks</button>
+          <button class="tag-pill" type="button">Crowd</button>
+          <button class="tag-pill" type="button">Venue</button>
+          <button class="tag-pill" type="button">Staff</button>
+        </div>
+
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <div class="note">Likelihood to recommend</div>
+            <input id="nps" class="slider" type="range" min="0" max="10" value="8">
+            <div class="slider-num" id="npsNum">8</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Tell us more</h2>
+        <p>Optional, but gold for us.</p>
+      </div>
+      <div class="card-body">
+        <div class="form-grid">
+          <div class="field">
+            <label for="name">Name (optional)</label>
+            <input id="name" placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="event">Event attended</label>
+            <select id="event">
+              <option>Groove</option>
+              <option>Tempo</option>
+              <option>APT</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="visit">How often do you come?</label>
+            <select id="visit">
+              <option>First time</option>
+              <option>Occasionally</option>
+              <option>Monthly</option>
+              <option>Weekly</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="email">Email (optional)</label>
+            <input id="email" placeholder="you@email.com">
+          </div>
+          <div class="field" style="grid-column:1 / -1">
+            <label for="notes">Quick feedback</label>
+            <textarea id="notes" placeholder="What should we keep, improve, or add next time?"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button id="submitBtn" class="btn primary submit" type="button">
+            <i class="fa-solid fa-paper-plane"></i> Send rating
+          </button>
+          <span class="note">No sign‑in required. Your feedback is private.</span>
+        </div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<div id="rateModal" class="modal-backdrop hidden" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rateTitle">
+    <div class="modal-head">
+      <div>
+        <div id="rateTitle" class="modal-title">Rating sent ✅</div>
+        <div class="modal-sub">Thank you for helping us elevate the experience.</div>
+      </div>
+      <button class="modal-x" id="rateClose" type="button" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row">
+        <div class="k">Your vibe score</div>
+        <div class="v" id="summaryScore">—</div>
+      </div>
+      <div class="modal-row">
+        <div class="k">Recommend score</div>
+        <div class="v" id="summaryNps">—</div>
+      </div>
+      <div class="modal-row">
+        <div class="k">Tags</div>
+        <div class="v" id="summaryTags">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const toggle = document.getElementById("themeToggle");
+  const stored = localStorage.getItem("theme");
+
+  function applyTheme(theme) {
+    if (theme === "dark") root.setAttribute("data-theme","dark");
+    else root.setAttribute("data-theme","light");
+    if (toggle){
+      toggle.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+      toggle.title = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+    }
+  }
+
+  if (stored) applyTheme(stored);
+  else {
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(prefersDark ? "dark" : "light");
+  }
+
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      const isDark = root.getAttribute("data-theme") === "dark";
+      const next = isDark ? "light" : "dark";
+      applyTheme(next);
+      localStorage.setItem("theme", next);
+    });
+  }
+})();
+
+(function(){
+  const emojiRow = document.getElementById("emojiRow");
+  const starRow = document.getElementById("starRow");
+  const tags = document.querySelectorAll(".tag-pill");
+  const nps = document.getElementById("nps");
+  const npsNum = document.getElementById("npsNum");
+  const submit = document.getElementById("submitBtn");
+
+  let score = 0;
+
+  emojiRow.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".emoji");
+    if(!btn) return;
+    score = Number(btn.dataset.score || 0);
+    emojiRow.querySelectorAll(".emoji").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    paintStars(score);
+  });
+
+  starRow.addEventListener("click", (e)=>{
+    const star = e.target.closest(".star");
+    if(!star) return;
+    score = Number(star.dataset.star || 0);
+    paintStars(score);
+  });
+
+  function paintStars(n){
+    starRow.querySelectorAll(".star").forEach(s=>{
+      const v = Number(s.dataset.star || 0);
+      s.classList.toggle("active", v <= n);
+    });
+  }
+
+  tags.forEach(t=>{
+    t.addEventListener("click", ()=>t.classList.toggle("active"));
+  });
+
+  nps.addEventListener("input", ()=>{ npsNum.textContent = nps.value; });
+
+  const modal = document.getElementById("rateModal");
+  const close = document.getElementById("rateClose");
+  const sumScore = document.getElementById("summaryScore");
+  const sumNps = document.getElementById("summaryNps");
+  const sumTags = document.getElementById("summaryTags");
+
+  submit.addEventListener("click", ()=>{
+    if(score === 0){
+      alert("Pick a rating first.");
+      return;
+    }
+    const selectedTags = Array.from(tags).filter(t=>t.classList.contains("active")).map(t=>t.textContent.trim());
+    sumScore.textContent = score + "/5";
+    sumNps.textContent = nps.value + "/10";
+    sumTags.textContent = selectedTags.length ? selectedTags.join(", ") : "—";
+
+    modal.classList.remove("hidden");
+    modal.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  });
+
+  function closeModal(){
+    modal.classList.add("hidden");
+    modal.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+  }
+
+  close.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e)=>{
+    if(e.target === modal) closeModal();
+  });
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
+  });
+})();
+</script>
+</body>
+</html>
