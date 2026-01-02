@@ -379,23 +379,42 @@
 </main>
 
 <script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxl8qg5fxw8yWZJj-R98x0V0nBALjQv66xuJLiom5rkEh_BpYtZRrMcFlYkjxAOq6UC/exec";
+
 (function(){
   const form = document.getElementById("aptForm");
   if(!form) return;
 
   const WHATSAPP = "255768464367";
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    const name = document.getElementById("aptName").value.trim();
-    const phone = document.getElementById("aptPhone").value.trim();
-    const ig = document.getElementById("aptIg").value.trim();
-    const before = document.getElementById("aptBefore").value;
-    const date = document.getElementById("aptDate").value;
-    const notes = document.getElementById("aptNotes").value.trim();
+  const name = document.getElementById("aptName").value.trim();
+  const phone = document.getElementById("aptPhone").value.trim();
+  const ig = document.getElementById("aptIg").value.trim();
+  const before = document.getElementById("aptBefore").value;
+  const notes = document.getElementById("aptNotes").value.trim();
 
-   const msg =
+  const data = {
+    name,
+    phone,
+    instagram: ig,
+    beenBefore: before,
+    notes,
+    requestId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2))
+  };
+
+  // log to sheet
+  try{
+    await fetch(SCRIPT_URL, {
+      method:"POST",
+      headers:{ "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action:"addAptRequest", data })
+    });
+  }catch(e){}
+
+  const msg =
 `APT INVITE REQUEST
 Name: ${name}
 Phone: ${phone}
@@ -403,10 +422,11 @@ Instagram: ${ig || "-"}
 Been to APT before: ${before}
 Notes: ${notes || "-"}`;
 
+  const url = `https://wa.me/255768464367?text=${encodeURIComponent(msg)}`;
+  window.location.href = url;
+});
 
-    const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
-    window.location.href = url;
-  });
+  
 })();
 </script>
 
