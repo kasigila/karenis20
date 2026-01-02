@@ -2028,6 +2028,31 @@ footer{
 
 .tempo-modal-body{ padding:16px; }
   
+  .tempo-modal{
+  max-width: 560px;
+  width: calc(100% - 32px); /* prevents overflow on small screens */
+}
+
+.tempo-nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.tempo-nav-btn{
+  width:44px;
+  height:44px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow-soft);
+  cursor:pointer;
+  font-weight:900;
+  font-size:20px;
+}
+
   .tempo-calendars{
   display:grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3391,9 +3416,16 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
 
     <div class="tempo-modal-body">
       
-      <div class="tempo-calendars" id="tempoCalendars"></div>
+      <div class="tempo-nav">
+  <button class="tempo-nav-btn" id="tempoPrev" type="button" aria-label="Previous month">‹</button>
+  <div class="tempo-month" id="tempoMonthLabel">Month</div>
+  <button class="tempo-nav-btn" id="tempoNext" type="button" aria-label="Next month">›</button>
+</div>
 
-      <div class="tempo-list" id="tempoDateList"></div>
+<div class="tempo-calendar">
+  <div class="tempo-grid" id="tempoCalendarGrid"></div>
+</div>
+
     </div>
   </div>
 </div>
@@ -4326,10 +4358,13 @@ boardGrid.innerHTML = boardItems.map(item => {
   const openBtn = document.getElementById("tempoScheduleBtn");
   const modal = document.getElementById("tempoScheduleModal");
   const closeBtn = document.getElementById("tempoScheduleClose");
-  const calendars = document.getElementById("tempoCalendars");
-  const list = document.getElementById("tempoDateList");
 
-  if(!openBtn || !modal || !calendars) return;
+  const prevBtn = document.getElementById("tempoPrev");
+  const nextBtn = document.getElementById("tempoNext");
+  const monthLabel = document.getElementById("tempoMonthLabel");
+  const grid = document.getElementById("tempoCalendarGrid");
+
+  if(!openBtn || !modal || !grid || !monthLabel || !prevBtn || !nextBtn) return;
 
   // ✅ 2026 sample dates (May–August)
   const TEMPO_DATES = [
@@ -4345,34 +4380,15 @@ boardGrid.innerHTML = boardItems.map(item => {
   ];
 
   const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  let currentMonth = new Date(2026, 4, 1); // start at May 2026
 
-  const calendarMonths = [
-    new Date(2026, 4, 1), // May
-    new Date(2026, 5, 1), // June
-    new Date(2026, 6, 1), // July
-    new Date(2026, 7, 1)  // August
-  ];
+  function renderCalendar(){
+    grid.innerHTML = "";
 
-  function formatDateLabel(ds){
-    const [y,m,d] = ds.split("-");
-    return `${MONTHS[Number(m)-1]} ${Number(d)}, ${y}`;
-  }
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
 
-  function buildMonth(dateObj){
-    const year = dateObj.getFullYear();
-    const month = dateObj.getMonth();
-
-    const wrap = document.createElement("div");
-    wrap.className = "tempo-calendar";
-
-    const label = document.createElement("div");
-    label.className = "tempo-month";
-    label.textContent = `${MONTHS[month]} ${year}`;
-    wrap.appendChild(label);
-
-    const grid = document.createElement("div");
-    grid.className = "tempo-grid";
-    wrap.appendChild(grid);
+    monthLabel.textContent = `${MONTHS[month]} ${year}`;
 
     const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     days.forEach(d => {
@@ -4399,26 +4415,10 @@ boardGrid.innerHTML = boardItems.map(item => {
       cell.innerHTML = `<span>${d}</span>`;
       grid.appendChild(cell);
     }
-
-    return wrap;
-  }
-
-  function renderCalendars(){
-    calendars.innerHTML = "";
-    list.innerHTML = "";
-
-    calendarMonths.forEach(m => calendars.appendChild(buildMonth(m)));
-
-    TEMPO_DATES.forEach(ds => {
-      const item = document.createElement("div");
-      item.className = "tempo-pill";
-      item.textContent = formatDateLabel(ds);
-      list.appendChild(item);
-    });
   }
 
   function openModal(){
-    renderCalendars();
+    renderCalendar();
     modal.classList.remove("byz-hidden");
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
@@ -4429,6 +4429,16 @@ boardGrid.innerHTML = boardItems.map(item => {
     modal.setAttribute("aria-hidden","true");
     document.body.style.overflow = "";
   }
+
+  prevBtn.addEventListener("click", () => {
+    currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+    renderCalendar();
+  });
+
+  nextBtn.addEventListener("click", () => {
+    currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+    renderCalendar();
+  });
 
   openBtn.addEventListener("click", openModal);
   closeBtn.addEventListener("click", closeModal);
@@ -4441,7 +4451,6 @@ boardGrid.innerHTML = boardItems.map(item => {
     if(e.key === "Escape" && !modal.classList.contains("byz-hidden")) closeModal();
   });
 })();
-
 
 </script>
 </body>
