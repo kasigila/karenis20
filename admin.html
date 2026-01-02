@@ -499,15 +499,19 @@
     document.getElementById("login").classList.add("hidden");
     document.getElementById("dashboard").classList.remove("hidden");
 
-    // ✅ ensure scroll is unlocked + reset to top
+    // ensure scrolling works + jump to top
+    document.documentElement.style.overflow = "";
     document.body.style.overflow = "";
-    window.scrollTo({ top: 0, behavior: "instant" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: "auto" });
 
     load();
   } else {
     alert("Incorrect password");
   }
 }
+
 
     async function load(){
       try{
