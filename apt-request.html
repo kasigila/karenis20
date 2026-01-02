@@ -78,10 +78,11 @@
 
   a{color:inherit;text-decoration:none}
     
-  .container{max-width:var(--max);margin:0 auto;padding:0 28px}
+ .container{max-width:var(--max);margin:0 auto;padding:0 28px}
 @media (max-width: 560px){
-  .container{ padding: 0 22px; }
+  .container{ padding: 0 30px; }
 }
+
 
 
   header{
@@ -166,10 +167,13 @@
     box-shadow: var(--shadow);
     padding: 22px;
   }
+    
   .hero-title{
-    font-size: clamp(2.1rem, 5vw, 3.2rem);
-    letter-spacing:-1px;
-  }
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  letter-spacing:-1px;
+  font-weight:900; /* matches Request Form title weight */
+}
+
   .hero-sub{
     margin-top:8px;color:var(--sub);max-width:60ch;
   }
