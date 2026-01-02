@@ -54,6 +54,10 @@
     }
     a{color:inherit;text-decoration:none}
     .container{max-width:var(--max);margin:0 auto;padding:0 24px}
+@media (max-width: 560px){
+  .container{ padding: 0 28px; }
+}
+
     header{
       position:fixed;
       top:0;left:0;right:0;
@@ -765,11 +769,11 @@ Txn: ${data.transactionCode}`;
         sessionStorage.setItem("byz_last_status", "submitted");
 
         setProgress(100);
-        markSubmitted();
 showPendingToast();
 setTimeout(() => {
   window.location.href = waUrl;
 }, 650);
+
 
 
       }catch(err){
@@ -789,36 +793,45 @@ setTimeout(() => {
 let __toastTimer = null;
 function ensureToast(){
   if(document.getElementById("byzToast")) return;
+
   const wrap = document.createElement("div");
   wrap.id = "byzToast";
   wrap.className = "toast";
   wrap.innerHTML = `
-    <div class="toast-card" role="status" aria-live="polite">
-      <div class="toast-body" id="byzToastBody"></div>
+    <div class="toast-card" role="dialog" aria-modal="true">
       <button class="toast-close" type="button" aria-label="Close">
         <i class="fa-solid fa-xmark"></i>
       </button>
+      <div class="toast-body" id="byzToastBody"></div>
     </div>
   `;
+
   document.body.appendChild(wrap);
-  wrap.querySelector(".toast-close").addEventListener("click", () => {
-    wrap.classList.remove("show");
-    if(__toastTimer) clearTimeout(__toastTimer);
-    __toastTimer = null;
+
+  wrap.querySelector(".toast-close").addEventListener("click", closeBookingModal);
+  wrap.addEventListener("click", (e) => {
+    if(e.target === wrap) closeBookingModal();
   });
 }
-function showToast(html, ms = 7000){
+function closeBookingModal(){
+  const toast = document.getElementById("byzToast");
+  if(toast) toast.classList.remove("show");
+  document.body.style.overflow = "";
+  markSubmitted();
+  __submittingBooking = false;
+  sessionStorage.setItem("byz_last_status","done");
+}
+
+function showToast(html){
   ensureToast();
   const toast = document.getElementById("byzToast");
   const body = document.getElementById("byzToastBody");
+
   body.innerHTML = html;
   toast.classList.add("show");
-  if(__toastTimer) clearTimeout(__toastTimer);
-  __toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-    __toastTimer = null;
-  }, ms);
+  document.body.style.overflow = "hidden";
 }
+
     function markSubmitted(){
   const btn = document.getElementById("submitBookingBtn");
   if(!btn) return;
@@ -828,11 +841,11 @@ function showToast(html, ms = 7000){
 
 function showPendingToast(){
   showToast(
-    `<div><b>Booking submitted ✅</b></div>
-     <div class="toast-sub">Pending verification. You’ll get a confirmation email once approved.</div>`,
-    8000
+    `<div><b>Booking submitted!</b></div>
+     <div class="toast-sub">Pending verification. You’ll get a confirmation email once approved.</div>`
   );
 }
+
 
 function resetSubmitUI(){
   __submittingBooking = false;
@@ -866,13 +879,12 @@ function showBookingSubmittedUI(){
 function handleReturnFromWhatsApp(){
   const status = sessionStorage.getItem("byz_last_status");
   const ts = Number(sessionStorage.getItem("byz_last_ts") || "0");
+
   if(status === "submitted" && (Date.now() - ts < 10 * 60 * 1000)){
-    resetSubmitUI();
-    showBookingSubmittedUI();
-  } else {
-    resetSubmitUI();
+    showPendingToast();
   }
 }
+
 window.addEventListener("pageshow", handleReturnFromWhatsApp);
 window.addEventListener("focus", handleReturnFromWhatsApp);
 document.addEventListener("visibilitychange", () => {
