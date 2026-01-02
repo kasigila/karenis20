@@ -60,6 +60,13 @@
     height:var(--header-h);
     display:flex;align-items:center;justify-content:space-between;
   }
+    .header-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-left:auto;
+}
+
   .brand{
     display:flex;align-items:center;gap:10px;
     font-weight:700;letter-spacing:-.4px;
@@ -163,7 +170,7 @@
 <body>
 <header>
   
-  <div style="display:flex;gap:10px;align-items:center">
+<div class="header-actions">
   <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme" aria-pressed="false" title="Switch to dark mode">
     <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-glyph">
       <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2" />
@@ -181,6 +188,7 @@
 
   <a class="btn ghost" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
 </div>
+
 
   
 </header>
