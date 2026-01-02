@@ -2027,6 +2027,17 @@ footer{
 }
 
 .tempo-modal-body{ padding:16px; }
+  
+  .tempo-calendars{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:12px;
+}
+
+@media (max-width: 640px){
+  .tempo-calendars{ grid-template-columns: 1fr; }
+}
+
 .tempo-calendar{
   border-radius:22px;
   border:1px solid var(--border);
@@ -3256,7 +3267,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
       <div class="reveal" style="margin-top:18px;border:1px solid var(--border);border-radius:22px;background:color-mix(in srgb, var(--bg-alt) 70%, transparent);padding:16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
         <div>
           <div style="font-weight:800;letter-spacing:-.3px">Ready to book your experience?</div>
-          <div style="color:var(--sub);font-size:13px;margin-top:4px">Use our automated booking system or test us on WhatsApp.</div>
+          <div style="color:var(--sub);font-size:13px;margin-top:4px">Use our automated booking system or text us on WhatsApp.</div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Now</a>
@@ -3379,10 +3390,8 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
     </div>
 
     <div class="tempo-modal-body">
-      <div class="tempo-calendar">
-        <div class="tempo-month" id="tempoMonthLabel">Month</div>
-        <div class="tempo-grid" id="tempoCalendarGrid"></div>
-      </div>
+      
+      <div class="tempo-calendars" id="tempoCalendars"></div>
 
       <div class="tempo-list" id="tempoDateList"></div>
     </div>
@@ -4317,32 +4326,53 @@ boardGrid.innerHTML = boardItems.map(item => {
   const openBtn = document.getElementById("tempoScheduleBtn");
   const modal = document.getElementById("tempoScheduleModal");
   const closeBtn = document.getElementById("tempoScheduleClose");
-  const monthLabel = document.getElementById("tempoMonthLabel");
-  const grid = document.getElementById("tempoCalendarGrid");
+  const calendars = document.getElementById("tempoCalendars");
   const list = document.getElementById("tempoDateList");
 
-  if(!openBtn || !modal || !grid || !monthLabel) return;
+  if(!openBtn || !modal || !calendars) return;
 
-  // ✅ Sample dates (edit anytime)
+  // ✅ 2026 sample dates (May–August)
   const TEMPO_DATES = [
-    "2025-10-04",
-    "2025-10-11",
-    "2025-10-18",
-    "2025-10-25"
+    "2026-05-07",
+    "2026-05-23",
+    "2026-06-06",
+    "2026-06-20",
+    "2026-07-04",
+    "2026-07-18",
+    "2026-08-01",
+    "2026-08-15",
+    "2026-08-29"
   ];
 
   const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-  // Month displayed on calendar (Oct 2025)
-  const calendarMonth = new Date(2025, 9, 1);
+  const calendarMonths = [
+    new Date(2026, 4, 1), // May
+    new Date(2026, 5, 1), // June
+    new Date(2026, 6, 1), // July
+    new Date(2026, 7, 1)  // August
+  ];
 
-  function renderCalendar(){
-    grid.innerHTML = "";
-    list.innerHTML = "";
+  function formatDateLabel(ds){
+    const [y,m,d] = ds.split("-");
+    return `${MONTHS[Number(m)-1]} ${Number(d)}, ${y}`;
+  }
 
-    const year = calendarMonth.getFullYear();
-    const month = calendarMonth.getMonth();
-    monthLabel.textContent = `${MONTHS[month]} ${year}`;
+  function buildMonth(dateObj){
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth();
+
+    const wrap = document.createElement("div");
+    wrap.className = "tempo-calendar";
+
+    const label = document.createElement("div");
+    label.className = "tempo-month";
+    label.textContent = `${MONTHS[month]} ${year}`;
+    wrap.appendChild(label);
+
+    const grid = document.createElement("div");
+    grid.className = "tempo-grid";
+    wrap.appendChild(grid);
 
     const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
     days.forEach(d => {
@@ -4370,16 +4400,25 @@ boardGrid.innerHTML = boardItems.map(item => {
       grid.appendChild(cell);
     }
 
+    return wrap;
+  }
+
+  function renderCalendars(){
+    calendars.innerHTML = "";
+    list.innerHTML = "";
+
+    calendarMonths.forEach(m => calendars.appendChild(buildMonth(m)));
+
     TEMPO_DATES.forEach(ds => {
       const item = document.createElement("div");
       item.className = "tempo-pill";
-      item.textContent = ds;
+      item.textContent = formatDateLabel(ds);
       list.appendChild(item);
     });
   }
 
   function openModal(){
-    renderCalendar();
+    renderCalendars();
     modal.classList.remove("byz-hidden");
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
@@ -4402,6 +4441,7 @@ boardGrid.innerHTML = boardItems.map(item => {
     if(e.key === "Escape" && !modal.classList.contains("byz-hidden")) closeModal();
   });
 })();
+
 
 </script>
 </body>
