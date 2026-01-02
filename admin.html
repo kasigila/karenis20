@@ -200,6 +200,13 @@
     .hidden{display:none}
 
     .dash-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+    
+    #dashboardTop{
+  position: relative;
+  top: calc(-1 * (var(--header-h) + 16px));
+  height: 0;
+}
+
     .stats{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
@@ -342,6 +349,8 @@
 
     <!-- DASHBOARD -->
     <div id="dashboard" class="dash-grid hidden">
+        <div id="dashboardTop"></div>
+
       <section class="card">
         <div class="card-head">
           <h1>BYZ Admin Control Center</h1>
@@ -499,12 +508,17 @@
     document.getElementById("login").classList.add("hidden");
     document.getElementById("dashboard").classList.remove("hidden");
 
-    // ensure scrolling works + jump to top
+        // ensure scrolling works + jump to top (below fixed header)
     document.documentElement.style.overflow = "";
     document.body.style.overflow = "";
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    window.scrollTo({ top: 0, behavior: "auto" });
+
+    const top = document.getElementById("dashboardTop");
+    if(top){
+      top.scrollIntoView({ behavior: "auto", block: "start" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+
 
     load();
   } else {
