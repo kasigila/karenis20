@@ -475,6 +475,18 @@
   const form = document.getElementById("aptForm");
     let __submittingApt = false;
 
+    const igInput = document.getElementById("aptIg");
+  if(igInput){
+    igInput.addEventListener("input", () => {
+      let v = igInput.value || "";
+      if(v === "") return;
+      if(!v.startsWith("@")){
+        igInput.value = "@" + v.replace(/^@+/, "");
+      }
+    });
+  }
+
+
   if(!form) return;
 
   const WHATSAPP = "255768464367";
@@ -509,33 +521,17 @@
     requestId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2))
   };
 
-  try{
-    await fetch(SCRIPT_URL, {
-      method:"POST",
-      headers:{ "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action:"addAptRequest", data })
-    });
-  }catch(e){}
+   showAptModal();
 
-  const msg =
-`APT INVITE REQUEST
-Name: ${name}
-Phone: ${phone}
-Instagram: ${ig || "-"}
-Been to APT before: ${before}
-Notes: ${notes || "-"}`;
+  // fire-and-forget submit (don’t block popup)
+  fetch(SCRIPT_URL, {
+    method:"POST",
+    headers:{ "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ action:"addAptRequest", data })
+  }).catch(() => {});
 
-  const url = `https://wa.me/255768464367?text=${encodeURIComponent(msg)}`;
 
-  sessionStorage.setItem("apt_last_status","submitted");
-  sessionStorage.setItem("apt_last_ts", String(Date.now()));
-  sessionStorage.setItem("apt_last_wa", url);
-
-  showAptModal();
-
-  setTimeout(() => {
-    window.location.href = url;
-  }, 650);
+ 
 });
 
 
