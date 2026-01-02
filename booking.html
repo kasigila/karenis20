@@ -60,6 +60,10 @@
   .container{ padding: 0 28px; }
 }
 
+@media (max-width: 560px){
+  .container{ padding: 0 28px; }
+}
+
 
     header{
       position:fixed;
@@ -956,7 +960,6 @@ Txn: ${data.transactionCode}`;
         sessionStorage.setItem("byz_last_status", "submitted");
 
         setProgress(100);
-        markSubmitted();
 showPendingToast();
 setTimeout(() => {
   window.location.href = waUrl;
@@ -986,22 +989,30 @@ function ensureToast(){
   wrap.id = "byzToast";
   wrap.className = "toast";
   wrap.innerHTML = `
-    <div class="toast-card" role="status" aria-live="polite">
-      <div class="toast-body" id="byzToastBody"></div>
+    <div class="toast-card" role="dialog" aria-modal="true">
       <button class="toast-close" type="button" aria-label="Close">
         <i class="fa-solid fa-xmark"></i>
       </button>
+      <div class="toast-body" id="byzToastBody"></div>
     </div>
   `;
 
   document.body.appendChild(wrap);
 
-  wrap.querySelector(".toast-close").addEventListener("click", () => {
-    wrap.classList.remove("show");
-    if(__toastTimer) clearTimeout(__toastTimer);
-    __toastTimer = null;
+  wrap.querySelector(".toast-close").addEventListener("click", closeBookingModal);
+  wrap.addEventListener("click", (e) => {
+    if(e.target === wrap) closeBookingModal();
   });
 }
+function closeBookingModal(){
+  const toast = document.getElementById("byzToast");
+  if(toast) toast.classList.remove("show");
+  document.body.style.overflow = "";
+  markSubmitted();
+  __submittingBooking = false;
+  sessionStorage.setItem("byz_last_status","done");
+}
+
 
 function showToast(html){
   ensureToast();
@@ -1010,7 +1021,9 @@ function showToast(html){
 
   body.innerHTML = html;
   toast.classList.add("show");
+  document.body.style.overflow = "hidden";
 }
+
 
     function markSubmitted(){
   const btn = document.getElementById("submitBookingBtn");
@@ -1021,11 +1034,11 @@ function showToast(html){
 
 function showPendingToast(){
   showToast(
-    `<div><b>Booking submitted ✅</b></div>
-     <div class="toast-sub">Pending verification. You’ll get a confirmation email once approved.</div>`,
-    8000
+    `<div><b>Booking submitted!</b></div>
+     <div class="toast-sub">Pending verification. You’ll get a confirmation email once approved.</div>`
   );
 }
+
 
     function resetSubmitUI(){
   __submittingBooking = false;
@@ -1068,12 +1081,10 @@ function handleReturnFromWhatsApp(){
   const ts = Number(sessionStorage.getItem("byz_last_ts") || "0");
 
   if(status === "submitted" && (Date.now() - ts < 10 * 60 * 1000)){
-    resetSubmitUI();
-    showBookingSubmittedUI();
-  } else {
-    resetSubmitUI();
+    showPendingToast();
   }
 }
+
 
 window.addEventListener("pageshow", handleReturnFromWhatsApp);
 window.addEventListener("focus", handleReturnFromWhatsApp);
