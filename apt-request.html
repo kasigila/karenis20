@@ -482,7 +482,9 @@
 
   const name = document.getElementById("aptName").value.trim();
   const phone = document.getElementById("aptPhone").value.trim();
-  const ig = document.getElementById("aptIg").value.trim();
+    let ig = document.getElementById("aptIg").value.trim();
+  if (ig && !ig.startsWith("@")) ig = "@" + ig;
+
   const before = document.getElementById("aptBefore").value;
   const notes = document.getElementById("aptNotes").value.trim();
 
@@ -514,15 +516,14 @@ Notes: ${notes || "-"}`;
 
     const url = `https://wa.me/255768464367?text=${encodeURIComponent(msg)}`;
 
-  const modal = document.getElementById("aptModalBackdrop");
-  const waBtn = document.getElementById("aptWhatsappLink");
-  if (waBtn) waBtn.href = url;
+    const modal = document.getElementById("aptModalBackdrop");
 
   if (modal){
     modal.classList.remove("hidden");
     modal.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
   }
+
 
 });
   const modal = document.getElementById("aptModalBackdrop");
@@ -600,7 +601,7 @@ Notes: ${notes || "-"}`;
   <div class="apt-modal" role="dialog" aria-modal="true" aria-labelledby="aptModalTitle">
     <div class="apt-modal-head">
       <div>
-        <div id="aptModalTitle" class="apt-modal-title">Thank you for your time ✨</div>
+        <div id="aptModalTitle" class="apt-modal-title">Thank you for your time!</div>
         <div class="apt-modal-sub">Your APT request has been submitted.</div>
       </div>
       <button class="apt-modal-x" id="aptModalClose" type="button" aria-label="Close">
@@ -611,16 +612,7 @@ Notes: ${notes || "-"}`;
     <div class="apt-modal-body">
       <div class="apt-modal-row">
         <div class="k">What’s next?</div>
-        <div class="v">We’ll reach out on WhatsApp if a slot opens.</div>
-      </div>
-
-      <div class="apt-modal-row">
-        <div class="k">Optional</div>
-        <div class="v">
-          <a id="aptWhatsappLink" class="btn primary" href="#" target="_blank" rel="noopener">
-            Open WhatsApp
-          </a>
-        </div>
+                <div class="v">We’ll reach out on WhatsApp or Instagram if a slot opens.</div>
       </div>
 
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
