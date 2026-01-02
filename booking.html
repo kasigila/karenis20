@@ -299,6 +299,12 @@
       color: var(--bg);
       border-color: transparent;
     }
+    .btn.submitted{
+  background:#0a7f3f;
+  color:#fff;
+  border-color: transparent;
+}
+
     .btn.ghost{
       background: color-mix(in srgb, var(--bg) 88%, transparent);
       backdrop-filter: blur(12px);
@@ -962,7 +968,12 @@ Txn: ${data.transactionCode}`;
         sessionStorage.setItem("byz_last_status", "submitted");
 
         setProgress(100);
-        window.location.href = waUrl;
+        markSubmitted();
+showPendingToast();
+setTimeout(() => {
+  window.location.href = waUrl;
+}, 650);
+
 
       }catch(err){
         console.error(err);
@@ -1019,6 +1030,21 @@ function showToast(html, ms = 7000){
     __toastTimer = null;
   }, ms);
 }
+    function markSubmitted(){
+  const btn = document.getElementById("submitBookingBtn");
+  if(!btn) return;
+  btn.classList.add("submitted");
+  btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Booking submitted`;
+}
+
+function showPendingToast(){
+  showToast(
+    `<div><b>Booking submitted ✅</b></div>
+     <div class="toast-sub">Pending verification. You’ll get a confirmation email once approved.</div>`,
+    8000
+  );
+}
+
     function resetSubmitUI(){
   __submittingBooking = false;
 
