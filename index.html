@@ -2816,7 +2816,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           </div>
 
           <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Now</a>
+            <a class="btn primary" href="booking-groove.html?type=caribbean">Book Now</a>
             <a class="btn" href="#dj">See Lineup</a>
           </div>
         </div>
@@ -2857,7 +2857,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
       <h3>Tempo</h3>
       <p>Seasonal events with evolving themes.</p>
       <div class="card-actions">
-        <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Table / Ticket</a>
+        <a class="btn primary" href="booking-tempo.html">Book Table / Ticket</a>
         <button class="btn" id="tempoScheduleBtn" type="button">
           <i class="fa-regular fa-calendar" aria-hidden="true"></i> View Schedule
         </button>
@@ -2872,7 +2872,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           <div style="font-weight:800;letter-spacing:-.3px">Already know what event to attend?</div>
           <div style="color:var(--sub);font-size:13px;margin-top:4px">Click Book Now and we’ll take care of the rest.</div>
         </div>
-        <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Now</a>
+        <button class="btn primary" id="openBookingPicker" type="button">Book Now</button>
       </div>
     </div>
   </section>
@@ -3295,7 +3295,7 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
           <div style="color:var(--sub);font-size:13px;margin-top:4px">Use our automated booking system or text us on WhatsApp.</div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn primary" href="https://kasigila.github.io/byzmock/booking.html">Book Now</a>
+          <button class="btn primary" id="openBookingPicker2" type="button">Book Now</button>
           <a class="btn" href="https://wa.me/255768464367" target="_blank" rel="noopener">WhatsApp</a>
         </div>
       </div>
@@ -3426,6 +3426,45 @@ Reggae • Dancehall • Afro • Worldwide grooves — all in one place.</p>
   <div class="tempo-grid" id="tempoCalendarGrid"></div>
 </div>
 
+    </div>
+  </div>
+</div>
+<!-- Booking Picker Modal -->
+<div id="bookingPickerBackdrop" class="byz-modal-backdrop byz-hidden" aria-hidden="true">
+  <div class="byz-modal" role="dialog" aria-modal="true" aria-labelledby="bookingPickerTitle">
+    <div class="byz-modal-head">
+      <div>
+        <div id="bookingPickerTitle" class="byz-modal-title">Choose Your Experience</div>
+        <div class="byz-modal-sub">Pick the event you want to book.</div>
+      </div>
+      <button class="byz-modal-x" id="bookingPickerClose" type="button" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="byz-modal-body">
+      <div class="byz-modal-row">
+        <div class="k">Groove Series</div>
+        <div class="byz-modal-actions" style="margin-top:8px;">
+          <a class="byz-modal-btn" href="booking-groove.html?type=rnb">RnB Groove</a>
+          <a class="byz-modal-btn" href="booking-groove.html?type=afrobeats">Afrobeats Groove</a>
+          <a class="byz-modal-btn" href="booking-groove.html?type=caribbean">Caribbean Groove</a>
+        </div>
+      </div>
+
+      <div class="byz-modal-row">
+        <div class="k">Tempo</div>
+        <div class="byz-modal-actions" style="margin-top:8px;">
+          <a class="byz-modal-btn primary" href="booking-tempo.html">Book Tempo</a>
+        </div>
+      </div>
+
+      <div class="byz-modal-row">
+        <div class="k">APT Session (Invite‑Only)</div>
+        <div class="byz-modal-actions" style="margin-top:8px;">
+          <a class="byz-modal-btn" href="apt-request.html">Request Invite</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -4449,6 +4488,41 @@ boardGrid.innerHTML = boardItems.map(item => {
 
   document.addEventListener("keydown", (e) => {
     if(e.key === "Escape" && !modal.classList.contains("byz-hidden")) closeModal();
+  });
+})();
+/* =========================================================
+   BOOKING PICKER MODAL
+========================================================= */
+(function(){
+  const open1 = document.getElementById("openBookingPicker");
+  const open2 = document.getElementById("openBookingPicker2");
+  const backdrop = document.getElementById("bookingPickerBackdrop");
+  const closeBtn = document.getElementById("bookingPickerClose");
+
+  if(!backdrop) return;
+
+  function openModal(){
+    backdrop.classList.remove("byz-hidden");
+    backdrop.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal(){
+    backdrop.classList.add("byz-hidden");
+    backdrop.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+  }
+
+  if(open1) open1.addEventListener("click", openModal);
+  if(open2) open2.addEventListener("click", openModal);
+  if(closeBtn) closeBtn.addEventListener("click", closeModal);
+
+  backdrop.addEventListener("click", (e) => {
+    if(e.target === backdrop) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && !backdrop.classList.contains("byz-hidden")) closeModal();
   });
 })();
 
