@@ -271,6 +271,25 @@
     flex-wrap:wrap;
     margin-top:14px;
   }
+    .apt-success{
+  border-radius: var(--radius-lg);
+  border:1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin-top: 12px;
+}
+.apt-success .big{
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -.4px;
+}
+.apt-success .sub{
+  margin-top: 8px;
+  color: var(--sub);
+  font-size: 13px;
+}
+
   .note{
     font-size:12px;
     color:var(--sub);
@@ -374,6 +393,16 @@
           <span class="note">Submitting opens WhatsApp with your details.</span>
         </div>
       </form>
+      <div id="aptSuccess" class="apt-success hidden">
+  <div class="big">Thank you for your time ✨</div>
+  <div class="sub">
+    Your APT request was submitted successfully. We’ll reach out on WhatsApp if a slot opens.
+  </div>
+  <a id="aptWhatsappLink" class="btn primary" href="#" target="_blank" rel="noopener">
+    Open WhatsApp
+  </a>
+</div>
+
     </div>
   </section>
 </main>
@@ -423,7 +452,12 @@ Been to APT before: ${before}
 Notes: ${notes || "-"}`;
 
   const url = `https://wa.me/255768464367?text=${encodeURIComponent(msg)}`;
-  window.location.href = url;
+  document.getElementById("aptForm").classList.add("hidden");
+const successBox = document.getElementById("aptSuccess");
+const waBtn = document.getElementById("aptWhatsappLink");
+if (waBtn) waBtn.href = url;
+if (successBox) successBox.classList.remove("hidden");
+
 });
 
   
