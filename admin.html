@@ -495,14 +495,19 @@
     }
 
     function login(){
-      if(password.value === ADMIN_PASSWORD){
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("dashboard").classList.remove("hidden");
-        load();
-      } else {
-        alert("Incorrect password");
-      }
-    }
+  if(password.value === ADMIN_PASSWORD){
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+
+    // ✅ ensure scroll is unlocked + reset to top
+    document.body.style.overflow = "";
+    window.scrollTo({ top: 0, behavior: "instant" });
+
+    load();
+  } else {
+    alert("Incorrect password");
+  }
+}
 
     async function load(){
       try{
