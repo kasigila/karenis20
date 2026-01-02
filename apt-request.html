@@ -473,16 +473,28 @@
 
 (function(){
   const form = document.getElementById("aptForm");
+    let __submittingApt = false;
+
   if(!form) return;
 
   const WHATSAPP = "255768464367";
 
   form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  if(__submittingApt) return;
+  __submittingApt = true;
+
+  const submitBtn = document.getElementById("aptSubmitBtn");
+  if(submitBtn){
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = "0.7";
+    submitBtn.style.pointerEvents = "none";
+    submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
+  }
 
   const name = document.getElementById("aptName").value.trim();
   const phone = document.getElementById("aptPhone").value.trim();
-    let ig = document.getElementById("aptIg").value.trim();
+  let ig = document.getElementById("aptIg").value.trim();
   if (ig && !ig.startsWith("@")) ig = "@" + ig;
 
   const before = document.getElementById("aptBefore").value;
@@ -497,7 +509,6 @@
     requestId: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2))
   };
 
-  // log to sheet
   try{
     await fetch(SCRIPT_URL, {
       method:"POST",
@@ -514,24 +525,35 @@ Instagram: ${ig || "-"}
 Been to APT before: ${before}
 Notes: ${notes || "-"}`;
 
-    const url = `https://wa.me/255768464367?text=${encodeURIComponent(msg)}`;
+  const url = `https://wa.me/255768464367?text=${encodeURIComponent(msg)}`;
 
-    const modal = document.getElementById("aptModalBackdrop");
+  sessionStorage.setItem("apt_last_status","submitted");
+  sessionStorage.setItem("apt_last_ts", String(Date.now()));
+  sessionStorage.setItem("apt_last_wa", url);
 
-  if (modal){
-    modal.classList.remove("hidden");
-    modal.setAttribute("aria-hidden","false");
-    document.body.style.overflow = "hidden";
-  }
+  showAptModal();
 
-
+  setTimeout(() => {
+    window.location.href = url;
+  }, 650);
 });
-  const modal = document.getElementById("aptModalBackdrop");
+
+
+  
+    const modal = document.getElementById("aptModalBackdrop");
   const closeBtn = document.getElementById("aptModalClose");
   const doneBtn = document.getElementById("aptModalDone");
   const submitBtn = document.getElementById("aptSubmitBtn");
 
-  function closeModal(){
+  function showAptModal(){
+    if(modal){
+      modal.classList.remove("hidden");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+  }
+
+  function closeAptModal(){
     if(modal){
       modal.classList.add("hidden");
       modal.setAttribute("aria-hidden","true");
@@ -539,24 +561,40 @@ Notes: ${notes || "-"}`;
     }
     if(submitBtn){
       submitBtn.classList.add("submitted");
-      submitBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Request Sent`;
+      submitBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Booking submitted`;
     }
+    __submittingApt = false;
+    sessionStorage.setItem("apt_last_status","done");
   }
 
-  if(closeBtn) closeBtn.addEventListener("click", closeModal);
-  if(doneBtn) doneBtn.addEventListener("click", closeModal);
+  if(closeBtn) closeBtn.addEventListener("click", closeAptModal);
+  if(doneBtn) doneBtn.addEventListener("click", closeAptModal);
 
   if(modal){
     modal.addEventListener("click", (e) => {
-      if(e.target === modal) closeModal();
+      if(e.target === modal) closeAptModal();
     });
   }
 
   document.addEventListener("keydown", (e) => {
     if(e.key === "Escape" && modal && !modal.classList.contains("hidden")){
-      closeModal();
+      closeAptModal();
     }
   });
+
+  function handleAptReturn(){
+    const status = sessionStorage.getItem("apt_last_status");
+    const ts = Number(sessionStorage.getItem("apt_last_ts") || "0");
+    if(status === "submitted" && (Date.now() - ts < 10 * 60 * 1000)){
+      showAptModal();
+    }
+  }
+  window.addEventListener("pageshow", handleAptReturn);
+  window.addEventListener("focus", handleAptReturn);
+  document.addEventListener("visibilitychange", () => {
+    if(!document.hidden) handleAptReturn();
+  });
+
 
   
 })();
