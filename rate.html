@@ -23,7 +23,7 @@
       --shadow: 0 18px 60px rgba(0,0,0,.08);
       --shadow-soft: 0 10px 30px rgba(0,0,0,.08);
       --ease: cubic-bezier(.2,.8,.2,1);
-      --max: 980px;
+      --max: 1000px;
       --header-h: 64px;
     }
 
@@ -55,36 +55,33 @@
       content:"";
       position:fixed;
       inset:auto;
-      width:520px;
-      height:520px;
-      border-radius:50%;
-      filter: blur(80px);
+      width:560px;height:560px;border-radius:50%;
+      filter: blur(90px);
       opacity:.25;
       pointer-events:none;
       z-index:-1;
     }
     body::before{
-      background: radial-gradient(circle, rgba(0,0,0,.12), transparent 60%);
-      top:-120px; right:-160px;
+      background: radial-gradient(circle, rgba(0,0,0,.14), transparent 60%);
+      top:-140px; right:-180px;
     }
     body::after{
       background: radial-gradient(circle, rgba(0,0,0,.08), transparent 60%);
-      bottom:-180px; left:-160px;
+      bottom:-200px; left:-180px;
     }
     [data-theme="dark"] body::before{
       background: radial-gradient(circle, rgba(255,255,255,.08), transparent 60%);
     }
     [data-theme="dark"] body::after{
-      background: radial-gradient(circle, rgba(255,255,255,.06), transparent 60%);
+      background: radial-gradient(circle, rgba(255,255,255,.05), transparent 60%);
     }
 
     a{color:inherit;text-decoration:none}
     .container{max-width:var(--max);margin:0 auto;padding:0 24px}
-    @media (max-width: 560px){ .container{ padding: 0 32px; } }
+    @media (max-width: 560px){ .container{ padding:0 32px; } }
 
     header{
-      position:fixed;top:0;left:0;right:0;
-      height:var(--header-h);
+      position:fixed;top:0;left:0;right:0;height:var(--header-h);
       background: color-mix(in srgb, var(--bg) 86%, transparent);
       backdrop-filter: blur(18px);
       border-bottom:1px solid var(--border);
@@ -119,21 +116,19 @@
     }
     .btn:hover{transform: translateY(-2px); box-shadow: var(--shadow-soft)}
     .btn.primary{background:var(--accent);color:var(--bg);border-color:transparent}
-    .btn.ghost{background:transparent}
 
     .theme-btn{
       width:44px;height:44px;border-radius:999px;
       border:1px solid var(--border);
       background: var(--bg-elev);
       display:inline-flex;align-items:center;justify-content:center;
-      cursor:pointer;
-      box-shadow: var(--shadow-soft);
+      cursor:pointer;box-shadow: var(--shadow-soft);
       transition: transform .2s var(--ease), box-shadow .2s var(--ease);
     }
     .theme-btn:hover{transform: translateY(-1px); box-shadow: var(--shadow);}
     .theme-glyph{width:20px;height:20px;display:block}
 
-    main{padding-top:calc(var(--header-h) + 22px); padding-bottom: 90px;}
+    main{padding-top:calc(var(--header-h) + 22px); padding-bottom: 100px;}
 
     .hero{
       padding: 28px 0 16px;
@@ -142,22 +137,37 @@
       border-radius: var(--radius-lg);
       border:1px solid var(--border);
       background:
-        radial-gradient(800px 300px at 20% 0%, color-mix(in srgb, var(--bg-alt) 70%, transparent), transparent 70%),
+        radial-gradient(820px 320px at 18% 0%, color-mix(in srgb, var(--bg-alt) 70%, transparent), transparent 70%),
         color-mix(in srgb, var(--bg-elev) 95%, transparent);
       box-shadow: var(--shadow);
-      padding: 22px;
+      padding: 24px;
+      overflow:hidden;
+      position:relative;
     }
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: conic-gradient(from 180deg, transparent, color-mix(in srgb, var(--accent) 14%, transparent), transparent);
+      opacity:.25;filter: blur(20px);
+      animation: spinGlow 10s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes spinGlow{ to{ transform: rotate(360deg); } }
+
     .hero-title{
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: clamp(2.1rem, 5.2vw, 3.4rem);
       letter-spacing:-1px;
       font-weight:900;
+      position:relative;
+      z-index:1;
     }
     .hero-sub{
-      margin-top:8px;color:var(--sub);max-width:60ch;
+      margin-top:8px;color:var(--sub);max-width:60ch;position:relative;z-index:1;
     }
     .hero-row{
       margin-top:14px;
-      display:flex;gap:10px;flex-wrap:wrap;
+      display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1;
     }
     .hero-pill{
       display:inline-flex;align-items:center;gap:8px;
@@ -170,7 +180,7 @@
 
     .grid{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
+      grid-template-columns: 1.05fr .95fr;
       gap:16px;
       margin-top:16px;
       align-items:start;
@@ -189,20 +199,12 @@
     .card-head p{margin-top:6px;color:var(--sub);font-size:14px;}
     .card-body{padding:18px;}
 
-    .rating-stack{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-    .emoji-row{
-      display:flex;gap:10px;flex-wrap:wrap;
-    }
+    .rating-stack{display:flex;flex-direction:column;gap:14px;}
+    .emoji-row{display:flex;gap:10px;flex-wrap:wrap;}
     .emoji{
-      width:54px;height:54px;border-radius:16px;
-      border:1px solid var(--border);
+      width:56px;height:56px;border-radius:16px;border:1px solid var(--border);
       background: color-mix(in srgb, var(--bg) 92%, transparent);
-      display:grid;place-items:center;
-      font-size:24px;cursor:pointer;
+      display:grid;place-items:center;font-size:24px;cursor:pointer;
       box-shadow: var(--shadow-soft);
       transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
     }
@@ -212,93 +214,76 @@
       background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
     }
 
-    .stars{
-      display:flex;gap:8px;align-items:center;
-    }
-    .star{
-      font-size:22px;
-      color:color-mix(in srgb, var(--sub) 60%, var(--text));
-      cursor:pointer;
-      transition: transform .2s var(--ease), color .2s var(--ease);
-    }
-    .star.active{color: #ffb300;}
+    .stars{display:flex;gap:8px;align-items:center;}
+    .star{font-size:22px;color:color-mix(in srgb, var(--sub) 60%, var(--text));cursor:pointer;transition: transform .2s var(--ease), color .2s var(--ease);}
+    .star.active{color:#ffb300;}
     .star:hover{transform: translateY(-2px);}
 
-    .tags{
-      display:flex;gap:8px;flex-wrap:wrap;
-    }
+    .tags{display:flex;gap:8px;flex-wrap:wrap;}
     .tag-pill{
       padding:8px 12px;border-radius:999px;border:1px solid var(--border);
       background: color-mix(in srgb, var(--bg-alt) 70%, transparent);
       font-size:12px;font-weight:800;color:var(--sub);
-      cursor:pointer;
-      box-shadow: var(--shadow-soft);
+      cursor:pointer;box-shadow: var(--shadow-soft);
       transition: transform .2s var(--ease), box-shadow .2s var(--ease);
     }
-    .tag-pill.active{
-      background: var(--accent);color: var(--bg);border-color: transparent;
-    }
-
-    input, select, textarea{
-      width:100%;
-      padding:14px;
-      border-radius:18px;
-      border:1px solid var(--border);
-      background: var(--bg-elev);
-      color: var(--text);
-      font-size:14px;
-      outline:none;
-      box-shadow: var(--shadow-soft);
-    }
-    textarea{min-height:120px;resize:vertical}
-
-    .form-actions{
-      display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;
-    }
-    .note{font-size:12px;color:var(--sub)}
+    .tag-pill.active{background: var(--accent);color: var(--bg);border-color: transparent;}
 
     .slider-wrap{
       border-radius: 18px;
       border:1px solid var(--border);
       background: color-mix(in srgb, var(--bg) 92%, transparent);
-      padding:14px;
+      padding:14px;box-shadow: var(--shadow-soft);
+    }
+    .slider-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .slider{flex:1;accent-color: var(--accent);}
+    .slider-num{font-weight:900;width:36px;text-align:center;}
+
+    input, select, textarea{
+      width:100%;
+      padding:14px;border-radius:18px;border:1px solid var(--border);
+      background: var(--bg-elev);color: var(--text);font-size:14px;outline:none;
       box-shadow: var(--shadow-soft);
     }
-    .slider-row{
-      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    textarea{min-height:120px;resize:vertical}
+
+    .form-grid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:12px;
     }
-    .slider{
-      flex:1;
-      accent-color: var(--accent);
+    @media (max-width: 720px){ .form-grid{grid-template-columns:1fr;} }
+
+    .form-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+    .note{font-size:12px;color:var(--sub);}
+
+    .site-score{
+      display:grid;grid-template-columns: repeat(3, 1fr);gap:10px;margin-top:12px;
     }
-    .slider-num{
-      font-weight:900;
-      width:36px;
-      text-align:center;
+    @media (max-width: 720px){ .site-score{grid-template-columns:1fr;} }
+    .score-box{
+      border-radius:18px;border:1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      padding:12px;box-shadow: var(--shadow-soft);
     }
+    .score-box .k{color:var(--sub);font-size:12px;}
+    .score-box .v{margin-top:6px;font-weight:900;font-size:18px;}
 
     .submit{
-      width:100%;
-      margin-top: 4px;
+      width:100%;margin-top: 6px;
     }
 
     .modal-backdrop{
-      position:fixed;
-      inset:0;
-      z-index:4000;
+      position:fixed;inset:0;z-index:4000;
       background: rgba(0,0,0,.45);
       backdrop-filter: blur(12px);
-      display:grid;
-      place-items:center;
-      padding: 20px;
+      display:grid;place-items:center;padding:20px;
     }
     .modal{
       width: min(520px, 100%);
-      border-radius: 26px;
-      border:1px solid var(--border);
+      border-radius: 26px;border:1px solid var(--border);
       background: color-mix(in srgb, var(--bg) 92%, transparent);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+      box-shadow: var(--shadow);overflow:hidden;
     }
     .modal-head{
       display:flex;align-items:flex-start;justify-content:space-between;
@@ -356,13 +341,15 @@
 
 <main>
   <section class="hero">
-    <div class="container hero-card">
-      <div class="hero-title">Rate the BYZ Experience</div>
-      <p class="hero-sub">Tell us how it felt. Your feedback shapes the next wave.</p>
-      <div class="hero-row">
-        <span class="hero-pill"><i class="fa-solid fa-sparkles"></i> Quick + meaningful</span>
-        <span class="hero-pill"><i class="fa-solid fa-user-check"></i> Anonymous allowed</span>
-        <span class="hero-pill"><i class="fa-solid fa-heart"></i> BYZ listens</span>
+    <div class="container">
+      <div class="hero-card">
+        <div class="hero-title">Rate the BYZ Experience</div>
+        <p class="hero-sub">Tell us how it felt. Your feedback shapes the next wave.</p>
+        <div class="hero-row">
+          <span class="hero-pill"><i class="fa-solid fa-sparkles"></i> Quick + meaningful</span>
+          <span class="hero-pill"><i class="fa-solid fa-user-check"></i> Anonymous allowed</span>
+          <span class="hero-pill"><i class="fa-solid fa-heart"></i> BYZ listens</span>
+        </div>
       </div>
     </div>
   </section>
@@ -370,8 +357,8 @@
   <section class="grid container">
     <section class="card">
       <div class="card-head">
-        <h2>Your rating</h2>
-        <p>Pick a vibe, then rate the experience.</p>
+        <h2>Your night</h2>
+        <p>Vibe check + experience score.</p>
       </div>
       <div class="card-body rating-stack">
         <div class="emoji-row" id="emojiRow">
@@ -411,11 +398,29 @@
 
     <section class="card">
       <div class="card-head">
-        <h2>Tell us more</h2>
-        <p>Optional, but gold for us.</p>
+        <h2>Website experience</h2>
+        <p>How did the site feel to use?</p>
       </div>
       <div class="card-body">
-        <div class="form-grid">
+        <div class="site-score">
+          <div class="score-box">
+            <div class="k">Speed</div>
+            <div class="v" id="siteSpeed">8</div>
+            <input id="speed" class="slider" type="range" min="0" max="10" value="8">
+          </div>
+          <div class="score-box">
+            <div class="k">Clarity</div>
+            <div class="v" id="siteClarity">8</div>
+            <input id="clarity" class="slider" type="range" min="0" max="10" value="8">
+          </div>
+          <div class="score-box">
+            <div class="k">Design</div>
+            <div class="v" id="siteDesign">9</div>
+            <input id="design" class="slider" type="range" min="0" max="10" value="9">
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-top:12px;">
           <div class="field">
             <label for="name">Name (optional)</label>
             <input id="name" placeholder="Your name">
@@ -476,8 +481,8 @@
         <div class="v" id="summaryScore">—</div>
       </div>
       <div class="modal-row">
-        <div class="k">Recommend score</div>
-        <div class="v" id="summaryNps">—</div>
+        <div class="k">Website score</div>
+        <div class="v" id="summarySite">—</div>
       </div>
       <div class="modal-row">
         <div class="k">Tags</div>
@@ -524,6 +529,14 @@
   const tags = document.querySelectorAll(".tag-pill");
   const nps = document.getElementById("nps");
   const npsNum = document.getElementById("npsNum");
+
+  const speed = document.getElementById("speed");
+  const clarity = document.getElementById("clarity");
+  const design = document.getElementById("design");
+  const speedNum = document.getElementById("siteSpeed");
+  const clarityNum = document.getElementById("siteClarity");
+  const designNum = document.getElementById("siteDesign");
+
   const submit = document.getElementById("submitBtn");
 
   let score = 0;
@@ -557,10 +570,17 @@
 
   nps.addEventListener("input", ()=>{ npsNum.textContent = nps.value; });
 
+  function bindSlider(slider, label){
+    slider.addEventListener("input", ()=>{ label.textContent = slider.value; });
+  }
+  bindSlider(speed, speedNum);
+  bindSlider(clarity, clarityNum);
+  bindSlider(design, designNum);
+
   const modal = document.getElementById("rateModal");
   const close = document.getElementById("rateClose");
   const sumScore = document.getElementById("summaryScore");
-  const sumNps = document.getElementById("summaryNps");
+  const sumSite = document.getElementById("summarySite");
   const sumTags = document.getElementById("summaryTags");
 
   submit.addEventListener("click", ()=>{
@@ -569,8 +589,10 @@
       return;
     }
     const selectedTags = Array.from(tags).filter(t=>t.classList.contains("active")).map(t=>t.textContent.trim());
+    const siteScore = Math.round((Number(speed.value)+Number(clarity.value)+Number(design.value))/3);
+
     sumScore.textContent = score + "/5";
-    sumNps.textContent = nps.value + "/10";
+    sumSite.textContent = siteScore + "/10";
     sumTags.textContent = selectedTags.length ? selectedTags.join(", ") : "—";
 
     modal.classList.remove("hidden");
@@ -585,12 +607,8 @@
   }
 
   close.addEventListener("click", closeModal);
-  modal.addEventListener("click", (e)=>{
-    if(e.target === modal) closeModal();
-  });
-  document.addEventListener("keydown", (e)=>{
-    if(e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
-  });
+  modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+  document.addEventListener("keydown", (e)=>{ if(e.key === "Escape" && !modal.classList.contains("hidden")) closeModal(); });
 })();
 </script>
 </body>
